@@ -1,1 +1,1 @@
-# WikinoMergeCo.
+# WikinoMergeCo
