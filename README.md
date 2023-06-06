@@ -4,9 +4,9 @@ Company Name:
     Merge Co.
 
 Group Member:
-    Bonnet, Jerus Patrick S.
-    Clavecillas, Christian C.
-    De Padua, Angelo Miguel N.
+    Bonnet, Jerus Patrick S.\
+    Clavecillas, Christian C.\
+    De Padua, Angelo Miguel N.\
     Roman, Alexis Nicole B.
 
 Project Name:
