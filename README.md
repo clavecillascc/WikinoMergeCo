@@ -3,7 +3,7 @@
 Company Name:
     Merge Co.
 
-Group Member:
+Group Member:\
     Bonnet, Jerus Patrick S.\
     Clavecillas, Christian C.\
     De Padua, Angelo Miguel N.\
