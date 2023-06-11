@@ -30,3 +30,11 @@ val LightGreen3 = Color(0xff11d79b)
 val BlueViolet1 = Color(0xffaeb4fd)
 val BlueViolet2 = Color(0xff9fa5fe)
 val BlueViolet3 = Color(0xff8f98fd)
+
+// colors for app
+val appDarkBlue = Color(0xFF314154)
+val appYellow = Color(0xFFEBAD09)
+val logoRed = Color(0xFFAC0000)
+val logoBlue = Color(0xFF1E256E)
+val appWhite = Color(0xFFF6F6F6)
+val appWhiteYellow = Color(0xFFFEFCF1)
