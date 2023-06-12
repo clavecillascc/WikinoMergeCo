@@ -34,12 +34,17 @@ import com.clavecillascc.wikinomergeco.ui.theme.DarkerButtonBlue
 import com.clavecillascc.wikinomergeco.ui.theme.DeepBlue
 import com.clavecillascc.wikinomergeco.ui.theme.LightRed
 import com.clavecillascc.wikinomergeco.ui.theme.TextWhite
+import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
+import com.clavecillascc.wikinomergeco.ui.theme.appNotSoWhite
+import com.clavecillascc.wikinomergeco.ui.theme.appWhite
+import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
+import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 
 @Composable
 fun HomeScreen() {
     Box(
         modifier = Modifier
-            .background(DeepBlue)
+            .background(appNotSoWhite)
             .fillMaxSize()
     ) {
         Column {
@@ -48,11 +53,11 @@ fun HomeScreen() {
             CurrentMeditation()
         }
         BottomMenu(items = listOf(
-            BottomMenuContent("Home", R.drawable.ic_launcher_foreground),
-            BottomMenuContent("Meditate", R.drawable.screenshot_2023_06_07_200814),
-            BottomMenuContent("Sleep", R.drawable.ic_launcher_foreground),
-            BottomMenuContent("Music", R.drawable.screenshot_2023_06_07_200814),
-            BottomMenuContent("Profile", R.drawable.ic_launcher_foreground),
+            BottomMenuContent("Translate", R.drawable.ic_launcher_foreground),
+            BottomMenuContent("Library", R.drawable.screenshot_2023_06_07_200814),
+            BottomMenuContent("Collaborators", R.drawable.ic_launcher_foreground),
+            BottomMenuContent("About Us", R.drawable.screenshot_2023_06_07_200814),
+            //BottomMenuContent("Profile", R.drawable.ic_launcher_foreground),
         ), modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
@@ -61,9 +66,9 @@ fun HomeScreen() {
 fun BottomMenu(
     items: List<BottomMenuContent>,
     modifier: Modifier = Modifier,
-    activeHighlightColor: Color = ButtonBlue,
-    activeTextColor: Color = Color.White,
-    inactiveTextColor: Color = AquaBlue,
+    activeHighlightColor: Color = appYellow,
+    activeTextColor: Color = appYellow,
+    inactiveTextColor: Color = appWhite,
     initialSelectedItemIndex: Int = 0
 ) {
     var selectedItemIndex by remember {
@@ -74,7 +79,7 @@ fun BottomMenu(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .background(DeepBlue)
+            .background(appDarkBlue)
             .padding(15.dp)
     ) {
         items.forEachIndexed { index, item ->
@@ -182,8 +187,8 @@ fun ChipSection(
                     }
                     .clip(RoundedCornerShape(10.dp))
                     .background(
-                        if (selectedChipIndex == it) ButtonBlue
-                        else DarkerButtonBlue
+                        if (selectedChipIndex == it) appYellow
+                        else appWhite
                     )
                     .padding(15.dp)
             ) {
@@ -195,7 +200,7 @@ fun ChipSection(
 
 @Composable
 fun CurrentMeditation(
-    color: Color = LightRed
+    color: Color = appWhiteYellow
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
