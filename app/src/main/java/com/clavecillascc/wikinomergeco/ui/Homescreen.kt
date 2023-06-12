@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -138,36 +139,44 @@ fun BottomMenuItem(
 fun GreetingSection(
     name: String = ""
 ) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(15.dp)
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
+    Box(modifier = Modifier
+        .background(appDarkBlue)
+        .height(50.dp)
+        .fillMaxWidth())
+    {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+
             modifier = Modifier
-
+                .fillMaxWidth()
+                .padding(15.dp)
         ) {
-            Text(
-                text = " $name",
-                color = TextWhite
+            Column(
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
 
-            )
-            Text(
-                text = "",
-                color = TextWhite
+            ) {
+                Text(
+                    text = " $name",
+                    color = TextWhite
+
+                )
+                Text(
+                    text = "Wikino",
+                    color = TextWhite
+                )
+            }
+            Icon(
+                painter = painterResource(id = R.drawable.app_logo),
+                contentDescription = "Search",
+                //tint = Color.White,
+                modifier = Modifier.size(24.dp)
             )
         }
-        Icon(
-            painter = painterResource(id = R.drawable.screenshot_2023_06_07_200814),
-            contentDescription = "Search",
-            //tint = Color.White,
-            modifier = Modifier.size(24.dp)
-        )
     }
-}
+    }
+
 
 @Composable
 fun ChipSection(
