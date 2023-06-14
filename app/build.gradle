@@ -64,4 +64,10 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
+
+    //Splash API
+    implementation 'androidx.core:core-splashscreen:1.0.1'
+
+    //System UI Controller - Accompanist
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.3-beta")
 }

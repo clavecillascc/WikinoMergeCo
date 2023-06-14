@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -34,12 +35,17 @@ import com.clavecillascc.wikinomergeco.ui.theme.DarkerButtonBlue
 import com.clavecillascc.wikinomergeco.ui.theme.DeepBlue
 import com.clavecillascc.wikinomergeco.ui.theme.LightRed
 import com.clavecillascc.wikinomergeco.ui.theme.TextWhite
+import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
+import com.clavecillascc.wikinomergeco.ui.theme.appNotSoWhite
+import com.clavecillascc.wikinomergeco.ui.theme.appWhite
+import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
+import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 
 @Composable
 fun HomeScreen() {
     Box(
         modifier = Modifier
-            .background(DeepBlue)
+            .background(appNotSoWhite)
             .fillMaxSize()
     ) {
         Column {
@@ -48,11 +54,11 @@ fun HomeScreen() {
             CurrentMeditation()
         }
         BottomMenu(items = listOf(
-            BottomMenuContent("Home", R.drawable.ic_launcher_foreground),
-            BottomMenuContent("Meditate", R.drawable.screenshot_2023_06_07_200814),
-            BottomMenuContent("Sleep", R.drawable.ic_launcher_foreground),
-            BottomMenuContent("Music", R.drawable.screenshot_2023_06_07_200814),
-            BottomMenuContent("Profile", R.drawable.ic_launcher_foreground),
+            BottomMenuContent("Translate", R.drawable.ic_launcher_foreground),
+            BottomMenuContent("Library", R.drawable.screenshot_2023_06_07_200814),
+            BottomMenuContent("Collaborators", R.drawable.ic_launcher_foreground),
+            BottomMenuContent("About Us", R.drawable.screenshot_2023_06_07_200814),
+            //BottomMenuContent("Profile", R.drawable.ic_launcher_foreground),
         ), modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
@@ -61,9 +67,9 @@ fun HomeScreen() {
 fun BottomMenu(
     items: List<BottomMenuContent>,
     modifier: Modifier = Modifier,
-    activeHighlightColor: Color = ButtonBlue,
-    activeTextColor: Color = Color.White,
-    inactiveTextColor: Color = AquaBlue,
+    activeHighlightColor: Color = appYellow,
+    activeTextColor: Color = appYellow,
+    inactiveTextColor: Color = appWhite,
     initialSelectedItemIndex: Int = 0
 ) {
     var selectedItemIndex by remember {
@@ -74,7 +80,7 @@ fun BottomMenu(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .background(DeepBlue)
+            .background(appDarkBlue)
             .padding(15.dp)
     ) {
         items.forEachIndexed { index, item ->
@@ -133,36 +139,44 @@ fun BottomMenuItem(
 fun GreetingSection(
     name: String = ""
 ) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(15.dp)
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
+    Box(modifier = Modifier
+        .background(appDarkBlue)
+        .height(50.dp)
+        .fillMaxWidth())
+    {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+
             modifier = Modifier
-
+                .fillMaxWidth()
+                .padding(15.dp)
         ) {
-            Text(
-                text = " $name",
-                color = TextWhite
+            Column(
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
 
-            )
-            Text(
-                text = "",
-                color = TextWhite
+            ) {
+                Text(
+                    text = " $name",
+                    color = TextWhite
+
+                )
+                Text(
+                    text = "Wikino",
+                    color = TextWhite
+                )
+            }
+            Icon(
+                painter = painterResource(id = R.drawable.app_logo),
+                contentDescription = "Search",
+                //tint = Color.White,
+                modifier = Modifier.size(24.dp)
             )
         }
-        Icon(
-            painter = painterResource(id = R.drawable.screenshot_2023_06_07_200814),
-            contentDescription = "Search",
-            //tint = Color.White,
-            modifier = Modifier.size(24.dp)
-        )
     }
-}
+    }
+
 
 @Composable
 fun ChipSection(
@@ -182,8 +196,8 @@ fun ChipSection(
                     }
                     .clip(RoundedCornerShape(10.dp))
                     .background(
-                        if (selectedChipIndex == it) ButtonBlue
-                        else DarkerButtonBlue
+                        if (selectedChipIndex == it) appYellow
+                        else appWhite
                     )
                     .padding(15.dp)
             ) {
@@ -195,7 +209,7 @@ fun ChipSection(
 
 @Composable
 fun CurrentMeditation(
-    color: Color = LightRed
+    color: Color = appWhiteYellow
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
