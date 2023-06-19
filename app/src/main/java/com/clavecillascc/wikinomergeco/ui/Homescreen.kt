@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.materialIcon
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
@@ -38,6 +41,7 @@ import com.clavecillascc.wikinomergeco.ui.theme.AquaBlue
 import com.clavecillascc.wikinomergeco.ui.theme.ButtonBlue
 import com.clavecillascc.wikinomergeco.ui.theme.DarkerButtonBlue
 import com.clavecillascc.wikinomergeco.ui.theme.DeepBlue
+import com.clavecillascc.wikinomergeco.ui.theme.ErasDemiITC
 import com.clavecillascc.wikinomergeco.ui.theme.LightRed
 import com.clavecillascc.wikinomergeco.ui.theme.TextWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
@@ -55,8 +59,9 @@ fun HomeScreen() {
     ) {
         Column {
             GreetingSection()
-            ChipSection(chips = listOf("", "", ""))
-            Feedbox()
+            SearchBar()
+            //Filter(chips = listOf("", "", ""))
+            WordOfTheDay()
             Feedbox2()
         }
         BottomMenu(items = listOf(
@@ -144,9 +149,7 @@ fun BottomMenuItem(
 
 @Preview
 @Composable
-fun GreetingSection(
-    name: String = ""
-) {
+fun GreetingSection() {
     Box(modifier = Modifier
         .background(appDarkBlue)
         .height(50.dp)
@@ -158,7 +161,7 @@ fun GreetingSection(
 
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp)
+                .padding(horizontal = 10.dp, vertical = 5.dp)
         ) {
             Image(painter = painterResource(id = R.drawable.app_logo),
                 contentDescription = "app Icon")
@@ -169,18 +172,37 @@ fun GreetingSection(
             ) {
 
                 Text(
-                    text = "    Wikino",
-                    color = TextWhite
+                    text = "  Wikino",
+                    color = TextWhite,
+                    style = MaterialTheme.typography.headlineMedium
                 )
             }
 
         }
     }
     }
+@Composable
+fun SearchBar(){
+    Box(modifier = Modifier
+        .background(appYellow)
+        .fillMaxWidth()
+        .height(75.dp)) {
+        Row(){
+            /*
+            Box(
+                contentAlignment = Alignment.Center){
+                Text(text = "Searchbar")
+            }
+            Icon(painter = painterResource(id = R.drawable.collaboration), contentDescription = "user"
+            , Modifier.size(50.dp))
+            */
 
+        }
+    }
+}
 
 @Composable
-fun ChipSection(
+fun Filter(
     chips: List<String>
 ) {
     var selectedChipIndex by remember {
@@ -209,8 +231,9 @@ fun ChipSection(
 }
 
 @Composable
-fun Feedbox(
-    color: Color = appWhiteYellow
+fun WordOfTheDay(
+    color: Color = appWhiteYellow,
+
 ) {
     Column(
         modifier = Modifier
@@ -221,13 +244,24 @@ fun Feedbox(
             .fillMaxWidth()
             .height(200.dp)
     ) {
-
+            //Header
             Text(
-                text = "",
+                text = ""
 
-                )
+            )
+            //Word of the Day
             Text(
-                text = "",
+                text = ""
+
+            )
+            //Other terms
+            Text(
+            text = ""
+
+            )
+            //In sentence
+            Text(
+                text = ""
 
             )
 
