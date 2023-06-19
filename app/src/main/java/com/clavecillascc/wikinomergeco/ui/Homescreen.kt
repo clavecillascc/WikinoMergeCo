@@ -1,5 +1,7 @@
 package com.clavecillascc.wikinomergeco.ui
 
+import android.icu.text.ListFormatter.Width
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.materialIcon
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,15 +28,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.AquaBlue
 import com.clavecillascc.wikinomergeco.ui.theme.ButtonBlue
 import com.clavecillascc.wikinomergeco.ui.theme.DarkerButtonBlue
 import com.clavecillascc.wikinomergeco.ui.theme.DeepBlue
+import com.clavecillascc.wikinomergeco.ui.theme.ErasDemiITC
 import com.clavecillascc.wikinomergeco.ui.theme.LightRed
 import com.clavecillascc.wikinomergeco.ui.theme.TextWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
@@ -50,16 +59,19 @@ fun HomeScreen() {
     ) {
         Column {
             GreetingSection()
-            ChipSection(chips = listOf("", "", ""))
-            CurrentMeditation()
+            SearchBar()
+            //Filter(chips = listOf("", "", ""))
+            WordOfTheDay()
+            Feedbox2()
         }
         BottomMenu(items = listOf(
-            BottomMenuContent("Translate", R.drawable.ic_launcher_foreground),
-            BottomMenuContent("Library", R.drawable.screenshot_2023_06_07_200814),
-            BottomMenuContent("Collaborators", R.drawable.ic_launcher_foreground),
-            BottomMenuContent("About Us", R.drawable.screenshot_2023_06_07_200814),
+            BottomMenuContent("Translate", R.drawable.translate),
+            BottomMenuContent("Library", R.drawable.library, ),
+            BottomMenuContent("Favorites", R.drawable.favorite, ),
+            BottomMenuContent("Collaboration", R.drawable.collaboration, ),
             //BottomMenuContent("Profile", R.drawable.ic_launcher_foreground),
-        ), modifier = Modifier.align(Alignment.BottomCenter))
+        ), modifier = Modifier.align(Alignment.BottomCenter),
+        )
     }
 }
 
@@ -70,7 +82,7 @@ fun BottomMenu(
     activeHighlightColor: Color = appYellow,
     activeTextColor: Color = appYellow,
     inactiveTextColor: Color = appWhite,
-    initialSelectedItemIndex: Int = 0
+    initialSelectedItemIndex: Int = 0,
 ) {
     var selectedItemIndex by remember {
         mutableStateOf(initialSelectedItemIndex)
@@ -117,69 +129,81 @@ fun BottomMenuItem(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
-                .background(if (isSelected) activeHighlightColor else Color.Transparent)
-                .padding(10.dp)
+                .background(if (isSelected) appDarkBlue else Color.Transparent)
+                .padding(1.dp)
         ) {
             Icon(
                 painter = painterResource(id = item.iconId),
                 contentDescription = item.title,
                 tint = if (isSelected) activeTextColor else inactiveTextColor,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(30.dp)
             )
         }
         Text(
             text = item.title,
-            color = if(isSelected) activeTextColor else inactiveTextColor
+            color = if(isSelected) activeTextColor else inactiveTextColor,
+            fontSize = 10.sp
         )
     }
 }
 
 @Preview
 @Composable
-fun GreetingSection(
-    name: String = ""
-) {
+fun GreetingSection() {
     Box(modifier = Modifier
         .background(appDarkBlue)
         .height(50.dp)
         .fillMaxWidth())
     {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+            //horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically,
 
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp)
+                .padding(horizontal = 10.dp, vertical = 5.dp)
         ) {
+            Image(painter = painterResource(id = R.drawable.app_logo),
+                contentDescription = "app Icon")
             Column(
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
 
             ) {
-                Text(
-                    text = " $name",
-                    color = TextWhite
 
-                )
                 Text(
-                    text = "Wikino",
-                    color = TextWhite
+                    text = "  Wikino",
+                    color = TextWhite,
+                    fontFamily = ErasDemiITC,
+                    fontSize = 20.sp
                 )
             }
-            Icon(
-                painter = painterResource(id = R.drawable.app_logo),
-                contentDescription = "Search",
-                //tint = Color.White,
-                modifier = Modifier.size(24.dp)
-            )
+
         }
     }
     }
+@Composable
+fun SearchBar(){
+    Box(modifier = Modifier
+        .background(appYellow)
+        .fillMaxWidth()
+        .height(75.dp)) {
+        Row(){
+            /*
+            Box(
+                contentAlignment = Alignment.Center){
+                Text(text = "Searchbar")
+            }
+            Icon(painter = painterResource(id = R.drawable.collaboration), contentDescription = "user"
+            , Modifier.size(50.dp))
+            */
 
+        }
+    }
+}
 
 @Composable
-fun ChipSection(
+fun Filter(
     chips: List<String>
 ) {
     var selectedChipIndex by remember {
@@ -208,44 +232,71 @@ fun ChipSection(
 }
 
 @Composable
-fun CurrentMeditation(
-    color: Color = appWhiteYellow
+fun WordOfTheDay(
+    color: Color = appWhiteYellow,
+
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+    Column(
         modifier = Modifier
             .padding(15.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
+            .height(200.dp)
     ) {
-        Column {
+            //Header
             Text(
-                text = "",
+                text = "Word of the day",
+                style = MaterialTheme.typography.headlineMedium
 
-                )
+            )
+            //Word of the Day
             Text(
-                text = "",
+                text = "Naglamis",
+                style = MaterialTheme.typography.titleMedium
 
-                color = TextWhite
             )
-        }
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .background(ButtonBlue)
-                .padding(10.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.screenshot_2023_06_07_200814),
-                contentDescription = "Play",
-                tint = Color.White,
-                modifier = Modifier.size(16.dp)
+            //Other terms
+            Text(
+            text = ""
+
             )
-        }
+            //In sentence
+            Text(
+                text = ""
+
+            )
+
+
     }
+
+}
+
+@Composable
+fun Feedbox2(
+    color: Color = appWhiteYellow
+) {
+    Column(
+        modifier = Modifier
+            .padding(15.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(color)
+            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
+
+        Text(
+            text = "",
+
+            )
+        Text(
+            text = "",
+
+            )
+
+
+    }
+
 }
