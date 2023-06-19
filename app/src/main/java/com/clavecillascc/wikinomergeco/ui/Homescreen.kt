@@ -1,5 +1,6 @@
 package com.clavecillascc.wikinomergeco.ui
 
+import android.icu.text.ListFormatter.Width
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,10 +26,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.AquaBlue
 import com.clavecillascc.wikinomergeco.ui.theme.ButtonBlue
@@ -56,12 +60,13 @@ fun HomeScreen() {
             Feedbox2()
         }
         BottomMenu(items = listOf(
-            BottomMenuContent("Translate", R.drawable.translate,),
+            BottomMenuContent("Translate", R.drawable.translate),
             BottomMenuContent("Library", R.drawable.library, ),
             BottomMenuContent("Favorites", R.drawable.favorite, ),
             BottomMenuContent("Collaboration", R.drawable.collaboration, ),
             //BottomMenuContent("Profile", R.drawable.ic_launcher_foreground),
-        ), modifier = Modifier.align(Alignment.BottomCenter))
+        ), modifier = Modifier.align(Alignment.BottomCenter),
+        )
     }
 }
 
@@ -72,7 +77,7 @@ fun BottomMenu(
     activeHighlightColor: Color = appYellow,
     activeTextColor: Color = appYellow,
     inactiveTextColor: Color = appWhite,
-    initialSelectedItemIndex: Int = 0
+    initialSelectedItemIndex: Int = 0,
 ) {
     var selectedItemIndex by remember {
         mutableStateOf(initialSelectedItemIndex)
@@ -120,18 +125,19 @@ fun BottomMenuItem(
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
                 .background(if (isSelected) appDarkBlue else Color.Transparent)
-                .padding(10.dp)
+                .padding(1.dp)
         ) {
             Icon(
                 painter = painterResource(id = item.iconId),
                 contentDescription = item.title,
                 tint = if (isSelected) activeTextColor else inactiveTextColor,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(30.dp)
             )
         }
         Text(
             text = item.title,
-            color = if(isSelected) activeTextColor else inactiveTextColor
+            color = if(isSelected) activeTextColor else inactiveTextColor,
+            fontSize = 10.sp
         )
     }
 }
