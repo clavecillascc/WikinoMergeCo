@@ -54,10 +54,10 @@ fun HomeScreen() {
             CurrentMeditation()
         }
         BottomMenu(items = listOf(
-            BottomMenuContent("Translate", R.drawable.ic_launcher_foreground),
-            BottomMenuContent("Library", R.drawable.screenshot_2023_06_07_200814),
-            BottomMenuContent("Collaborators", R.drawable.ic_launcher_foreground),
-            BottomMenuContent("About Us", R.drawable.screenshot_2023_06_07_200814),
+            BottomMenuContent("Translate", R.drawable.translate,),
+            BottomMenuContent("Library", R.drawable.library, ),
+            BottomMenuContent("Favorites", R.drawable.favorite, ),
+            BottomMenuContent("Collaboration", R.drawable.collaboration, ),
             //BottomMenuContent("Profile", R.drawable.ic_launcher_foreground),
         ), modifier = Modifier.align(Alignment.BottomCenter))
     }
