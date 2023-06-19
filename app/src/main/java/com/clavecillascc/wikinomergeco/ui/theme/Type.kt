@@ -7,10 +7,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.clavecillascc.wikinomergeco.R
-
-val ErasDemiITC = FontFamily(
-    Font(R.font.eras_demi_itc)
-)
+// initializing fonts
+val ErasDemiITC = FontFamily(Font(R.font.eras_demi_itc))
+val Poppins = FontFamily(Font(R.font.poppins_regular))
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -22,9 +21,10 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     ),
     headlineMedium = TextStyle(
-        fontFamily = ErasDemiITC,
+        fontFamily = Poppins,
         fontWeight = FontWeight.Normal,
-        fontSize = 25.sp
+        fontSize = 20.sp,
+        color = textHeaderBlack
     )
     /* Other default text styles to override
     titleLarge = TextStyle(

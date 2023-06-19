@@ -174,7 +174,8 @@ fun GreetingSection() {
                 Text(
                     text = "  Wikino",
                     color = TextWhite,
-                    style = MaterialTheme.typography.headlineMedium
+                    fontFamily = ErasDemiITC,
+                    fontSize = 20.sp
                 )
             }
 
@@ -246,12 +247,14 @@ fun WordOfTheDay(
     ) {
             //Header
             Text(
-                text = ""
+                text = "Word of the day",
+                style = MaterialTheme.typography.headlineMedium
 
             )
             //Word of the Day
             Text(
-                text = ""
+                text = "Naglamis",
+                style = MaterialTheme.typography.titleMedium
 
             )
             //Other terms

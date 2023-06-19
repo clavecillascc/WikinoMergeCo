@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
                         systemUiController.setStatusBarColor(appDarkBlue)
                     }
                     HomeScreen()
+
                 }
             }
         }
