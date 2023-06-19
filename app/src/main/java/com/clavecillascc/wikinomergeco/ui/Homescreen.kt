@@ -1,5 +1,6 @@
 package com.clavecillascc.wikinomergeco.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -51,7 +52,8 @@ fun HomeScreen() {
         Column {
             GreetingSection()
             ChipSection(chips = listOf("", "", ""))
-            CurrentMeditation()
+            Feedbox()
+            Feedbox2()
         }
         BottomMenu(items = listOf(
             BottomMenuContent("Translate", R.drawable.translate,),
@@ -117,7 +119,7 @@ fun BottomMenuItem(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
-                .background(if (isSelected) activeHighlightColor else Color.Transparent)
+                .background(if (isSelected) appDarkBlue else Color.Transparent)
                 .padding(10.dp)
         ) {
             Icon(
@@ -145,34 +147,27 @@ fun GreetingSection(
         .fillMaxWidth())
     {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+            //horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically,
 
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp)
         ) {
+            Image(painter = painterResource(id = R.drawable.app_logo),
+                contentDescription = "app Icon")
             Column(
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
 
             ) {
-                Text(
-                    text = " $name",
-                    color = TextWhite
 
-                )
                 Text(
-                    text = "Wikino",
+                    text = "    Wikino",
                     color = TextWhite
                 )
             }
-            Icon(
-                painter = painterResource(id = R.drawable.app_logo),
-                contentDescription = "Search",
-                //tint = Color.White,
-                modifier = Modifier.size(24.dp)
-            )
+
         }
     }
     }
@@ -208,20 +203,19 @@ fun ChipSection(
 }
 
 @Composable
-fun CurrentMeditation(
+fun Feedbox(
     color: Color = appWhiteYellow
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+    Column(
         modifier = Modifier
             .padding(15.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
+            .height(200.dp)
     ) {
-        Column {
+
             Text(
                 text = "",
 
@@ -229,23 +223,37 @@ fun CurrentMeditation(
             Text(
                 text = "",
 
-                color = TextWhite
             )
-        }
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .background(ButtonBlue)
-                .padding(10.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.screenshot_2023_06_07_200814),
-                contentDescription = "Play",
-                tint = Color.White,
-                modifier = Modifier.size(16.dp)
-            )
-        }
+
+
     }
+
+}
+
+@Composable
+fun Feedbox2(
+    color: Color = appWhiteYellow
+) {
+    Column(
+        modifier = Modifier
+            .padding(15.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(color)
+            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
+
+        Text(
+            text = "",
+
+            )
+        Text(
+            text = "",
+
+            )
+
+
+    }
+
 }
