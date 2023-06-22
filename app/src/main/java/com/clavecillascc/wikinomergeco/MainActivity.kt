@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.clavecillascc.wikinomergeco.screens.HomeScreen
 import com.clavecillascc.wikinomergeco.ui.theme.WikinoMergeCoTheme
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
