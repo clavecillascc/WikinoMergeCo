@@ -1,4 +1,4 @@
-package com.clavecillascc.wikinomergeco
+package com.clavecillascc.wikinomergeco.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,6 +30,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.clavecillascc.wikinomergeco.BottomMenuContent
+import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.AquaBlue
 import com.clavecillascc.wikinomergeco.ui.theme.ButtonBlue
 import com.clavecillascc.wikinomergeco.ui.theme.ErasDemiITC

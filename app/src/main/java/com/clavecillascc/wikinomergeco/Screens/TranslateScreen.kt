@@ -1,2 +1,2 @@
-package com.clavecillascc.wikinomergeco
+package com.clavecillascc.wikinomergeco.screens
 
