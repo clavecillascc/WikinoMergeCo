@@ -1,4 +1,4 @@
-package com.clavecillascc.wikinomergeco.ui
+package com.clavecillascc.wikinomergeco
 
 import androidx.annotation.DrawableRes
 

@@ -1,6 +1,5 @@
-package com.clavecillascc.wikinomergeco.ui
+package com.clavecillascc.wikinomergeco
 
-import android.icu.text.ListFormatter.Width
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,9 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.materialIcon
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,21 +25,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.AquaBlue
 import com.clavecillascc.wikinomergeco.ui.theme.ButtonBlue
-import com.clavecillascc.wikinomergeco.ui.theme.DarkerButtonBlue
-import com.clavecillascc.wikinomergeco.ui.theme.DeepBlue
 import com.clavecillascc.wikinomergeco.ui.theme.ErasDemiITC
-import com.clavecillascc.wikinomergeco.ui.theme.LightRed
 import com.clavecillascc.wikinomergeco.ui.theme.TextWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appNotSoWhite
