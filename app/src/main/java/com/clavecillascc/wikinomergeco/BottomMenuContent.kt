@@ -1,10 +1,8 @@
 package com.clavecillascc.wikinomergeco
 
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
 
 data class BottomMenuContent(
-    val name: String,
+    val title: String,
     val route: String,
-    val icon: ImageVector,
-    val badgeCount: Int = 0
-)
+    @DrawableRes val iconId: Int)
