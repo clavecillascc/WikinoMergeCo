@@ -5,8 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.clavecillascc.wikinomergeco.screens.CollaboratorScreen
-import com.clavecillascc.wikinomergeco.screens.DictionaryScreen
 import com.clavecillascc.wikinomergeco.screens.HomeScreen
+import com.clavecillascc.wikinomergeco.screens.LibraryScreen
 import com.clavecillascc.wikinomergeco.screens.TranslateScreen
 
 @Composable
@@ -18,8 +18,8 @@ fun Navigation(navController: NavHostController) {
         composable(route = "translate"){
             TranslateScreen()
         }
-        composable(route = "dictionary"){
-            DictionaryScreen()
+        composable(route = "library"){
+            LibraryScreen()
         }
         composable(route = "collaborator"){
             CollaboratorScreen()
