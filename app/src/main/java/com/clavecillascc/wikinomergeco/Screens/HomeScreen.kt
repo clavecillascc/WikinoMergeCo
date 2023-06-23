@@ -16,6 +16,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,6 +34,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.clavecillascc.wikinomergeco.BottomMenuContent
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.AquaBlue
@@ -56,88 +62,50 @@ fun HomeScreen() {
             WordOfTheDay()
             Feedbox2()
         }
-        BottomMenu(items = listOf(
-            BottomMenuContent("Translate", R.drawable.translate),
-            BottomMenuContent("Library", R.drawable.library, ),
-            BottomMenuContent("Favorites", R.drawable.favorite, ),
-            BottomMenuContent("Collaboration", R.drawable.collaboration, ),
-            //BottomMenuContent("Profile", R.drawable.ic_launcher_foreground),
-        ), modifier = Modifier.align(Alignment.BottomCenter),
-        )
     }
 }
 
 @Composable
-fun BottomMenu(
+fun BottomNavigationBar(
     items: List<BottomMenuContent>,
-    modifier: Modifier = Modifier,
-    activeHighlightColor: Color = appYellow,
-    activeTextColor: Color = appYellow,
-    inactiveTextColor: Color = appWhite,
-    initialSelectedItemIndex: Int = 0,
-) {
-    var selectedItemIndex by remember {
-        mutableStateOf(initialSelectedItemIndex)
-    }
-    Row(
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .background(appDarkBlue)
-            .padding(15.dp)
-    ) {
-        items.forEachIndexed { index, item ->
-            BottomMenuItem(
-                item = item,
-                isSelected = index == selectedItemIndex,
-                activeHighlightColor = activeHighlightColor,
-                activeTextColor = activeTextColor,
-                inactiveTextColor = inactiveTextColor
-            ) {
-                selectedItemIndex = index
-            }
-        }
-    }
-}
-
-@Composable
-fun BottomMenuItem(
-    item: BottomMenuContent,
+    navController: NavController,
     isSelected: Boolean = false,
     activeHighlightColor: Color = ButtonBlue,
     activeTextColor: Color = Color.White,
     inactiveTextColor: Color = AquaBlue,
-    onItemClick: () -> Unit
+    onItemClick: (BottomMenuContent) -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.clickable {
-            onItemClick()
-        }
+    val backStackEntry = navController.currentBackStackEntryAsState()
+    NavigationBar(
+        containerColor = appDarkBlue,
+        tonalElevation = 5.dp
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
-                .background(if (isSelected) appDarkBlue else Color.Transparent)
-                .padding(1.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = item.iconId),
-                contentDescription = item.title,
-                tint = if (isSelected) activeTextColor else inactiveTextColor,
-                modifier = Modifier.size(30.dp)
-            )
+        items.forEach { item ->
+            val selected = item.route == backStackEntry.value?.destination?.route
+            NavigationBarItem(
+                selected = selected,
+                onClick = { onItemClick(item) },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = appYellow,
+                    unselectedIconColor = appWhite
+                ),
+                icon = {
+                    Column(horizontalAlignment = CenterHorizontally) {
+                        Icon(
+                            painter = painterResource(id = item.iconId),
+                            contentDescription = item.title,
+                            tint = if (isSelected) activeTextColor else inactiveTextColor,
+                            modifier = Modifier.size(30.dp)
+                        )
+                        Text(
+                            text = item.title,
+                            color = if(isSelected) activeTextColor else inactiveTextColor,
+                            fontSize = 10.sp)
+                        }
+                    })
+                }
         }
-        Text(
-            text = item.title,
-            color = if(isSelected) activeTextColor else inactiveTextColor,
-            fontSize = 10.sp
-        )
     }
-}
 
 @Preview
 @Composable
