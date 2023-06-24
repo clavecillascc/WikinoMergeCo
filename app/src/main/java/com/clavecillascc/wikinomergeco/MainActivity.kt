@@ -45,6 +45,7 @@ import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.nio.file.Files.size
 
 
 class MainActivity : ComponentActivity() {
@@ -121,7 +122,8 @@ fun BottomNavigationBar(navController: NavController) {
                     icon = {
                         Icon(
                             painter = painterResource(id = menuItem.icon),
-                            contentDescription = menuItem.title
+                            contentDescription = menuItem.title,
+                            modifier = Modifier.size(27.dp)
                         )
                     },
                     label = { Text(text = menuItem.title) },
