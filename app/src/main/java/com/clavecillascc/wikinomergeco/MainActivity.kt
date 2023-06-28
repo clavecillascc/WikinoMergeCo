@@ -18,6 +18,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -75,7 +77,7 @@ fun MainScreen() {
         topBar = { TopBar(coroutineScope, scaffoldState) },
         content = { ContentArea(navController) },
         bottomBar = { BottomNavigationBar(navController) },
-        drawerContent = { Drawer(coroutineScope, scaffoldState) }
+        drawerContent = { ModalNavigationDrawer(coroutineScope, scaffoldState) }
     )
 
     BackPressHandler{
@@ -195,6 +197,21 @@ fun Drawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
         }
     }
 }
+
+@Composable
+fun ModalNavigationDrawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
+        ModalDrawerSheet {
+
+            Divider()
+            NavigationDrawerItem(
+                label = { Text(text = "Drawer Item") },
+                selected = false,
+                onClick = { /*TODO*/ }
+            )
+
+        }
+}
+
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController, startDestination = NavigationItems.Home.route) {
