@@ -38,7 +38,7 @@ import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 
 @Composable
 fun TranslateScreen() {
-    //TODO
+    /*TODO*/
     //Text(text = "Translate")
     SearchAppBar(text = String(), onTextChange = { /*TODO*/ }, onCloseClicked = { /*TODO*/ }, onSearchClicked = { /*TODO*/ })
 }
@@ -50,8 +50,7 @@ fun SearchBar(){
         .fillMaxWidth()
         .height(70.dp)) {
         Row(){
-
-
+          
         }
     }
 }

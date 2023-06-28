@@ -26,13 +26,12 @@ import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 
 @Composable
 fun LibraryScreen() {
-    //TODO
+    /*TODO*/
     //Text(text = "Library")
     Column() {
         Spacer(modifier = Modifier.size(15.dp))
         Languages()
     }
-
 }
 
 @Composable
@@ -50,8 +49,6 @@ fun Languages (color: Color = appWhiteYellow, ) {
 
             .fillMaxWidth()
             .fillMaxHeight(),
-
-    
     ) {
         Text(text = "Available Languages:")
         Spacer(modifier = Modifier.size(20.dp))
@@ -89,8 +86,5 @@ fun Languages (color: Color = appWhiteYellow, ) {
                 }
             }
         }
-
-
         }
-
 }

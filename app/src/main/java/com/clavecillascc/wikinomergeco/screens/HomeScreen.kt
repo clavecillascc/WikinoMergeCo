@@ -28,7 +28,7 @@ import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 
 @Composable
 fun HomeScreen() {
-    //TODO
+    /*TODO*/
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
         ) {
@@ -39,7 +39,6 @@ fun HomeScreen() {
         WordOfTheDay()
     }
 }
-
 
 @Composable
 fun WordOfTheDay(
