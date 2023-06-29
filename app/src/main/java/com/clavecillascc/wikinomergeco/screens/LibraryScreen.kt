@@ -1,34 +1,46 @@
 package com.clavecillascc.wikinomergeco.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ButtonDefaults.buttonColors
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
+import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 
 @Composable
 fun LibraryScreen() {
     /*TODO*/
     //Text(text = "Library")
-    Column() {
+    Column {
         Spacer(modifier = Modifier.size(15.dp))
         Languages()
     }
@@ -46,45 +58,138 @@ fun Languages (color: Color = appWhiteYellow, ) {
             .clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
-
             .fillMaxWidth()
             .fillMaxHeight(),
     ) {
         Text(text = "Available Languages:")
         Spacer(modifier = Modifier.size(20.dp))
 
-        Column(verticalArrangement = Arrangement.SpaceAround,
-        modifier = Modifier
-            .height(150.dp)) {
-            Row(horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()) {
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "Tagalog")
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
 
+
+            modifier = Modifier
+                .height(220.dp)
+                .padding(horizontal = 10.dp)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(modifier = Modifier
+                    .size(height = 100.dp, width = 90.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White
+                ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { /*TODO*/ }
+                ) {
+                    //Text(text = "Tagalog")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_tagalog),
+                        contentDescription = "Tagalog",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
                 }
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "Bisaya")
+                Button(modifier = Modifier
+                    .size(height = 100.dp, width = 90.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White
+                ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { /*TODO*/ }
+                ) {
+                    //Text(text = "Tagalog")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_cebuano),
+                        contentDescription = "Tagalog",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
                 }
 
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "Ilocano")
+                Button(modifier = Modifier
+                    .size(height = 100.dp, width = 90.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White
+                ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { /*TODO*/ }
+                ) {
+                    //Text(text = "Tagalog")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_ilocano),
+                        contentDescription = "Tagalog",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
                 }
             }
 
-            Row(horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()) {
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "Waray")
 
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(modifier = Modifier
+                    .size(height = 100.dp, width = 90.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White
+                ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { /*TODO*/ }
+                ) {
+                    //Text(text = "Tagalog")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_maranao),
+                        contentDescription = "Tagalog",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
                 }
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "Cebuano")
+                Button(modifier = Modifier
+                    .size(height = 100.dp, width = 90.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White
+                ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { /*TODO*/ }
+                ) {
+                    //Text(text = "Tagalog")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_waray),
+                        contentDescription = "Tagalog",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
                 }
 
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "Tausug")
+                Button(modifier = Modifier
+                    .size(height = 100.dp, width = 90.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White
+                ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { /*TODO*/ }
+                ) {
+                    //Text(text = "Tagalog")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_bicolano),
+                        contentDescription = "Tagalog",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
                 }
             }
+
+
         }
-        }
+    }
 }
