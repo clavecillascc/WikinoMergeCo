@@ -40,6 +40,8 @@ val logoOuntline = Color(0xFFFCFAEB)
 val appNotSoWhite = Color(0xFFF6F6F6)
 val appWhite = Color(0xFFFFFFFF)
 val appWhiteYellow = Color(0xFFFEFCF1)
+val selectedGray = Color(0xFFCECBCB)
+val notSelectedGray = Color(0xFFF0F0F0)
 
 //font color
 val textHeaderBlack = Color(0xFF242424)
