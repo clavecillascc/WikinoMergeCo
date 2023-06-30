@@ -31,7 +31,12 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         color = textSeeMore
-    )
+    ),
+    labelSmall = TextStyle(
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        color = textHeaderBlack)
     /* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,

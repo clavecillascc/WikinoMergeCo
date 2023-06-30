@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -19,6 +21,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,8 +36,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.TextWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
@@ -50,8 +57,7 @@ fun CollaboratorScreen() {
         CollaboratorFilter()
         Spacer(modifier = Modifier.size(15.dp))
         RecentlyAdded()
-        Forum()
-        Forum()
+        HomeForum()
     }
 
 }
@@ -111,60 +117,86 @@ fun RecentlyAdded(
 ) {
     Column(
         modifier = Modifier
-            .padding(15.dp)
+            .padding(horizontal = 18.dp, vertical = 10.dp)
             .shadow(
                 shape = RoundedCornerShape(10.dp),
                 elevation = 5.dp,
             )
             .clip(RoundedCornerShape(10.dp))
             .background(color)
-            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .padding(horizontal = 15.dp, vertical = 15.dp)
             .fillMaxWidth()
-            .height(200.dp)
+            .height(200.dp),
+        verticalArrangement = Arrangement.SpaceBetween
+
+
     ) {
+        Column() {
+            //Header
+            Text(
+                text = "",
+                style = MaterialTheme.typography.headlineMedium,
 
-        Text(
-            text = "",
+                )
+            //Word of the Day
+            Text(
+                text = "",
+                style = MaterialTheme.typography.titleMedium
 
             )
-        Text(
-            text = "",
+            //Other terms
+            Text(
+                text = ""
+
+            )
+            //In sentence
+            Text(
+                text = ""
 
             )
 
+        }
+        //See more clickable
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
 
+            Row(modifier = Modifier.height(20.dp)
+                ) {
+                IconButton(onClick = { /*TODO*/ }, Modifier.size(30.dp)) {
+                    Icon(painter = painterResource(id = R.drawable.follow_icon),
+                        contentDescription = "follow", Modifier.size(15.dp))
+                }
+                Text(
+                    text = "Follow",
+                    style = MaterialTheme.typography.labelSmall)
+            }
+
+            Row(modifier = Modifier.height(20.dp)
+            ) {
+                IconButton(onClick = { /*TODO*/ }, Modifier.size(30.dp)) {
+                    Icon(painter = painterResource(id =R.drawable.chat_light),
+                        contentDescription = "comment", Modifier.size(20.dp))
+                }
+                Text(
+                    text = "Comment",
+                    style = MaterialTheme.typography.labelSmall)
+            }
+
+            Row(modifier = Modifier.height(20.dp)
+            ) {
+                IconButton(onClick = { /*TODO*/ }, Modifier.size(20.dp)) {
+                    Icon(painter = painterResource(R.drawable.upvote_icon),
+                        contentDescription = "upvote", Modifier.size(10.dp))}
+
+                IconButton(onClick = { /*TODO*/ }, Modifier.size(20.dp)) {
+                    Icon(painter = painterResource(R.drawable.downvote_icon),
+                      contentDescription = "downvote", Modifier.size(10.dp))}
+
+
+            }
+
+        }
     }
-
 }
 
-@Composable
-fun Forum(
-    color: Color = appWhiteYellow
-) {
-    Column(
-        modifier = Modifier
-            .padding(15.dp)
-            .shadow(
-                shape = RoundedCornerShape(10.dp),
-                elevation = 5.dp,
-            )
-            .clip(RoundedCornerShape(10.dp))
-            .background(color)
-            .padding(horizontal = 15.dp, vertical = 20.dp)
-            .fillMaxWidth()
-            .height(200.dp)
-    ) {
-
-        Text(
-            text = "",
-
-            )
-        Text(
-            text = "",
-
-            )
 
 
-    }
-
-}
