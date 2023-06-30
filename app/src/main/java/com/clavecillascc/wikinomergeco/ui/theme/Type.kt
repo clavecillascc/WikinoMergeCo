@@ -22,9 +22,15 @@ val Typography = Typography(
     ),
     headlineMedium = TextStyle(
         fontFamily = Poppins,
-        fontWeight = FontWeight.Normal,
-        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp,
         color = textHeaderBlack
+    ),
+    displaySmall = TextStyle(
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        color = textSeeMore
     )
     /* Other default text styles to override
     titleLarge = TextStyle(
