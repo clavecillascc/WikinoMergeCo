@@ -60,7 +60,6 @@ fun WordOfTheDay(
             .background(color)
             .padding(horizontal = 15.dp, vertical = 15.dp)
             .fillMaxWidth()
-            //.height(200.dp),
             ,verticalArrangement = Arrangement.SpaceBetween
 
 
