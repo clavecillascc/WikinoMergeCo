@@ -60,36 +60,56 @@ fun WordOfTheDay(
             .background(color)
             .padding(horizontal = 15.dp, vertical = 15.dp)
             .fillMaxWidth()
-            .height(200.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+            //.height(200.dp),
+            ,verticalArrangement = Arrangement.SpaceBetween
 
 
 
     ) {
         Column() {
-            //Header
+            //Word of the Day
+            // Line 1 - Header
             Text(
                 text = "Word of the day",
                 style = MaterialTheme.typography.headlineMedium,
 
                 )
-            //Word of the Day
+            Spacer(modifier = Modifier.size(5.dp))
+            //Line 2 -Translated Word
+            Row() {
+                Text(
+                    text = "     " + "Naglamis",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = "(Ilocano)",
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            //Line 3 - Other terms
             Text(
-                text = "",
-                style = MaterialTheme.typography.titleMedium
+                text = "     "  + "• " + "ang lamig, malamig",
+                style = MaterialTheme.typography.titleSmall
 
             )
-            //Other terms
+            Spacer(modifier = Modifier.size(10.dp))
+            //Line 4 - Sentence in same language
             Text(
-                text = ""
-
+                text ="       "  + "Naglamiis ti angin!",
+                style = MaterialTheme.typography.bodySmall
             )
-            //In sentence
+            //Line 5 - Sentence in chosen language
             Text(
-                text = ""
-
+                text = "          "  + "Ang lamig ng hangin!",
+                style = MaterialTheme.typography.headlineSmall
             )
+            //Line 6 - Sentence in english language
 
+            Text(
+                text = "          "  + "The wind is so cold!",
+                style = MaterialTheme.typography.headlineSmall
+            )
         }
         //See more clickable
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -162,7 +182,7 @@ fun FAQ(
 fun HomeForum ( color: Color = appWhiteYellow){
     Column(
         modifier = Modifier
-            .padding(start = 18.dp, top =10.dp, end = 18.dp, bottom = 80.dp)
+            .padding(start = 18.dp, top = 10.dp, end = 18.dp, bottom = 80.dp)
             .shadow(
                 shape = RoundedCornerShape(10.dp),
                 elevation = 5.dp,

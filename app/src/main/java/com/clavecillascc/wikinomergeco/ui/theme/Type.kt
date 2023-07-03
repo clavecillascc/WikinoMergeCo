@@ -20,10 +20,11 @@ val Typography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
+    // Line 1 - Header
     headlineMedium = TextStyle(
         fontFamily = Poppins,
         fontWeight = FontWeight.Bold,
-        fontSize = 18.sp,
+        fontSize = 22.sp,
         color = textHeaderBlack
     ),
     displaySmall = TextStyle(
@@ -36,7 +37,34 @@ val Typography = Typography(
         fontFamily = Poppins,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
-        color = textHeaderBlack)
+        color = textHeaderBlack
+    ),
+    //Line 2 -Translated Word
+    titleMedium = TextStyle(
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp,
+        color = textTerm
+    ),
+    //Line 3 - Other terms
+    titleSmall = TextStyle(
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        color = textOtherTerms
+    ),
+    //Line 4 - Sentence in same language
+    bodySmall = TextStyle(
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        color = textTerm),
+    //Line 5 & 6
+    headlineSmall = TextStyle(
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        color = textSentence)
     /* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
