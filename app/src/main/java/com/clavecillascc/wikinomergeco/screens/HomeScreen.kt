@@ -1,9 +1,7 @@
 package com.clavecillascc.wikinomergeco.screens
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +13,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +26,13 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.semantics.SemanticsProperties.Text
+import androidx.compose.ui.unit.dp
+import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
+import com.clavecillascc.wikinomergeco.ui.theme.appYellow
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.clavecillascc.wikinomergeco.ui.theme.ErasDemiITC
@@ -33,7 +41,6 @@ import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 
 @Composable
 fun HomeScreen() {
-    /*TODO*/
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
         ) {
@@ -47,23 +54,39 @@ fun HomeScreen() {
 @Composable
 fun WordOfTheDay(
     color: Color = appWhiteYellow,
+) {
+    val word = remember { mutableStateOf("") }
+    val storage = FirebaseStorage.getInstance()
+    val storageRef = storage.reference
+    val ONE_MEGABYTE: Long = 1024 * 1024
+    LaunchedEffect(Unit) {
+        // Retrieve a list of all files in the desired folder
+        val files = withContext(Dispatchers.IO) {
+            storageRef.child("Words/").listAll().await().items
+        }
+        
+        // Choose a random file from the list
+        val randomFile = files.random()
 
-    ) {
+        // Download the content of the random file
+        val bytes = withContext(Dispatchers.IO) {
+            randomFile.getBytes(ONE_MEGABYTE).await()
+        }
+        val text = String(bytes)
+        word.value = text
+    }
     Column(
         modifier = Modifier
-            .padding(horizontal = 18.dp, vertical = 10.dp)
+            .padding(10.dp)
             .shadow(
                 shape = RoundedCornerShape(10.dp),
                 elevation = 5.dp,
             )
             .clip(RoundedCornerShape(10.dp))
             .background(color)
-            .padding(horizontal = 15.dp, vertical = 15.dp)
+            .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
-            ,verticalArrangement = Arrangement.SpaceBetween
-
-
-
+            .height(200.dp)
     ) {
         Column() {
             //Word of the Day
@@ -119,7 +142,6 @@ fun WordOfTheDay(
         }
 
     }
-
 }
 
 @Composable
@@ -229,4 +251,3 @@ fun HomeForum ( color: Color = appWhiteYellow){
         }
     }
 }
-

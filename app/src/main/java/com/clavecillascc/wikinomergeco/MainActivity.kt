@@ -46,15 +46,20 @@ import com.clavecillascc.wikinomergeco.ui.theme.WikinoMergeCoTheme
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
+import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.nio.file.Files.size
+
 
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //initialize Firebase
+        FirebaseApp.initializeApp(this)
+
         installSplashScreen()
         setContent {
             WikinoMergeCoTheme {
