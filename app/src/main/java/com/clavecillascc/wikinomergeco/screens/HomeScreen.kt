@@ -129,7 +129,7 @@ fun FAQ(
             .padding(horizontal = 15.dp, vertical = 15.dp)
             .fillMaxWidth()
             .height(200.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
 
         Column() {
@@ -141,18 +141,20 @@ fun FAQ(
                 )
             //Word of the Day
             Text(
-                text = "",
-                style = MaterialTheme.typography.titleMedium
+                text = "   "+"• "+"sample 1",
+                style = MaterialTheme.typography.labelMedium
 
             )
             //Other terms
             Text(
-                text = ""
+                text = "   "+"• "+"sample 2",
+                style = MaterialTheme.typography.labelMedium
 
             )
             //In sentence
             Text(
-                text = ""
+                text = "   "+"• "+"sample 3",
+                style = MaterialTheme.typography.labelMedium
 
             )
 
@@ -163,10 +165,11 @@ fun FAQ(
                 modifier = Modifier.align(alignment = Alignment.End),
                 style = MaterialTheme.typography.displaySmall,
 
-            )
+                )
         }
     }
 }
+
 
 @Composable
 fun HomeForum ( color: Color = appWhiteYellow){
