@@ -130,66 +130,6 @@ fun Languages (color: Color = appWhiteYellow, ) {
                 }
             }
 
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Button(modifier = Modifier
-                    .size(height = 100.dp, width = 90.dp)
-                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.White
-                ),
-                    contentPadding = PaddingValues(0.dp),
-                    onClick = { /*TODO*/ }
-                ) {
-                    //Text(text = "Tagalog")
-                    Image(
-                        painter = painterResource(id = R.drawable.button_maranao),
-                        contentDescription = "Tagalog",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxSize()
-                    )
-                }
-                Button(modifier = Modifier
-                    .size(height = 100.dp, width = 90.dp)
-                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.White
-                ),
-                    contentPadding = PaddingValues(0.dp),
-                    onClick = { /*TODO*/ }
-                ) {
-                    //Text(text = "Tagalog")
-                    Image(
-                        painter = painterResource(id = R.drawable.button_waray),
-                        contentDescription = "Tagalog",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxSize()
-                    )
-                }
-
-                Button(modifier = Modifier
-                    .size(height = 100.dp, width = 90.dp)
-                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.White
-                ),
-                    contentPadding = PaddingValues(0.dp),
-                    onClick = { /*TODO*/ }
-                ) {
-                    //Text(text = "Tagalog")
-                    Image(
-                        painter = painterResource(id = R.drawable.button_bicolano),
-                        contentDescription = "Tagalog",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxSize()
-                    )
-                }
-            }
-
-
         }
     }
 }
