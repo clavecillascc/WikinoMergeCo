@@ -1,7 +1,9 @@
 package com.clavecillascc.wikinomergeco.screens
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -86,9 +88,9 @@ fun WordOfTheDay(
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
-            .height(200.dp)
+        //.height(200.dp)
     ) {
-        Column() {
+        Column {
             //Word of the Day
             // Line 1 - Header
             Text(
@@ -97,51 +99,18 @@ fun WordOfTheDay(
 
                 )
             Spacer(modifier = Modifier.size(5.dp))
-            //Line 2 -Translated Word
-            Row() {
+            Translation()
+            //See more clickable
+            Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = "     " + "Naglamis",
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Text(
-                    text = "(Ilocano)",
-                    style = MaterialTheme.typography.titleMedium
+                    text = "See more",
+                    modifier = Modifier.align(alignment = Alignment.End),
+                    style = MaterialTheme.typography.displaySmall
                 )
             }
-
-            //Line 3 - Other terms
-            Text(
-                text = "     "  + "• " + "ang lamig, malamig",
-                style = MaterialTheme.typography.titleSmall
-
-            )
-            Spacer(modifier = Modifier.size(10.dp))
-            //Line 4 - Sentence in same language
-            Text(
-                text ="       "  + "Naglamiis ti angin!",
-                style = MaterialTheme.typography.bodySmall
-            )
-            //Line 5 - Sentence in chosen language
-            Text(
-                text = "          "  + "Ang lamig ng hangin!",
-                style = MaterialTheme.typography.headlineSmall
-            )
-            //Line 6 - Sentence in english language
-
-            Text(
-                text = "          "  + "The wind is so cold!",
-                style = MaterialTheme.typography.headlineSmall
-            )
         }
-        //See more clickable
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Text(text = "See more",
-                modifier = Modifier.align(alignment = Alignment.End),
-                style = MaterialTheme.typography.displaySmall
-            )
-        }
-
     }
+
 }
 
 @Composable
@@ -249,5 +218,48 @@ fun HomeForum ( color: Color = appWhiteYellow){
 
                 )
         }
+    }
+}
+
+@Composable
+fun Translation(color: Color = appWhiteYellow){
+    Column(
+
+    ) {
+        //Line 2 -Translated Word
+        Row() {
+            Text(
+                text = "     " + "Naglamis",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = "(Ilocano)",
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+
+        //Line 3 - Other terms
+        Text(
+            text = "     "  + "• " + "ang lamig, malamig",
+            style = MaterialTheme.typography.titleSmall
+
+        )
+        Spacer(modifier = Modifier.size(10.dp))
+        //Line 4 - Sentence in same language
+        Text(
+            text ="       "  + "Naglamiis ti angin!",
+            style = MaterialTheme.typography.bodySmall
+        )
+        //Line 5 - Sentence in chosen language
+        Text(
+            text = "          "  + "Ang lamig ng hangin!",
+            style = MaterialTheme.typography.headlineSmall
+        )
+        //Line 6 - Sentence in english language
+
+        Text(
+            text = "          "  + "The wind is so cold!",
+            style = MaterialTheme.typography.headlineSmall
+        )
     }
 }
