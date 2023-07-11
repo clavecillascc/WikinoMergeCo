@@ -68,3 +68,5 @@ fun WikinoMergeCoTheme(
         content = content
     )
 }
+
+

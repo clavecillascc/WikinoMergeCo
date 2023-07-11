@@ -58,16 +58,12 @@ fun Languages (color: Color = appWhiteYellow, ) {
             .clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
-            .fillMaxWidth()
-            .fillMaxHeight(),
     ) {
         Text(text = "Available Languages:")
         Spacer(modifier = Modifier.size(20.dp))
 
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
-
-
             modifier = Modifier
                 .height(220.dp)
                 .padding(horizontal = 10.dp)
@@ -129,7 +125,6 @@ fun Languages (color: Color = appWhiteYellow, ) {
                     )
                 }
             }
-
         }
     }
 }

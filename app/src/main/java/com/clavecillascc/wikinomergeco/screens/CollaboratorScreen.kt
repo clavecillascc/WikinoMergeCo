@@ -64,7 +64,7 @@ fun CollaboratorScreen() {
         CollaboratorFilter()
         Spacer(modifier = Modifier.size(15.dp))
         RecentlyAdded()
-
+        Spacer(modifier = Modifier.size(75.dp))
     }
 
 }

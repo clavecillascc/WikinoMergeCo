@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,18 +31,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.clavecillascc.wikinomergeco.navigation.Screen
+import com.clavecillascc.wikinomergeco.navigation.WikinoMergeCoRouter
 import com.clavecillascc.wikinomergeco.screens.CollaboratorScreen
 import com.clavecillascc.wikinomergeco.screens.HomeScreen
 import com.clavecillascc.wikinomergeco.screens.LibraryScreen
+import com.clavecillascc.wikinomergeco.screens.LoginScreen
+import com.clavecillascc.wikinomergeco.screens.SignUpScreen
 import com.clavecillascc.wikinomergeco.screens.TranslateScreen
 import com.clavecillascc.wikinomergeco.ui.theme.ErasDemiITC
-import com.clavecillascc.wikinomergeco.ui.theme.Navigation
 import com.clavecillascc.wikinomergeco.ui.theme.WikinoMergeCoTheme
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
@@ -49,7 +54,6 @@ import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
 
 
 class MainActivity : ComponentActivity() {
@@ -68,6 +72,39 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+@Composable
+fun Login(homeViewModel: HomeViewModel = viewModel()) {
+
+    homeViewModel.checkForActiveSession()
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color.White
+    ) {
+
+        if (homeViewModel.isUserLoggedIn.value == true) {
+            WikinoMergeCoRouter.navigateTo(Screen.HomeScreen)
+        }
+
+        Crossfade(targetState = WikinoMergeCoRouter.currentScreen) { currentState ->
+            when (currentState.value) {
+                is Screen.SignUpScreen -> {
+                    SignUpScreen()
+                }
+
+                is Screen.LoginScreen -> {
+                    LoginScreen()
+                }
+
+                is Screen.HomeScreen -> {
+                    HomeScreen()
+                }
+            }
+        }
+
+    }
+}
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -105,7 +142,7 @@ fun MainScreen() {
 
 @Composable
 fun ContentArea(navController: NavHostController) {
-    Navigation(navController = navController)
+    com.clavecillascc.wikinomergeco.navigation.Navigation(navController = navController)
 
 }
 
