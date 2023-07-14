@@ -1,4 +1,4 @@
-package com.clavecillascc.wikinomergeco
+package com.clavecillascc.wikinomergeco.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
@@ -7,13 +7,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.clavecillascc.wikinomergeco.login.LoginScreen
-import com.clavecillascc.wikinomergeco.login.LoginViewModel
-import com.clavecillascc.wikinomergeco.login.SignUpScreen
+import com.clavecillascc.wikinomergeco.R
+import com.clavecillascc.wikinomergeco.loginAndSignUp.LoginScreen
+import com.clavecillascc.wikinomergeco.loginAndSignUp.LoginViewModel
+import com.clavecillascc.wikinomergeco.loginAndSignUp.SignUpScreen
+import com.clavecillascc.wikinomergeco.mainScreen.MainScreen
 
 sealed class NavigationItems(var route: String, var icon: Int, var title: String) {
 
-    object Home : NavigationItems("home",R.drawable.home , "Home")
+    object Home : NavigationItems("home", R.drawable.home, "Home")
     object Translate : NavigationItems("translate", R.drawable.translate, "Translate")
     object Library : NavigationItems("library", R.drawable.library, "Library")
     object Collaborator : NavigationItems("collaborator", R.drawable.collaboration, "Collaborator")

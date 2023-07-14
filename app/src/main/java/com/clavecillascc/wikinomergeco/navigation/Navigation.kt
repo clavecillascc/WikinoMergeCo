@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.clavecillascc.wikinomergeco.screens.CollaboratorScreen
-import com.clavecillascc.wikinomergeco.screens.HomeScreen
-import com.clavecillascc.wikinomergeco.screens.LibraryScreen
-import com.clavecillascc.wikinomergeco.screens.TranslateScreen
+import com.clavecillascc.wikinomergeco.otherScreens.CollaboratorScreen
+import com.clavecillascc.wikinomergeco.otherScreens.HomeScreen
+import com.clavecillascc.wikinomergeco.otherScreens.LibraryScreen
+import com.clavecillascc.wikinomergeco.otherScreens.TranslateScreen
 
 @Composable
 fun Navigation(navController: NavHostController) {
