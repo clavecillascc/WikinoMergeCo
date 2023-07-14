@@ -1,4 +1,4 @@
-package com.clavecillascc.wikinomergeco.screens
+package com.clavecillascc.wikinomergeco.otherScreens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
