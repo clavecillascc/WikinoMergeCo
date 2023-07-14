@@ -42,26 +42,23 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 fun HomeScreen() {
-    /*TODO*/
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
         ) {
         Spacer(modifier = Modifier.size(15.dp))
         WordOfTheDay()
-        Feedbox2()
+        FAQ()
+        HomeForum()
     }
 }
-
 @Composable
 fun WordOfTheDay(
     color: Color = appWhiteYellow,
 ) {
     val word = remember { mutableStateOf("") }
-
     val storage = FirebaseStorage.getInstance()
     val storageRef = storage.reference
     val ONE_MEGABYTE: Long = 1024 * 1024
-
     val context = LocalContext.current
     val sharedPreferences = remember(context) {
         PreferenceManager.getDefaultSharedPreferences(context)
@@ -86,7 +83,6 @@ fun WordOfTheDay(
                 } else {
                     files
                 }
-
                 if (filteredFiles.isNotEmpty()) {
                     // Choose a random file from the filtered list
                     val randomFile = filteredFiles.random()
@@ -121,7 +117,6 @@ fun WordOfTheDay(
             }
         }
     }
-
     DisposableEffect(word.value) {
         onDispose {
             // Save the current word value when the composable is disposed
@@ -130,23 +125,19 @@ fun WordOfTheDay(
             }
         }
     }
-
     // Define the header, body, and other text styles
     val headerStyle = TextStyle(
         fontSize = 16.sp,
         color = Color.Blue
     )
-
     val bodyStyle = TextStyle(
         fontSize = 12.sp,
         color = Color.Yellow
     )
-
     val otherTextStyle = TextStyle(
         fontSize = 11.sp,
         color = Color.Blue
     )
-
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -167,7 +158,6 @@ fun WordOfTheDay(
             text = headerText,
             style = headerStyle
         )
-
         // Extract the body text
         val bodyText = word.value.substringAfter("\n").substringBeforeLast("\n")
         // Apply bodyStyle to the body text
@@ -175,7 +165,6 @@ fun WordOfTheDay(
             text = bodyText,
             style = bodyStyle
         )
-
         // Extract the intermediate lines
         val intermediateLines = word.value
             .substringAfter("\n")
@@ -194,7 +183,6 @@ fun WordOfTheDay(
                 )
             }
         }
-
         // Extract the other text
         val otherText = word.value.substringAfterLast("\n\t")
         // Apply otherTextStyle to the other text
@@ -207,33 +195,142 @@ fun WordOfTheDay(
 }
 
 @Composable
-fun Feedbox2(
+fun FAQ(
     color: Color = appWhiteYellow
 ) {
     Column(
         modifier = Modifier
-            .padding(15.dp)
+            .padding(horizontal = 18.dp, vertical = 10.dp)
             .shadow(
                 shape = RoundedCornerShape(10.dp),
                 elevation = 5.dp,
             )
             .clip(RoundedCornerShape(10.dp))
             .background(color)
-            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .padding(horizontal = 15.dp, vertical = 15.dp)
             .fillMaxWidth()
-            .height(200.dp)
+            .height(200.dp),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-
-        Text(
-            text = "",
-
+        Column() {
+            //Header
+            Text(
+                text = "FAQ",
+                style = MaterialTheme.typography.headlineMedium,
+                )
+            //Word of the Day
+            Text(
+                text = "   "+"• "+"sample 1",
+                style = MaterialTheme.typography.labelMedium
             )
-        Text(
-            text = "",
-
+            //Other terms
+            Text(
+                text = "   "+"• "+"sample 2",
+                style = MaterialTheme.typography.labelMedium
             )
-
-
+            //In sentence
+            Text(
+                text = "   "+"• "+"sample 3",
+                style = MaterialTheme.typography.labelMedium
+            )
+        }
+        //See more clickable
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(text = "See more",
+                modifier = Modifier.align(alignment = Alignment.End),
+                style = MaterialTheme.typography.displaySmall,
+                )
+        }
     }
+}
 
+
+@Composable
+fun HomeForum ( color: Color = appWhiteYellow){
+    Column(
+        modifier = Modifier
+            .padding(start = 18.dp, top = 10.dp, end = 18.dp, bottom = 80.dp)
+            .shadow(
+                shape = RoundedCornerShape(10.dp),
+                elevation = 5.dp,
+            )
+            .clip(RoundedCornerShape(10.dp))
+            .background(color)
+            .padding(horizontal = 15.dp, vertical = 15.dp)
+            .fillMaxWidth()
+            .height(200.dp),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column() {
+            //Header
+            Text(
+                text = "Forum",
+                style = MaterialTheme.typography.headlineMedium,
+
+                )
+            //Word of the Day
+            Text(
+                text = "",
+                style = MaterialTheme.typography.titleMedium
+            )
+            //Other terms
+            Text(
+                text = ""
+            )
+            //In sentence
+            Text(
+                text = ""
+            )
+        }
+        //See more clickable
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(text = "See more",
+                modifier = Modifier.align(alignment = Alignment.End),
+                style = MaterialTheme.typography.displaySmall,
+                )
+        }
+    }
+}
+
+@Composable
+fun Translation(color: Color = appWhiteYellow){
+    Column(
+
+    ) {
+        //Line 2 -Translated Word
+        Row() {
+            Text(
+                text = "     " + "Naglamis",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = "(Ilocano)",
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+
+        //Line 3 - Other terms
+        Text(
+            text = "     "  + "• " + "ang lamig, malamig",
+            style = MaterialTheme.typography.titleSmall
+
+        )
+        Spacer(modifier = Modifier.size(10.dp))
+        //Line 4 - Sentence in same language
+        Text(
+            text ="       "  + "Naglamiis ti angin!",
+            style = MaterialTheme.typography.bodySmall
+        )
+        //Line 5 - Sentence in chosen language
+        Text(
+            text = "          "  + "Ang lamig ng hangin!",
+            style = MaterialTheme.typography.headlineSmall
+        )
+        //Line 6 - Sentence in english language
+
+        Text(
+            text = "          "  + "The wind is so cold!",
+            style = MaterialTheme.typography.headlineSmall
+        )
+    }
 }

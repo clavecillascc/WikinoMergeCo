@@ -40,10 +40,15 @@ val logoOuntline = Color(0xFFFCFAEB)
 val appNotSoWhite = Color(0xFFF6F6F6)
 val appWhite = Color(0xFFFFFFFF)
 val appWhiteYellow = Color(0xFFFEFCF1)
+val selectedGray = Color(0xFFCECBCB)
+val notSelectedGray = Color(0xFFF0F0F0)
+val dividerColor = Color(0xFFEAEAEA)
 
 //font color
 val textHeaderBlack = Color(0xFF242424)
+val normalBlack = Color(0xFF242424)
 val textTerm = Color(0xFFA20101)
 val textOtherTerms = Color(0xFF006FF6)
 val textSentence = Color(0xFF746F6F)
 val textSeeMore = Color(0xFF5991FE)
+
