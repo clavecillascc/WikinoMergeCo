@@ -1,4 +1,4 @@
-package com.clavecillascc.wikinomergeco.screens
+package com.clavecillascc.wikinomergeco.otherScreens
 
 import android.graphics.Paint.Align
 import androidx.compose.foundation.Image
@@ -84,7 +84,6 @@ fun CollaboratorFilter(){
             Text(text = "    Available Laungages:", color = appWhite)
             Filter(chips = listOf("Tagalog", "Cebuano", "Bicolano"))
         }
-
     }
 }
 
