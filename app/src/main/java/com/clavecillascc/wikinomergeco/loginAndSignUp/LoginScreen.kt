@@ -30,11 +30,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginViewModel? = null,
+    loginAndSignUpViewModel: LoginAndSignUpViewModel? = null,
     onNavToHomePage:() -> Unit,
     onNavToSignUpPage:() -> Unit,
 ) {
-    val loginUiState = loginViewModel?.loginUiState
+    val loginUiState = loginAndSignUpViewModel?.loginUiState
     val isError = loginUiState?.loginError != null
     val context = LocalContext.current
 
@@ -61,7 +61,7 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(16.dp),
             value = loginUiState?.userName ?: "",
-            onValueChange = {loginViewModel?.onUserNameChange(it)},
+            onValueChange = {loginAndSignUpViewModel?.onUserNameChange(it)},
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Person,
@@ -78,7 +78,7 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(16.dp),
             value = loginUiState?.password ?: "",
-            onValueChange = { loginViewModel?.onPasswordNameChange(it) },
+            onValueChange = { loginAndSignUpViewModel?.onPasswordNameChange(it) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Lock,
@@ -92,7 +92,7 @@ fun LoginScreen(
             isError = isError
         )
 
-        Button(onClick = { loginViewModel?.loginUser(context) }) {
+        Button(onClick = { loginAndSignUpViewModel?.loginUser(context) }) {
             Text(text = "Sign In")
         }
         Spacer(modifier = Modifier.size(16.dp))
@@ -112,8 +112,8 @@ fun LoginScreen(
             CircularProgressIndicator()
         }
 
-        LaunchedEffect(key1 = loginViewModel?.hasUser){
-            if (loginViewModel?.hasUser == true){
+        LaunchedEffect(key1 = loginAndSignUpViewModel?.hasUser){
+            if (loginAndSignUpViewModel?.hasUser == true){
                 onNavToHomePage.invoke()
             }
         }

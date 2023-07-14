@@ -84,7 +84,6 @@ fun CollaboratorFilter(){
             Text(text = "    Available Laungages:", color = appWhite)
             Filter(chips = listOf("Tagalog", "Cebuano", "Bicolano"))
         }
-
     }
 }
 

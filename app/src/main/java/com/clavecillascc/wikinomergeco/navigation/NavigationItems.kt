@@ -8,10 +8,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.clavecillascc.wikinomergeco.R
+import com.clavecillascc.wikinomergeco.loginAndSignUp.LoginAndSignUpViewModel
 import com.clavecillascc.wikinomergeco.loginAndSignUp.LoginScreen
-import com.clavecillascc.wikinomergeco.loginAndSignUp.LoginViewModel
 import com.clavecillascc.wikinomergeco.loginAndSignUp.SignUpScreen
 import com.clavecillascc.wikinomergeco.mainScreen.MainScreen
+import com.clavecillascc.wikinomergeco.mainScreen.MainScreenViewModel
 
 sealed class NavigationItems(var route: String, var icon: Int, var title: String) {
 
@@ -39,21 +40,23 @@ enum class NestedRoutes {
 @Composable
 fun Navigation(
     navController: NavHostController = rememberNavController(),
-    loginViewModel: LoginViewModel
+    loginAndSignUpViewModel: LoginAndSignUpViewModel,
+    mainScreenViewModel: MainScreenViewModel
 ) {
     NavHost(
         navController = navController,
         startDestination = NestedRoutes.Main.name
     ) {
-        authGraph(navController, loginViewModel)
+        authGraph(navController, loginAndSignUpViewModel)
         homeGraph(
-            navController = navController
+            navController = navController,
+            mainScreenViewModel
         )
     }
 }
 fun NavGraphBuilder.authGraph(
     navController: NavHostController,
-    loginViewModel: LoginViewModel,
+    loginAndSignUpViewModel: LoginAndSignUpViewModel
 ) {
     navigation(
         startDestination = LoginRoutes.SignIn.name,
@@ -68,7 +71,7 @@ fun NavGraphBuilder.authGraph(
                     }
                 }
             },
-                loginViewModel = loginViewModel
+                loginAndSignUpViewModel = loginAndSignUpViewModel
 
             ) {
                 navController.navigate(LoginRoutes.Signup.name) {
@@ -88,7 +91,7 @@ fun NavGraphBuilder.authGraph(
                     }
                 }
             },
-                loginViewModel = loginViewModel
+                loginAndSignUpViewModel = loginAndSignUpViewModel
             ) {
                 navController.navigate(LoginRoutes.SignIn.name)
             }
@@ -97,14 +100,17 @@ fun NavGraphBuilder.authGraph(
 }
 
 fun NavGraphBuilder.homeGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    mainScreenViewModel: MainScreenViewModel
 ) {
     navigation(
         startDestination = HomeRoutes.Home.name,
         route = NestedRoutes.Main.name,
     ) {
         composable(HomeRoutes.Home.name) {
-            MainScreen() {
+            MainScreen(
+                mainScreenViewModel = mainScreenViewModel
+            ) {
                 navController.navigate(NestedRoutes.Login.name) {
                     launchSingleTop = true
                     popUpTo(0) {

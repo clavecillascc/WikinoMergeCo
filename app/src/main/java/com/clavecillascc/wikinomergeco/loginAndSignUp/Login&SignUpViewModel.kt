@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.clavecillascc.wikinomergeco.repository.AuthRepository
 import kotlinx.coroutines.launch
 
-class LoginViewModel(
+class LoginAndSignUpViewModel(
     private val repository: AuthRepository = AuthRepository(),
 ) : ViewModel() {
     val currentUser = repository.currentUser

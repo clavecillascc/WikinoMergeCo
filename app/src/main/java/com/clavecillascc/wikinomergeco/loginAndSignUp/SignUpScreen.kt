@@ -30,11 +30,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SignUpScreen(
-    loginViewModel: LoginViewModel? = null,
+    loginAndSignUpViewModel: LoginAndSignUpViewModel? = null,
     onNavToHomePage:() -> Unit,
     onNavToLoginPage:() -> Unit,
 ) {
-    val loginUiState = loginViewModel?.loginUiState
+    val loginUiState = loginAndSignUpViewModel?.loginUiState
     val isError = loginUiState?.signUpError != null
     val context = LocalContext.current
 
@@ -61,7 +61,7 @@ fun SignUpScreen(
                 .fillMaxWidth()
                 .padding(16.dp),
             value = loginUiState?.userNameSignUp ?: "",
-            onValueChange = {loginViewModel?.onUserNameChangeSignup(it)},
+            onValueChange = {loginAndSignUpViewModel?.onUserNameChangeSignup(it)},
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Person,
@@ -78,7 +78,7 @@ fun SignUpScreen(
                 .fillMaxWidth()
                 .padding(16.dp),
             value = loginUiState?.passwordSignUp ?: "",
-            onValueChange = { loginViewModel?.onPasswordChangeSignup(it) },
+            onValueChange = { loginAndSignUpViewModel?.onPasswordChangeSignup(it) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Lock,
@@ -96,7 +96,7 @@ fun SignUpScreen(
                 .fillMaxWidth()
                 .padding(16.dp),
             value = loginUiState?.confirmPasswordSignUp ?: "",
-            onValueChange = { loginViewModel?.onConfirmPasswordChange(it) },
+            onValueChange = {loginAndSignUpViewModel?.onConfirmPasswordChange(it) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Lock,
@@ -110,7 +110,7 @@ fun SignUpScreen(
             isError = isError
         )
 
-        Button(onClick = { loginViewModel?.createUser(context) }) {
+        Button(onClick = { loginAndSignUpViewModel?.createUser(context) }) {
             Text(text = "Sign In")
         }
         Spacer(modifier = Modifier.size(16.dp))
@@ -130,8 +130,8 @@ fun SignUpScreen(
             CircularProgressIndicator()
         }
 
-        LaunchedEffect(key1 = loginViewModel?.hasUser){
-            if (loginViewModel?.hasUser == true){
+        LaunchedEffect(key1 = loginAndSignUpViewModel?.hasUser){
+            if (loginAndSignUpViewModel?.hasUser == true){
                 onNavToHomePage.invoke()
             }
         }

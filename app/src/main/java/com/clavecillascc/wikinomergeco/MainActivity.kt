@@ -9,7 +9,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.clavecillascc.wikinomergeco.loginAndSignUp.LoginViewModel
+import com.clavecillascc.wikinomergeco.loginAndSignUp.LoginAndSignUpViewModel
+import com.clavecillascc.wikinomergeco.mainScreen.MainScreenViewModel
 import com.clavecillascc.wikinomergeco.navigation.Navigation
 import com.clavecillascc.wikinomergeco.ui.theme.WikinoMergeCoTheme
 import com.google.firebase.FirebaseApp
@@ -24,10 +25,12 @@ class MainActivity : ComponentActivity() {
 
         installSplashScreen()
         setContent {
-            val loginViewModel = viewModel(modelClass = LoginViewModel::class.java)
+            val loginAndSignUpViewModel = viewModel(modelClass = LoginAndSignUpViewModel::class.java)
+            val mainScreenViewModel = viewModel(modelClass = MainScreenViewModel::class.java)
             WikinoMergeCoTheme {
                 Navigation(
-                    loginViewModel = loginViewModel
+                    loginAndSignUpViewModel = loginAndSignUpViewModel,
+                    mainScreenViewModel = mainScreenViewModel
                 )
             }
         }
