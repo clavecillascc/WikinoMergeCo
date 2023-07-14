@@ -1,5 +1,6 @@
 package com.clavecillascc.wikinomergeco.screens
-import androidx.compose.ui.platform.LocalContext
+
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,23 +25,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.OffsetEffect
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
-import androidx.compose.ui.semantics.SemanticsProperties.Text
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
+import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
+import com.clavecillascc.wikinomergeco.ui.theme.textSentence
+import com.clavecillascc.wikinomergeco.ui.theme.textTerm
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import com.clavecillascc.wikinomergeco.ui.theme.ErasDemiITC
-import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
-import com.clavecillascc.wikinomergeco.ui.theme.appYellow
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun HomeScreen() {
@@ -48,11 +47,12 @@ fun HomeScreen() {
         ) {
         Spacer(modifier = Modifier.size(15.dp))
         WordOfTheDay()
+        WordOfTheDayUI()
         FAQ()
         HomeForum()
+
     }
 }
-
 @Composable
 fun WordOfTheDay(
     color: Color = appWhiteYellow,
@@ -61,21 +61,72 @@ fun WordOfTheDay(
     val storage = FirebaseStorage.getInstance()
     val storageRef = storage.reference
     val ONE_MEGABYTE: Long = 1024 * 1024
-    LaunchedEffect(Unit) {
-        // Retrieve a list of all files in the desired folder
-        val files = withContext(Dispatchers.IO) {
-            storageRef.child("Words/").listAll().await().items
-        }
-        
-        // Choose a random file from the list
-        val randomFile = files.random()
+    val context = LocalContext.current
+    val sharedPreferences = remember(context) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+    }
+    val lastRetrievalTime = sharedPreferences.getLong("lastRetrievalTime", 0L)
+    val previousFileKey = sharedPreferences.getString("previousFileKey", null)
 
-        // Download the content of the random file
-        val bytes = withContext(Dispatchers.IO) {
-            randomFile.getBytes(ONE_MEGABYTE).await()
+    LaunchedEffect(Unit) {
+        val currentTime = System.currentTimeMillis()
+        val oneDayInMillis = TimeUnit.DAYS.toMillis(1)
+
+        if ((currentTime - lastRetrievalTime >= oneDayInMillis) || previousFileKey == null) {
+            // Retrieve a list of all files in the desired folder
+            val files = withContext(Dispatchers.IO) {
+                storageRef.child("Words/").listAll().await().items
+            }
+
+            if (files.isNotEmpty()) {
+                // Exclude the previously selected file, if any
+                val filteredFiles = if (previousFileKey != null) {
+                    files.filter { it.name != previousFileKey }
+                } else {
+                    files
+                }
+                if (filteredFiles.isNotEmpty()) {
+                    // Choose a random file from the filtered list
+                    val randomFile = filteredFiles.random()
+
+                    try {
+                        // Download the content of the random file
+                        val bytes = withContext(Dispatchers.IO) {
+                            randomFile.getBytes(ONE_MEGABYTE).await()
+                        }
+
+                        val text = bytes.decodeToString() // Convert byte array to string
+                        word.value = text
+                        Log.d("WordOfTheDay", "Word retrieved: $text")
+
+                        // Store the random file key, previous file key, and last retrieval time in SharedPreferences
+                        sharedPreferences.edit {
+                            putString("previousFileKey", randomFile.name)
+                            putString("randomFileKey", randomFile.name)
+                            putLong("lastRetrievalTime", currentTime)
+                        }
+                    } catch (e: Exception) {
+                        Log.e("WordOfTheDay", "Error downloading file: ${e.message}")
+                    }
+                }
+            }
+        } else {
+            // Retrieve the previously stored word value
+            val storedWord = sharedPreferences.getString("word", "")
+            if (!storedWord.isNullOrEmpty()) {
+                word.value = storedWord
+                Log.d("WordOfTheDay", "Word retrieved from SharedPreferences: $storedWord")
+            }
         }
-        val text = String(bytes)
-        word.value = text
+    }
+
+    DisposableEffect(word.value) {
+        onDispose {
+            // Save the current word value when the composable is disposed
+            sharedPreferences.edit {
+                putString("word", word.value)
+            }
+        }
     }
     Column(
         modifier = Modifier
@@ -88,29 +139,43 @@ fun WordOfTheDay(
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
-        //.height(200.dp)
+            .height(200.dp)
     ) {
-        Column {
-            //Word of the Day
-            // Line 1 - Header
-            Text(
-                text = "Word of the day",
-                style = MaterialTheme.typography.headlineMedium,
+        val lines = word.value.lines()
 
-                )
-            Spacer(modifier = Modifier.size(5.dp))
-            Translation()
-            //See more clickable
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = "See more",
-                    modifier = Modifier.align(alignment = Alignment.End),
-                    style = MaterialTheme.typography.displaySmall
-                )
-            }
+        Text(
+            text = "Word of the day",
+            style = MaterialTheme.typography.headlineMedium,
+        )
+        Spacer(modifier = Modifier.size(5.dp))
+        if (lines.size >= 6) {
+            Text(
+                text = lines[1],
+                style = MaterialTheme.typography.titleMedium,
+                color = textTerm
+            )
+            Text(
+                text = lines[2],
+                style = MaterialTheme.typography.titleMedium,
+                color = appYellow
+            )
+            Text(
+                text = lines[3],
+                style = MaterialTheme.typography.titleMedium,
+                color = textOtherTerms
+            )
+            Text(
+                text = lines[4],
+                style = MaterialTheme.typography.headlineSmall,
+                color = textTerm
+            )
+            Text(
+                text = lines[5],
+                style = MaterialTheme.typography.headlineSmall,
+                color = textSentence
+            )
         }
     }
-
 }
 
 @Composable
@@ -131,40 +196,33 @@ fun FAQ(
             .height(200.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-
         Column() {
             //Header
             Text(
                 text = "FAQ",
                 style = MaterialTheme.typography.headlineMedium,
-
                 )
             //Word of the Day
             Text(
                 text = "   "+"• "+"sample 1",
                 style = MaterialTheme.typography.labelMedium
-
             )
             //Other terms
             Text(
                 text = "   "+"• "+"sample 2",
                 style = MaterialTheme.typography.labelMedium
-
             )
             //In sentence
             Text(
                 text = "   "+"• "+"sample 3",
                 style = MaterialTheme.typography.labelMedium
-
             )
-
         }
         //See more clickable
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(text = "See more",
                 modifier = Modifier.align(alignment = Alignment.End),
                 style = MaterialTheme.typography.displaySmall,
-
                 )
         }
     }
@@ -187,7 +245,6 @@ fun HomeForum ( color: Color = appWhiteYellow){
             .height(200.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-
         Column() {
             //Header
             Text(
@@ -199,26 +256,21 @@ fun HomeForum ( color: Color = appWhiteYellow){
             Text(
                 text = "",
                 style = MaterialTheme.typography.titleMedium
-
             )
             //Other terms
             Text(
                 text = ""
-
             )
             //In sentence
             Text(
                 text = ""
-
             )
-
         }
         //See more clickable
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(text = "See more",
                 modifier = Modifier.align(alignment = Alignment.End),
                 style = MaterialTheme.typography.displaySmall,
-
                 )
         }
     }
@@ -266,3 +318,34 @@ fun Translation(color: Color = appWhiteYellow){
         )
     }
 }
+
+@Composable
+fun WordOfTheDayUI(
+    color: Color = appWhiteYellow,
+) {
+    Column(
+        modifier = Modifier
+            .padding(10.dp)
+            .shadow(
+                shape = RoundedCornerShape(10.dp),
+                elevation = 5.dp,
+            )
+            .clip(RoundedCornerShape(10.dp))
+            .background(color)
+            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .fillMaxWidth()
+        //.height(200.dp)
+    ) {
+        Column {
+            //Word of the Day
+            // Line 1 - Header
+            Text(
+                text = "Word of the day",
+                style = MaterialTheme.typography.headlineMedium,
+
+                )
+            Spacer(modifier = Modifier.size(5.dp))
+            Translation()
+            }
+        }
+    }

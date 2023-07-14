@@ -133,6 +133,7 @@ fun RecentlyAdded(
     ) {
         UserContribution()
         UserContribution()
+        Spacer(modifier = Modifier.size(70.dp))
     }
 }
 @Composable

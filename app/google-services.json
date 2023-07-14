@@ -1,13 +1,14 @@
 {
   "project_info": {
     "project_number": "515146928597",
+    "firebase_url": "https://wikinomergeco-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "wikinomergeco",
     "storage_bucket": "wikinomergeco.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:515146928597:android:e9c0de9b6629cf879bed5c",
+        "mobilesdk_app_id": "1:515146928597:android:27c896a589ec485d9bed5c",
         "android_client_info": {
           "package_name": "com.clavecillascc.wikinomergeco"
         }
