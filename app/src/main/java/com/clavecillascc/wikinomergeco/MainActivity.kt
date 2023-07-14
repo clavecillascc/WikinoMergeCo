@@ -10,12 +10,8 @@ import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -30,12 +26,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.clavecillascc.wikinomergeco.login.LoginViewModel
 import com.clavecillascc.wikinomergeco.screens.CollaboratorScreen
 import com.clavecillascc.wikinomergeco.screens.HomeScreen
 import com.clavecillascc.wikinomergeco.screens.LibraryScreen
@@ -60,8 +58,12 @@ class MainActivity : ComponentActivity() {
 
         installSplashScreen()
         setContent {
+            val loginViewModel = viewModel(modelClass = LoginViewModel::class.java)
             WikinoMergeCoTheme {
-                    MainScreen()
+                Navigation(
+                    loginViewModel = loginViewModel
+                )
+//                    MainScreen()
                 }
             }
         }
@@ -69,7 +71,7 @@ class MainActivity : ComponentActivity() {
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScreen() {
+fun MainScreen(navToLoginPage: () -> Unit) {
 
     var pressedTime: Long = 0
     val activity = (LocalContext.current as? Activity)
@@ -83,7 +85,7 @@ fun MainScreen() {
         topBar = { TopBar(coroutineScope, scaffoldState) },
         content = { ContentArea(navController) },
         bottomBar = { BottomNavigationBar(navController) },
-        drawerContent = { ModalNavigationDrawer(coroutineScope, scaffoldState) }
+        drawerContent = { ModalNavigationDrawer(coroutineScope, scaffoldState,navToLoginPage)}
     )
 
     BackPressHandler{
@@ -104,7 +106,6 @@ fun MainScreen() {
 @Composable
 fun ContentArea(navController: NavHostController) {
     com.clavecillascc.wikinomergeco.navigation.Navigation(navController = navController)
-
 }
 
 @Composable
@@ -184,36 +185,36 @@ fun TopBar(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
     )
 }
 
-@Composable
-fun Drawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
-    Column(
-        Modifier
-            .background(Color.White)
-            .fillMaxSize()
-    ) {
-        val drawerMenu = listOf("Home", "Settings", "Sign Out")
-        val listState = rememberLazyListState()
-        LazyColumn(state = listState) {
-            items(drawerMenu) { item ->
-                Text(
-                    text = item,
-                    color = Color.Black,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp)
-                        .clickable {
-                            coroutineScope.launch {
-                                scaffoldState.drawerState.close()
-                            }
-                        }
-                )
-            }
-        }
-    }
-}
+//@Composable
+//fun Drawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
+//    Column(
+//        Modifier
+//            .background(Color.White)
+//            .fillMaxSize()
+//    ) {
+//        val drawerMenu = listOf("Home", "Settings", "Sign Out")
+//        val listState = rememberLazyListState()
+//        LazyColumn(state = listState) {
+//            items(drawerMenu) { item ->
+//                Text(
+//                    text = item,
+//                    color = Color.Black,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(20.dp)
+//                        .clickable {
+//                            coroutineScope.launch {
+//                                scaffoldState.drawerState.close()
+//                            }
+//                        }
+//                )
+//            }
+//        }
+//    }
+//}
 
 @Composable
-fun ModalNavigationDrawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
+fun ModalNavigationDrawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState,navToLoginPage: () -> Unit) {
         ModalDrawerSheet {
 
             Divider()
@@ -221,6 +222,12 @@ fun ModalNavigationDrawer(coroutineScope: CoroutineScope, scaffoldState: Scaffol
                 label = { Text(text = "Drawer Item") },
                 selected = false,
                 onClick = { /*TODO*/ }
+            )
+            Divider()
+            NavigationDrawerItem(
+                label = { Text(text = "Sign Out") },
+                selected = false,
+                onClick = { navToLoginPage.invoke() }
             )
 
         }
