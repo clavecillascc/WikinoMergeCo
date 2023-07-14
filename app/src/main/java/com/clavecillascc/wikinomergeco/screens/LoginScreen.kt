@@ -11,13 +11,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.clavecillascc.wikinomergeco.R
+import com.clavecillascc.wikinomergeco.data.login.LoginUIEvent
 import com.clavecillascc.wikinomergeco.navigation.Screen
 import com.clavecillascc.wikinomergeco.navigation.SystemBackButtonHandler
 import com.clavecillascc.wikinomergeco.navigation.WikinoMergeCoRouter
-
+import com.clavecillascc.wikinomergeco.data.login.LoginViewModel
 @Composable
-fun LoginScreen() {
+fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -30,12 +32,20 @@ fun LoginScreen() {
             MyTextFieldComponent(
                 labelValue = stringResource(id = R.string.email),
                 painterResource(id = R.drawable.message),
-                onTextChanged =
+                onTextChanged = {
+                    loginViewModel.onEvent(LoginUIEvent.EmailChanged(it))
+                },
+                errorStatus = loginViewModel.loginUIState.value.emailError
             )
             PasswordTextFieldComponent(
                 labelValue = stringResource(id = R.string.password),
                 painterResource(id = R.drawable.lock),
-                onTextChanged =
+                onTextChanged = {
+                    {
+                        loginViewModel.onEvent(LoginUIEvent.PasswordChanged(it))
+                    },
+                    errorStatus = loginViewModel.loginUIState.value.passwordError
+                }
             )
             UnderLinedTextComponent(value = stringResource(id = R.string.forgot_password))
             ButtonComponent(value = stringResource(id = R.string.login), onButtonClicked = { /*TODO*/ })

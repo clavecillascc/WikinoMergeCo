@@ -72,7 +72,12 @@ fun SignUpScreen() {
             Spacer(modifier = Modifier.height(20.dp))
             MyTextFieldComponent(
                 labelValue = stringResource(id = R.string.first_name),
-                painterResource(id = R.drawable.profile))
+                painterResource(id = R.drawable.profile),
+                onTextChanged = {
+                    signupViewModel.onEvent(SignupUIEvent.FirstNameChanged(it))
+                },
+                errorStatus = signupViewModel.registrationUIState.value.firstNameError
+            )
             MyTextFieldComponent(
                 labelValue = stringResource(id = R.string.last_name),
                 painterResource(id = R.drawable.profile))
@@ -83,7 +88,11 @@ fun SignUpScreen() {
                 labelValue = stringResource(id = R.string.password),
                 painterResource(id = R.drawable.lock))
             Spacer(modifier = Modifier.height(80.dp))
-            ButtonComponent(value = stringResource(id = R.string.register), onButtonClicked = { /*TODO*/ })
+            ButtonComponent(value = stringResource(id = R.string.register), onButtonClicked = {
+                loginViewModel.onEvent.RegisterButtonClicked
+            },
+                isEnabled = true
+            )
             DividerTextComponent()
             ClickableLoginTextComponent(tryingToLogin = true, onTextSelected = {
                 WikinoMergeCoRouter.navigateTo(Screen.LoginScreen)})
