@@ -141,19 +141,21 @@ fun FAQ(
                 )
             //Word of the Day
             Text(
-                text = "   "+"• "+"sample 1",
-                style = MaterialTheme.typography.labelMedium
+                //clickable, must be highlighted and underlined
+                text = "   "+"• "+"What is Wikino?",
+                style = MaterialTheme.typography.labelMedium,
+
 
             )
             //Other terms
             Text(
-                text = "   "+"• "+"sample 2",
+                text = "   "+"• "+"How long will it take for translatio...",
                 style = MaterialTheme.typography.labelMedium
 
             )
             //In sentence
             Text(
-                text = "   "+"• "+"sample 3",
+                text = "   "+"• "+"Why is English the default langua...",
                 style = MaterialTheme.typography.labelMedium
 
             )

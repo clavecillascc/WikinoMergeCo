@@ -1,13 +1,19 @@
 package com.clavecillascc.wikinomergeco.screens
 import android.view.Surface
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Icon
@@ -33,14 +39,25 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
+import com.clavecillascc.wikinomergeco.ui.theme.logoGray
+import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
+import com.clavecillascc.wikinomergeco.ui.theme.notSelectedGray
+import com.clavecillascc.wikinomergeco.ui.theme.selectedGray
 
 
 @Composable
 fun TranslateScreen() {
     /*TODO*/
     //Text(text = "Translate")
+
     SearchAppBar(text = String(), onTextChange = { /*TODO*/ }, onCloseClicked = { /*TODO*/ }, onSearchClicked = { /*TODO*/ })
+    Column(Modifier.fillMaxWidth().height(650.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+        NoActivityMessage()
+    }
+
 }
 
 @Composable
@@ -130,4 +147,16 @@ fun SearchAppBar(
                 cursorColor = Color.White.copy(alpha = ContentAlpha.medium)
             ))
     }
+}
+
+@Composable
+fun NoActivityMessage(){
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Image(
+            painter = painterResource(id = R.drawable.app_logo_grayed),
+            contentDescription = "Grayed Logo",
+            modifier = Modifier.size(150.dp))
+        Text(text = "Input text in search bar to begin translating", color = logoGray, fontSize = 13.sp)
+    }
+    
 }
