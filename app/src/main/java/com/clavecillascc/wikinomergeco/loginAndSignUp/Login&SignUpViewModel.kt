@@ -1,4 +1,4 @@
-package com.clavecillascc.wikinomergeco.login
+package com.clavecillascc.wikinomergeco.loginAndSignUp
 
 import android.content.Context
 import android.widget.Toast
@@ -50,7 +50,6 @@ class LoginViewModel(
                 loginUiState.passwordSignUp.isNotBlank() &&
                 loginUiState.confirmPasswordSignUp.isNotBlank()
 
-
     fun createUser(context: Context) = viewModelScope.launch {
         try {
             if (!validateSignupForm()) {
@@ -84,20 +83,14 @@ class LoginViewModel(
                     ).show()
                     loginUiState = loginUiState.copy(isSuccessLogin = false)
                 }
-
             }
-
-
         } catch (e: Exception) {
             loginUiState = loginUiState.copy(signUpError = e.localizedMessage)
             e.printStackTrace()
         } finally {
             loginUiState = loginUiState.copy(isLoading = false)
         }
-
-
     }
-
     fun loginUser(context: Context) = viewModelScope.launch {
         try {
             if (!validateLoginForm()) {
@@ -124,21 +117,14 @@ class LoginViewModel(
                     ).show()
                     loginUiState = loginUiState.copy(isSuccessLogin = false)
                 }
-
             }
-
-
         } catch (e: Exception) {
             loginUiState = loginUiState.copy(loginError = e.localizedMessage)
             e.printStackTrace()
         } finally {
             loginUiState = loginUiState.copy(isLoading = false)
         }
-
-
     }
-
-
 }
 
 data class LoginUiState(
