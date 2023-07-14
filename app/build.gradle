@@ -57,7 +57,6 @@ dependencies {
     implementation 'androidx.compose.material:material:1.4.3'
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.compose.material3:material3:1.1.1'
-    implementation 'androidx.preference:preference:1.2.0'
     implementation 'com.google.firebase:firebase-storage-ktx:20.2.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -67,6 +66,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
     implementation 'com.google.firebase:firebase-firestore-ktx:24.6.1'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
+    implementation 'androidx.preference:preference:1.2.0'
 
 
     //Splash API

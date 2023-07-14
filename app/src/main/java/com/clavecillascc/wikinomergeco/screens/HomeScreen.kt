@@ -2,7 +2,9 @@ package com.clavecillascc.wikinomergeco.screens
 import android.util.Log
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +20,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -44,7 +47,7 @@ import java.util.concurrent.TimeUnit
 fun HomeScreen() {
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
-        ) {
+    ) {
         Spacer(modifier = Modifier.size(15.dp))
         WordOfTheDay()
         FAQ()
@@ -70,7 +73,7 @@ fun WordOfTheDay(
         val currentTime = System.currentTimeMillis()
         val oneDayInMillis = TimeUnit.DAYS.toMillis(1)
 
-        if (currentTime - lastRetrievalTime >= oneDayInMillis || previousFileKey == null) {
+        if ((currentTime - lastRetrievalTime >= oneDayInMillis) || previousFileKey == null) {
             // Retrieve a list of all files in the desired folder
             val files = withContext(Dispatchers.IO) {
                 storageRef.child("Words/").listAll().await().items
@@ -125,6 +128,7 @@ fun WordOfTheDay(
             }
         }
     }
+
     // Define the header, body, and other text styles
     val headerStyle = TextStyle(
         fontSize = 16.sp,
@@ -138,6 +142,7 @@ fun WordOfTheDay(
         fontSize = 11.sp,
         color = Color.Blue
     )
+
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -151,46 +156,28 @@ fun WordOfTheDay(
             .fillMaxWidth()
             .height(200.dp)
     ) {
-        // Extract the header text
-        val headerText = word.value.substringBefore("\n")
-        // Apply headerStyle to the header text
-        Text(
-            text = headerText,
-            style = headerStyle
-        )
-        // Extract the body text
-        val bodyText = word.value.substringAfter("\n").substringBeforeLast("\n")
-        // Apply bodyStyle to the body text
-        Text(
-            text = bodyText,
-            style = bodyStyle
-        )
-        // Extract the intermediate lines
-        val intermediateLines = word.value
-            .substringAfter("\n")
-            .substringAfterLast("\n")
-            .substringBeforeLast("\n\t")
-            .trimIndent()
-            .split("\n")
+        val lines = word.value.lines()
+        if (lines.isNotEmpty()) {
+            Text(
+                text = lines.first(),
+                style = headerStyle
+            )
 
-        // Display intermediate lines
-        intermediateLines.forEachIndexed { index, line ->
-            if (index < intermediateLines.size - 1) {
+            if (lines.size >= 2) {
                 Text(
-                    text = line,
+                    text = lines[1],
+                    style = bodyStyle
+                )
+            }
+
+            for (i in 2 until lines.size) {
+                Text(
+                    text = lines[i],
                     style = otherTextStyle,
                     modifier = Modifier.padding(start = 16.dp)
                 )
             }
         }
-        // Extract the other text
-        val otherText = word.value.substringAfterLast("\n\t")
-        // Apply otherTextStyle to the other text
-        Text(
-            text = otherText,
-            style = otherTextStyle,
-            modifier = Modifier.padding(start = 16.dp)
-        )
     }
 }
 
@@ -212,12 +199,12 @@ fun FAQ(
             .height(200.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column() {
+        Column {
             //Header
             Text(
                 text = "FAQ",
                 style = MaterialTheme.typography.headlineMedium,
-                )
+            )
             //Word of the Day
             Text(
                 text = "   "+"• "+"sample 1",
@@ -239,7 +226,7 @@ fun FAQ(
             Text(text = "See more",
                 modifier = Modifier.align(alignment = Alignment.End),
                 style = MaterialTheme.typography.displaySmall,
-                )
+            )
         }
     }
 }
@@ -261,7 +248,7 @@ fun HomeForum ( color: Color = appWhiteYellow){
             .height(200.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column() {
+        Column {
             //Header
             Text(
                 text = "Forum",
@@ -287,18 +274,16 @@ fun HomeForum ( color: Color = appWhiteYellow){
             Text(text = "See more",
                 modifier = Modifier.align(alignment = Alignment.End),
                 style = MaterialTheme.typography.displaySmall,
-                )
+            )
         }
     }
 }
 
 @Composable
 fun Translation(color: Color = appWhiteYellow){
-    Column(
-
-    ) {
+    Column {
         //Line 2 -Translated Word
-        Row() {
+        Row {
             Text(
                 text = "     " + "Naglamis",
                 style = MaterialTheme.typography.titleMedium
