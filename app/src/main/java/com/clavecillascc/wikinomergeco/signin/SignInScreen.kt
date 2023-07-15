@@ -28,7 +28,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.clavecillascc.wikinomergeco.MainActivity
 import com.clavecillascc.wikinomergeco.R
+import com.clavecillascc.wikinomergeco.navigation.NavigationItems
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
@@ -69,8 +71,8 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.size(30.dp))
         }
-        //Buttons
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            //sign-in
             Button(modifier = Modifier
                 .size(height = 40.dp, width = 300.dp)
                 .defaultMinSize(), colors = ButtonDefaults.buttonColors(
@@ -83,7 +85,7 @@ fun SignInScreen(
                     fontSize = 14.sp) }
 
             Spacer(modifier = Modifier.size(15.dp))
-
+            //sign-up
             Button(modifier = Modifier
                 .size(height = 40.dp, width = 300.dp)
                 .defaultMinSize(), colors = ButtonDefaults.buttonColors(
@@ -100,19 +102,17 @@ fun SignInScreen(
                         style = MaterialTheme.typography.displayMedium,
                         color = appYellow,
                         fontSize = 14.sp) } }
-
+            //skip
             TextButton(modifier = Modifier
                 .size(height = 40.dp, width = 300.dp)
                 .defaultMinSize(),
                 contentPadding = PaddingValues(0.dp),
-                onClick = onSignInClick) {
+                onClick = { /*TODO*/ }) {
                 Text(text = "skip for now >",
                     style = MaterialTheme.typography.displayMedium,
                     color = appWhite,
                     fontSize = 14.sp)
             }
-
         }
     }
-    
 }
