@@ -84,7 +84,7 @@ fun MainScreen(
         topBar = { TopBar(coroutineScope, scaffoldState) },
         content = { ContentArea(navController) },
         bottomBar = { BottomNavigationBar(navController) },
-        drawerContent = { ModalNavigationDrawer(coroutineScope, scaffoldState, userData, onSignOut)}
+        drawerContent = { ModalNavigationDrawer(userData, onSignOut)}
     )
 
     BackPressHandler{
@@ -185,7 +185,7 @@ fun TopBar(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
 }
 
 @Composable
-fun ModalNavigationDrawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState,userData: UserData?, onSignOut: () -> Unit) {
+fun ModalNavigationDrawer(userData: UserData?, onSignOut: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -209,6 +209,16 @@ fun ModalNavigationDrawer(coroutineScope: CoroutineScope, scaffoldState: Scaffol
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            Divider()
+            NavigationDrawerItem(
+                label = { Text(text = "About Us") },
+                selected = false,
+                onClick = { /*TODO*/ }
+            )
+            Button(onClick = onSignOut) {
+                Text(text = "Sign out")
             }
         }
     }
