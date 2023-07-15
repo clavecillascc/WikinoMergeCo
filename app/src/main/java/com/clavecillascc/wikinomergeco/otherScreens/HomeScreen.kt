@@ -1,6 +1,5 @@
 package com.clavecillascc.wikinomergeco.otherScreens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,24 +12,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
@@ -40,15 +33,12 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.util.concurrent.TimeUnit
 
 @Composable
 fun HomeScreen() {
-    val scope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState()
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
-        ) {
+    ) {
         Spacer(modifier = Modifier.size(15.dp))
         WordOfTheDay()
         WordOfTheDayUI()
@@ -157,7 +147,7 @@ fun FAQ(
             Text(
                 text = "FAQ",
                 style = MaterialTheme.typography.headlineMedium,
-                )
+            )
             //Word of the Day
             Text(
                 text = "   "+"• "+"sample 1",
@@ -179,12 +169,10 @@ fun FAQ(
             Text(text = "See more",
                 modifier = Modifier.align(alignment = Alignment.End),
                 style = MaterialTheme.typography.displaySmall,
-                )
+            )
         }
     }
 }
-
-
 @Composable
 fun HomeForum ( color: Color = appWhiteYellow){
     Column(
@@ -206,14 +194,14 @@ fun HomeForum ( color: Color = appWhiteYellow){
             Text(
                 text = "Forum",
                 style = MaterialTheme.typography.headlineMedium,
-
-                )
+            )
             //Word of the Day
             Text(
                 text = "",
                 style = MaterialTheme.typography.titleMedium
             )
             //Other terms
+
             Text(
                 text = ""
             )
@@ -227,15 +215,13 @@ fun HomeForum ( color: Color = appWhiteYellow){
             Text(text = "See more",
                 modifier = Modifier.align(alignment = Alignment.End),
                 style = MaterialTheme.typography.displaySmall,
-                )
+            )
         }
     }
 }
-
 @Composable
 fun Translation(color: Color = appWhiteYellow){
     Column(
-
     ) {
         //Line 2 -Translated Word
         Row() {
@@ -248,12 +234,10 @@ fun Translation(color: Color = appWhiteYellow){
                 style = MaterialTheme.typography.titleMedium
             )
         }
-
         //Line 3 - Other terms
         Text(
             text = "     "  + "• " + "ang lamig, malamig",
             style = MaterialTheme.typography.titleSmall
-
         )
         Spacer(modifier = Modifier.size(10.dp))
         //Line 4 - Sentence in same language
@@ -267,7 +251,6 @@ fun Translation(color: Color = appWhiteYellow){
             style = MaterialTheme.typography.headlineSmall
         )
         //Line 6 - Sentence in english language
-
         Text(
             text = "          "  + "The wind is so cold!",
             style = MaterialTheme.typography.headlineSmall
@@ -302,6 +285,6 @@ fun WordOfTheDayUI(
                 )
             Spacer(modifier = Modifier.size(5.dp))
             Translation()
-            }
         }
     }
+}
