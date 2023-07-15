@@ -65,34 +65,34 @@ fun Languages (color: Color = appWhiteYellow, ) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(modifier = Modifier
-                    .size(height = 100.dp, width = 90.dp)
+                    .size(height = 110.dp, width = 92.dp)
                     .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
                     onClick = { /*TODO*/ }
                 ) {
-                    //Text(text = "Tagalog")
+                    //Text(text = "Cebuano")
                     Image(
-                        painter = painterResource(id = R.drawable.button_tagalog),
-                        contentDescription = "Tagalog",
+                        painter = painterResource(id = R.drawable.button_cebuano),
+                        contentDescription = "Cebuano",
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxSize()
                     )
                 }
                 Button(modifier = Modifier
-                    .size(height = 100.dp, width = 90.dp)
+                    .size(height = 110.dp, width = 92.dp)
                     .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
                     onClick = { /*TODO*/ }
                 ) {
-                    //Text(text = "Tagalog")
+                    //Text(text = "Ilocano")
                     Image(
-                        painter = painterResource(id = R.drawable.button_cebuano),
-                        contentDescription = "Tagalog",
+                        painter = painterResource(id = R.drawable.button_ilocano),
+                        contentDescription = "Ilocano",
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxSize()
@@ -100,17 +100,17 @@ fun Languages (color: Color = appWhiteYellow, ) {
                 }
 
                 Button(modifier = Modifier
-                    .size(height = 100.dp, width = 90.dp)
+                    .size(height = 110.dp, width = 92.dp)
                     .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
                     onClick = { /*TODO*/ }
                 ) {
-                    //Text(text = "Tagalog")
+                    //Text(text = "Bicolano")
                     Image(
-                        painter = painterResource(id = R.drawable.button_ilocano),
-                        contentDescription = "Tagalog",
+                        painter = painterResource(id = R.drawable.button_bicolano),
+                        contentDescription = "Bicolano",
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxSize()
