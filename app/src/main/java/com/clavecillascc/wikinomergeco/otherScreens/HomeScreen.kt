@@ -77,42 +77,43 @@ fun WordOfTheDay(
         val oneDayInMillis = TimeUnit.DAYS.toMillis(1)
 
         if ((currentTime - lastRetrievalTime >= oneDayInMillis) || previousFileKey == null) {
-            // Retrieve a list of all files in the desired folder
-            val files = withContext(Dispatchers.IO) {
-                storageRef.child("Words/").listAll().await().items
-            }
+            try {
+                // Retrieve a list of all files in the desired folder
+                val files = withContext(Dispatchers.IO) {
+                    storageRef.child("Words/").listAll().await().items
+                }
 
-            if (files.isNotEmpty()) {
-                // Exclude the previously selected file, if any
                 val filteredFiles = if (previousFileKey != null) {
                     files.filter { it.name != previousFileKey }
                 } else {
                     files
                 }
+
                 if (filteredFiles.isNotEmpty()) {
                     // Choose a random file from the filtered list
                     val randomFile = filteredFiles.random()
 
-                    try {
-                        // Download the content of the random file
-                        val bytes = withContext(Dispatchers.IO) {
-                            randomFile.getBytes(ONE_MEGABYTE).await()
-                        }
+                    // Download the content of the random file
+                    val bytes = withContext(Dispatchers.IO) {
+                        randomFile.getBytes(ONE_MEGABYTE).await()
+                    }
 
-                        val text = bytes.decodeToString() // Convert byte array to string
+                    val text = String(bytes) // Convert byte array to string
+
+                    if (text != word.value) {
                         word.value = text
-                        Log.d("WordOfTheDay", "Word retrieved: $text")
 
                         // Store the random file key, previous file key, and last retrieval time in SharedPreferences
                         sharedPreferences.edit {
-                            putString("previousFileKey", randomFile.name)
-                            putString("randomFileKey", randomFile.name)
+                            putString("previousFileKey", previousFileKey) // Store the previous file key
+                            putString("randomFileKey", randomFile.name) // Store the random file key
                             putLong("lastRetrievalTime", currentTime)
+                            putString("word", text) // Store the word value
                         }
-                    } catch (e: Exception) {
-                        Log.e("WordOfTheDay", "Error downloading file: ${e.message}")
                     }
                 }
+            } catch (e: Exception) {
+                Log.e("WordOfTheDay", "Error retrieving or downloading file: ${e.message}")
             }
         } else {
             // Retrieve the previously stored word value
@@ -124,7 +125,7 @@ fun WordOfTheDay(
         }
     }
 
-    DisposableEffect(word.value) {
+    DisposableEffect(Unit) {
         onDispose {
             // Save the current word value when the composable is disposed
             sharedPreferences.edit {
@@ -200,7 +201,7 @@ fun FAQ(
             .height(200.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column() {
+        Column {
             //Header
             Text(
                 text = "FAQ",
@@ -249,7 +250,7 @@ fun HomeForum ( color: Color = appWhiteYellow){
             .height(200.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column() {
+        Column {
             //Header
             Text(
                 text = "Forum",
@@ -281,12 +282,10 @@ fun HomeForum ( color: Color = appWhiteYellow){
 }
 
 @Composable
-fun Translation(color: Color = appWhiteYellow){
-    Column(
-
-    ) {
+fun Translation() {
+    Column {
         //Line 2 -Translated Word
-        Row() {
+        Row {
             Text(
                 text = "     " + "Naglamis",
                 style = MaterialTheme.typography.titleMedium
