@@ -36,10 +36,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.clavecillascc.wikinomergeco.screens.CollaboratorScreen
-import com.clavecillascc.wikinomergeco.screens.HomeScreen
-import com.clavecillascc.wikinomergeco.screens.LibraryScreen
-import com.clavecillascc.wikinomergeco.screens.TranslateScreen
+import com.clavecillascc.wikinomergeco.otherScreens.CollaboratorScreen
+import com.clavecillascc.wikinomergeco.otherScreens.HomeScreen
+import com.clavecillascc.wikinomergeco.otherScreens.LibraryScreen
+import com.clavecillascc.wikinomergeco.otherScreens.TranslateScreen
 import com.clavecillascc.wikinomergeco.ui.theme.ErasDemiITC
 import com.clavecillascc.wikinomergeco.ui.theme.Navigation
 import com.clavecillascc.wikinomergeco.ui.theme.WikinoMergeCoTheme
