@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                                         Toast.LENGTH_LONG
                                     ).show()
 
-                                    navController.navigate("profile")
+                                    navController.navigate("main_screen")
                                     viewModel.resetState()
                                 }
                             }
@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
-                        composable("profile") {
+                        composable("main_screen") {
                             MainScreen(
                                 userData = googleAuthUiClient.getSignedInUser(),
                                 onSignOut = {
