@@ -12,6 +12,7 @@ import com.clavecillascc.wikinomergeco.R
 // initializing fonts
 val ErasDemiITC = FontFamily(Font(R.font.eras_demi_itc))
 val Poppins = FontFamily(Font(R.font.poppins_regular))
+val Montserrat = FontFamily(Font(R.font.montserrat_bold))
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -76,7 +77,13 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         color = textSeeMore
-    )
+    ),
+    //Montserrat
+    displayMedium = TextStyle(
+        fontFamily = Montserrat,
+        fontWeight = FontWeight.Normal,
+        fontSize = 35.sp,
+        color = appWhite)
 /* Other default text styles to override
 titleLarge = TextStyle(
     fontFamily = FontFamily.Default,

@@ -84,8 +84,7 @@ fun Languages (color: Color = appWhiteYellow, ) {
                 Button(modifier = Modifier
                     .size(height = 110.dp, width = 92.dp)
                     .defaultMinSize(), colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.White
-                ),
+                    backgroundColor = Color.White),
                     contentPadding = PaddingValues(0.dp),
                     onClick = { /*TODO*/ }
                 ) {
