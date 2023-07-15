@@ -42,7 +42,9 @@ val appWhite = Color(0xFFFFFFFF)
 val appWhiteYellow = Color(0xFFFEFCF1)
 val selectedGray = Color(0xFFCECBCB)
 val notSelectedGray = Color(0xFFF0F0F0)
+val logoGray = Color(0xFFC8C8C8)
 val dividerColor = Color(0xFFEAEAEA)
+
 
 //font color
 val textHeaderBlack = Color(0xFF242424)
