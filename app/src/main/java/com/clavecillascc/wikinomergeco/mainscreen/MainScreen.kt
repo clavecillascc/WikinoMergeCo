@@ -7,6 +7,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -43,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -186,45 +189,52 @@ fun TopBar(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
 
 @Composable
 fun ModalNavigationDrawer(userData: UserData?, onSignOut: () -> Unit) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Column() {
         ModalDrawerSheet {
+            Row(
+                modifier = Modifier.padding(20.dp)
+            ) {
             if (userData?.profilePictureUrl != null) {
                 AsyncImage(
                     model = userData.profilePictureUrl,
                     contentDescription = "Profile picture",
                     modifier = Modifier
-                        .size(150.dp)
+                        .size(75.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.width(20.dp))
             }
             if (userData?.username != null) {
                 Text(
                     text = userData.username,
                     textAlign = TextAlign.Center,
-                    fontSize = 36.sp,
+                    fontSize = 25.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
-
+            }
             Divider()
             NavigationDrawerItem(
-                label = { Text(text = "About Us") },
+                shape = RectangleShape,
+                label = { Text(text = "Drawer Item") },
                 selected = false,
-                onClick = { /*TODO*/ }
+                onClick = { /*TODO*/ },
             )
-            Button(onClick = onSignOut) {
-                Text(text = "Sign out")
-            }
+            Divider()
+            Spacer(modifier = Modifier.size(540.dp))
+            Divider()
+            NavigationDrawerItem(
+                shape = RectangleShape,
+                label = { Text(text = "Sign out") },
+                selected = false,
+                onClick = onSignOut
+            )
+            Divider()
         }
     }
 }
-
-
     @Composable
     fun BackPressHandler(
         backPressedDispatcher: OnBackPressedDispatcher? = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher,
