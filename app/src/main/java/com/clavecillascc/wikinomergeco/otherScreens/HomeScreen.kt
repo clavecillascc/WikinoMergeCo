@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
@@ -85,7 +86,8 @@ fun WordOfTheDay(
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
-            .height(200.dp)
+            .height(200.dp),
+        horizontalAlignment = Alignment.Start
     ) {
         val lines = word.value.lines()
 
@@ -102,21 +104,25 @@ fun WordOfTheDay(
             )
             Text(
                 text = lines[2],
+                fontSize = 20.sp,
                 style = MaterialTheme.typography.titleMedium,
                 color = appYellow
             )
             Text(
-                text = lines[3],
+                text = "    " + lines[3],
+                fontSize = 16.sp,
                 style = MaterialTheme.typography.titleMedium,
                 color = textOtherTerms
             )
+            Spacer(modifier = Modifier.size(10.dp))
             Text(
-                text = lines[4],
-                style = MaterialTheme.typography.headlineSmall,
+                text = "    " + lines[4],
+                style = MaterialTheme.typography.bodySmall,
                 color = textTerm
+
             )
             Text(
-                text = lines[5],
+                text = "     " + lines[5],
                 style = MaterialTheme.typography.headlineSmall,
                 color = textSentence
             )

@@ -45,7 +45,7 @@ val Typography = Typography(
     titleMedium = TextStyle(
         fontFamily = Poppins,
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp,
+        fontSize = 22.sp,
         color = textTerm
     ),
     //Line 3 - Other terms
