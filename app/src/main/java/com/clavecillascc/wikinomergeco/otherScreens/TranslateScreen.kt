@@ -154,7 +154,7 @@ fun SearchAppBar(
 fun NoActivityMessage(){
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
-            painter = painterResource(id = R.drawable.app_logo),
+            painter = painterResource(id = R.drawable.app_logo_grayed),
             contentDescription = "Grayed Logo",
             modifier = Modifier.size(150.dp))
         Text(text = "Input text in search bar to begin translating", color = logoGray, fontSize = 13.sp)

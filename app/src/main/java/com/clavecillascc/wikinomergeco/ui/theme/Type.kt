@@ -6,6 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import com.clavecillascc.wikinomergeco.R
 // initializing fonts
@@ -44,7 +45,7 @@ val Typography = Typography(
     titleMedium = TextStyle(
         fontFamily = Poppins,
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp,
+        fontSize = 22.sp,
         color = textTerm
     ),
     //Line 3 - Other terms
@@ -74,7 +75,7 @@ val Typography = Typography(
         fontFamily = Poppins,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        color = normalBlack,
+        color = textSeeMore
     )
 /* Other default text styles to override
 titleLarge = TextStyle(

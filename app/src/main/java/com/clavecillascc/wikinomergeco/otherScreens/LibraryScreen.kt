@@ -3,7 +3,6 @@ package com.clavecillascc.wikinomergeco.otherScreens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,25 +15,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ButtonDefaults.buttonColors
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
-import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 
 @Composable
 fun LibraryScreen() {
@@ -73,34 +65,34 @@ fun Languages (color: Color = appWhiteYellow, ) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(modifier = Modifier
-                    .size(height = 100.dp, width = 90.dp)
+                    .size(height = 110.dp, width = 92.dp)
                     .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
                     onClick = { /*TODO*/ }
                 ) {
-                    //Text(text = "Tagalog")
+                    //Text(text = "Cebuano")
                     Image(
-                        painter = painterResource(id = R.drawable.button_tagalog),
-                        contentDescription = "Tagalog",
+                        painter = painterResource(id = R.drawable.button_cebuano),
+                        contentDescription = "Cebuano",
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxSize()
                     )
                 }
                 Button(modifier = Modifier
-                    .size(height = 100.dp, width = 90.dp)
+                    .size(height = 110.dp, width = 92.dp)
                     .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
                     onClick = { /*TODO*/ }
                 ) {
-                    //Text(text = "Tagalog")
+                    //Text(text = "Ilocano")
                     Image(
-                        painter = painterResource(id = R.drawable.button_cebuano),
-                        contentDescription = "Tagalog",
+                        painter = painterResource(id = R.drawable.button_ilocano),
+                        contentDescription = "Ilocano",
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxSize()
@@ -108,17 +100,17 @@ fun Languages (color: Color = appWhiteYellow, ) {
                 }
 
                 Button(modifier = Modifier
-                    .size(height = 100.dp, width = 90.dp)
+                    .size(height = 110.dp, width = 92.dp)
                     .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
                     onClick = { /*TODO*/ }
                 ) {
-                    //Text(text = "Tagalog")
+                    //Text(text = "Bicolano")
                     Image(
-                        painter = painterResource(id = R.drawable.button_ilocano),
-                        contentDescription = "Tagalog",
+                        painter = painterResource(id = R.drawable.button_bicolano),
+                        contentDescription = "Bicolano",
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxSize()
