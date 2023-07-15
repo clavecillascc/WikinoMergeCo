@@ -8,11 +8,18 @@ import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.Icon
@@ -34,18 +41,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.clavecillascc.wikinomergeco.R
-import com.clavecillascc.wikinomergeco.mainScreen.MainScreenViewModel
 import com.clavecillascc.wikinomergeco.navigation.NavigationItems
+import com.clavecillascc.wikinomergeco.signin.UserData
 import com.clavecillascc.wikinomergeco.ui.theme.ErasDemiITC
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
@@ -55,7 +67,10 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScreen(navToLoginPage: () -> Unit) {
+fun MainScreen(
+    userData: UserData?,
+    onSignOut: () -> Unit
+) {
 
     var pressedTime: Long = 0
     val activity = (LocalContext.current as? Activity)
@@ -69,7 +84,7 @@ fun MainScreen(navToLoginPage: () -> Unit) {
         topBar = { TopBar(coroutineScope, scaffoldState) },
         content = { ContentArea(navController) },
         bottomBar = { BottomNavigationBar(navController) },
-        drawerContent = { ModalNavigationDrawer(coroutineScope, scaffoldState,MainScreenViewModel(), navToLoginPage)}
+        drawerContent = { ModalNavigationDrawer(coroutineScope, scaffoldState, userData, onSignOut)}
     )
 
     BackPressHandler{
@@ -169,74 +184,55 @@ fun TopBar(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
     )
 }
 
-//@Composable
-//fun Drawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
-//    Column(
-//        Modifier
-//            .background(Color.White)
-//            .fillMaxSize()
-//    ) {
-//        val drawerMenu = listOf("Home", "Settings", "Sign Out")
-//        val listState = rememberLazyListState()
-//        LazyColumn(state = listState) {
-//            items(drawerMenu) { item ->
-//                Text(
-//                    text = item,
-//                    color = Color.Black,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(20.dp)
-//                        .clickable {
-//                            coroutineScope.launch {
-//                                scaffoldState.drawerState.close()
-//                            }
-//                        }
-//                )
-//            }
-//        }
-//    }
-//}
-
 @Composable
-fun ModalNavigationDrawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState,MainScreenViewModel: MainScreenViewModel?, navToLoginPage: () -> Unit) {
-    ModalDrawerSheet {
-
-        Divider()
-        NavigationDrawerItem(
-            label = { Text(text = "Drawer Item") },
-            selected = false,
-            onClick = { /*TODO*/ }
-        )
-        Divider()
-        NavigationDrawerItem(
-            label = { Text(text = "Sign Out") },
-            selected = false,
-            onClick = {
-                MainScreenViewModel?.signOut()
-                navToLoginPage.invoke()
+fun ModalNavigationDrawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState,userData: UserData?, onSignOut: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        ModalDrawerSheet {
+            if (userData?.profilePictureUrl != null) {
+                AsyncImage(
+                    model = userData.profilePictureUrl,
+                    contentDescription = "Profile picture",
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.height(16.dp))
             }
-        )
-    }
-}
-
-@Composable
-fun BackPressHandler(
-    backPressedDispatcher: OnBackPressedDispatcher? = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher,
-    onBackPressed: () -> Unit
-) {
-    val currentOnBackPressed by rememberUpdatedState(newValue = onBackPressed)
-    val backCallback = remember {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                currentOnBackPressed()
+            if (userData?.username != null) {
+                Text(
+                    text = userData.username,
+                    textAlign = TextAlign.Center,
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
+}
 
-    DisposableEffect(key1 = backPressedDispatcher) {
-        backPressedDispatcher?.addCallback(backCallback)
-        onDispose {
-            backCallback.remove()
+
+    @Composable
+    fun BackPressHandler(
+        backPressedDispatcher: OnBackPressedDispatcher? = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher,
+        onBackPressed: () -> Unit
+    ) {
+        val currentOnBackPressed by rememberUpdatedState(newValue = onBackPressed)
+        val backCallback = remember {
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    currentOnBackPressed()
+                }
+            }
+        }
+
+        DisposableEffect(key1 = backPressedDispatcher) {
+            backPressedDispatcher?.addCallback(backCallback)
+            onDispose {
+                backCallback.remove()
+            }
         }
     }
-}

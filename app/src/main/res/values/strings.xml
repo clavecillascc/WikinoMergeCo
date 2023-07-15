@@ -1,16 +1,5 @@
 <resources>
     <string name="app_name">WikinoMergeCo</string>
-    <string name="hello">Hey There,</string>
-    <string name="create_account">Create An Account</string>
-    <string name="welcome_back">Welcome Back</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="hide_password">Hide Password</string>
-    <string name="show_password">Show Password</string>
-    <string name="register">Register</string>
-    <string name="login">Login</string>
-    <string name="or">Or</string>
-    <string name="forgot_password">Forgot your password</string>
+    <string name="web_client_id">515146928597-uv2hl5u6cmnn7ctf3venarmuopc70nn7.apps.googleusercontent.com</string>
+
 </resources>
