@@ -21,7 +21,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -75,9 +79,10 @@ fun TextFile3ItemUI(textContent: String) {
 val textContentCache2 = mutableMapOf<String, String>()
 
 // Function to fetch text files from Firebase Cloud Storage
-suspend fun fetchTextFilesFromFirebase3(): List<String> {
+suspend fun fetchTextFilesFromFirebase3(): List<String> = coroutineScope {
     val storageReference = Firebase.storage.reference.child("Ilocano/")
     val textFiles = mutableListOf<String>()
+    val deferredList = mutableListOf<Deferred<String>>()
 
     try {
         val result = storageReference.listAll().await()
@@ -85,21 +90,32 @@ suspend fun fetchTextFilesFromFirebase3(): List<String> {
 
         for (item in items) {
             val downloadUrl = item.downloadUrl.await()
-            val cachedTextContent = textContentCache[downloadUrl.toString()]
-            val textContent = if (cachedTextContent != null) {
-                cachedTextContent
+            val cachedTextContent = textContentCache2[downloadUrl.toString()]
+
+            if (cachedTextContent != null) {
+                textFiles.add(cachedTextContent)
             } else {
-                val newContent = readTextFromUrl(downloadUrl.toString())
-                textContentCache2[downloadUrl.toString()] = newContent
-                newContent
+                // Fetch in parallel
+                val deferredContent = async {
+                    readTextFromUrl(downloadUrl.toString())
+                }
+                deferredList.add(deferredContent)
             }
-            textFiles.add(textContent)
+        }
+
+        // Wait for all the deferred tasks to complete
+        val newContents = deferredList.awaitAll()
+
+        for (newContent in newContents) {
+            if (newContent.isNotEmpty()) {
+                textFiles.add(newContent)
+            }
         }
     } catch (e: IOException) {
         // Handle the failure to fetch the text files
     }
 
-    return textFiles
+    return@coroutineScope textFiles
 }
 // Function to read text content from a given URL
 private suspend fun readTextFromUrl(url: String): String {
