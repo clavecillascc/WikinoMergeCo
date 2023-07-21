@@ -67,8 +67,7 @@ fun SearchBar(){
         .background(appYellow)
         .fillMaxWidth()
         .height(70.dp)) {
-        Row(){
-
+        Row {
         }
     }
 }

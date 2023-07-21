@@ -1,4 +1,4 @@
-package com.clavecillascc.wikinomergeco.mainScreen
+package com.clavecillascc.wikinomergeco.mainscreen
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -7,13 +7,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,7 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.Icon
@@ -87,7 +83,7 @@ fun MainScreen(
         topBar = { TopBar(coroutineScope, scaffoldState) },
         content = { ContentArea(navController) },
         bottomBar = { BottomNavigationBar(navController) },
-        drawerContent = { ModalNavigationDrawer(userData, onSignOut)}
+        drawerContent = { ModalNavigationDrawer(userData, onSignOut) }
     )
 
     BackPressHandler{
@@ -189,7 +185,7 @@ fun TopBar(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
 
 @Composable
 fun ModalNavigationDrawer(userData: UserData?, onSignOut: () -> Unit) {
-    Column() {
+    Column {
         ModalDrawerSheet {
             Row(
                 modifier = Modifier.padding(20.dp)

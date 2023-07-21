@@ -20,7 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.clavecillascc.wikinomergeco.components.SplashViewModel
-import com.clavecillascc.wikinomergeco.mainScreen.MainScreen
+import com.clavecillascc.wikinomergeco.mainscreen.MainScreen
 import com.clavecillascc.wikinomergeco.signin.GoogleAuthUiClient
 import com.clavecillascc.wikinomergeco.signin.SignInScreen
 import com.clavecillascc.wikinomergeco.signin.SignInViewModel

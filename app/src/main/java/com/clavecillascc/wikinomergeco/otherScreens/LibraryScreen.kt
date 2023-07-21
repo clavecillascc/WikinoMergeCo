@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,21 +24,23 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 
 @Composable
-fun LibraryScreen() {
+fun LibraryScreen(navController: NavHostController) {
     /*TODO*/
     //Text(text = "Library")
     Column {
         Spacer(modifier = Modifier.size(15.dp))
-        Languages()
+        Languages(navController = navController)
     }
 }
 
 @Composable
-fun Languages (color: Color = appWhiteYellow, ) {
+fun Languages (navController: NavHostController, color: Color = appWhiteYellow ) {
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -70,7 +71,10 @@ fun Languages (color: Color = appWhiteYellow, ) {
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        navController.navigate("cebuanoScreen")
+                    }
+
                 ) {
                     //Text(text = "Cebuano")
                     Image(
@@ -86,7 +90,9 @@ fun Languages (color: Color = appWhiteYellow, ) {
                     .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        navController.navigate("ilocanoScreen")
+                    }
                 ) {
                     //Text(text = "Ilocano")
                     Image(
@@ -104,7 +110,9 @@ fun Languages (color: Color = appWhiteYellow, ) {
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        navController.navigate("bicolanoScreen")
+                    }
                 ) {
                     //Text(text = "Bicolano")
                     Image(
