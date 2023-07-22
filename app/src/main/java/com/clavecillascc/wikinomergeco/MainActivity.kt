@@ -51,7 +51,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,11 +62,11 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
             WikinoMergeCoTheme {
-                    MainScreen()
-                }
+                MainScreen()
             }
         }
     }
+}
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -88,14 +87,15 @@ fun MainScreen() {
         drawerContent = { ModalNavigationDrawer(coroutineScope, scaffoldState) }
     )
 
-    BackPressHandler{
+    BackPressHandler {
         if (scaffoldState.drawerState.isOpen) {
             coroutineScope.launch {
                 scaffoldState.drawerState.close()
             }
         } else {
-            if (pressedTime + 2000 > System.currentTimeMillis()) { activity?.finish() }
-            else {
+            if (pressedTime + 2000 > System.currentTimeMillis()) {
+                activity?.finish()
+            } else {
                 Toast.makeText(context, "Press back again to exit", Toast.LENGTH_SHORT).show()
             }
             pressedTime = System.currentTimeMillis()
@@ -161,12 +161,14 @@ fun TopBar(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
     TopAppBar(
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(painter = painterResource(id = R.drawable.app_logo),
+                Image(
+                    painter = painterResource(id = R.drawable.app_logo),
                     contentDescription = "Logo",
-                Modifier.size(40.dp))
+                    Modifier.size(40.dp)
+                )
                 Text(text = " Wikino", fontSize = 25.sp, fontFamily = ErasDemiITC)
             }
-             },
+        },
         backgroundColor = appDarkBlue,
         contentColor = Color.White,
         navigationIcon = {
@@ -216,16 +218,16 @@ fun Drawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
 
 @Composable
 fun ModalNavigationDrawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
-        ModalDrawerSheet {
+    ModalDrawerSheet {
 
-            Divider()
-            NavigationDrawerItem(
-                label = { Text(text = "Drawer Item") },
-                selected = false,
-                onClick = { /*TODO*/ }
-            )
+        Divider()
+        NavigationDrawerItem(
+            label = { Text(text = "Drawer Item") },
+            selected = false,
+            onClick = { /*TODO*/ }
+        )
 
-        }
+    }
 }
 
 @Composable
@@ -241,7 +243,7 @@ fun Navigation(navController: NavHostController) {
         }
 
         composable(NavigationItems.Library.route) {
-            LibraryScreen()
+            LibraryScreen(navController = navController)
         }
 
         composable(NavigationItems.Collaborator.route) {

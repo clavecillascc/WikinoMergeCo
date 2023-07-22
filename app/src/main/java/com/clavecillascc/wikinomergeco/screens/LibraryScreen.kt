@@ -32,22 +32,26 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 
 @Composable
-fun LibraryScreen() {
+fun LibraryScreen(navController: NavController) {
     /*TODO*/
     //Text(text = "Library")
     Column {
         Spacer(modifier = Modifier.size(15.dp))
-        Languages()
+        Languages(navController = navController)
     }
 }
 
 @Composable
-fun Languages (color: Color = appWhiteYellow, ) {
+fun Languages(
+    color: Color = appWhiteYellow,
+    navController: NavController
+) {
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -82,7 +86,9 @@ fun Languages (color: Color = appWhiteYellow, ) {
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        navController.navigate("tagalogScreen")
+                    }
                 ) {
                     //Text(text = "Tagalog")
                     Image(
@@ -99,12 +105,12 @@ fun Languages (color: Color = appWhiteYellow, ) {
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = { navController.navigate("cebuanoScreen") }
                 ) {
                     //Text(text = "Tagalog")
                     Image(
                         painter = painterResource(id = R.drawable.button_cebuano),
-                        contentDescription = "Tagalog",
+                        contentDescription = "Cebuano",
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxSize()
@@ -117,12 +123,12 @@ fun Languages (color: Color = appWhiteYellow, ) {
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = { navController.navigate("ilocanoScreen") }
                 ) {
                     //Text(text = "Tagalog")
                     Image(
                         painter = painterResource(id = R.drawable.button_ilocano),
-                        contentDescription = "Tagalog",
+                        contentDescription = "Ilocano",
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxSize()

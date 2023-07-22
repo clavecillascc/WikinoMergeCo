@@ -220,6 +220,7 @@ fun HomeForum ( color: Color = appWhiteYellow){
                 style = MaterialTheme.typography.displaySmall,
 
                 )
+
         }
     }
 }
