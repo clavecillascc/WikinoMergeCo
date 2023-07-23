@@ -1,6 +1,8 @@
-package com.clavecillascc.wikinomergeco.screens
+package com.clavecillascc.wikinomergeco.otherScreens
 
+import android.app.Activity
 import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,8 +14,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,22 +32,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.window.Popup
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.clavecillascc.wikinomergeco.R
+import com.clavecillascc.wikinomergeco.components.AutocompleteViewModel
 import com.clavecillascc.wikinomergeco.interfaces.DBResponseListener
 import com.clavecillascc.wikinomergeco.models.CommentWord
 import com.clavecillascc.wikinomergeco.models.DownVote
@@ -53,7 +71,6 @@ import com.clavecillascc.wikinomergeco.services.DownVoteRequest
 import com.clavecillascc.wikinomergeco.services.UpvoteRequest
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
-
 
 @Composable
 fun TranslateScreen() {
@@ -83,13 +100,17 @@ fun TranslateScreen() {
         mutableStateOf("")
     }
 
-    var resultData by remember {
+    val resultData by remember {
         mutableStateOf("")
     }
 
     var commentList by remember {
         mutableStateOf<List<CommentWord>>(emptyList())
     }
+
+    val autocompleteViewModel: AutocompleteViewModel = viewModel()
+
+    val autocompleteSuggestions by autocompleteViewModel.suggestions.collectAsState(emptyList())
 
     if (search.isEmpty()) {
         isShowCard = false
@@ -114,7 +135,6 @@ fun TranslateScreen() {
         }
     })
 
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -132,6 +152,12 @@ fun TranslateScreen() {
                         isShowCard = false
                         resultsShow = false
                         commentList = emptyList()
+                    } else if (text.length >= 2) {
+                        // Fetch autocomplete suggestions
+                        autocompleteViewModel.fetchAutocompleteSuggestions(text)
+                    } else {
+                        // Clear suggestions when text is less than 2 characters
+                        autocompleteViewModel.fetchAutocompleteSuggestions("")
                     }
                 },
                 onCloseClicked = {
@@ -142,8 +168,10 @@ fun TranslateScreen() {
                 },
                 onSearchClicked = {
                     isShowCard = true
-
-                }
+                    // Add any specific action you want to perform when the user clicks the search button
+                    // For example, perform the search with the given text.
+                },
+                autocompleteSuggestions = autocompleteSuggestions // Pass the suggestions list
             )
             AvailableTranslations(
                 text = "Sample",
@@ -334,18 +362,20 @@ fun SearchBar() {
             .fillMaxWidth()
             .height(70.dp)
     ) {
-        Row() {
+        Row {
 
         }
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchAppBar(
     text: String,
     onTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
+    autocompleteSuggestions: List<String>,
 ) {
     Surface(
         modifier = Modifier
@@ -354,73 +384,119 @@ fun SearchAppBar(
         elevation = AppBarDefaults.TopAppBarElevation,
         color = appYellow
     ) {
-        TextField(modifier = Modifier
-            .fillMaxWidth(),
-            value = text,
+        var isSuggestionsExpanded by remember { mutableStateOf(false) }
+        val context = LocalContext.current
 
-            onValueChange = { it ->
-                onTextChange(it)
-            },
-            placeholder = {
-                Text(
-                    modifier = Modifier
-                        .alpha(ContentAlpha.medium),
-                    text = "Search here...",
-                    color = Color.White
-                )
-            },
-            textStyle = TextStyle(
-                fontSize = MaterialTheme.typography.bodySmall.fontSize
-            ),
-            singleLine = true,
-            leadingIcon = {
-                IconButton(
-                    modifier = Modifier
-                        .alpha(ContentAlpha.medium),
-                    onClick = {}
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search Icon",
-                        tint = Color.White
+        // Get the keyboard controller from LocalSoftwareKeyboardController
+        val keyboardController = LocalSoftwareKeyboardController.current
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = text,
+                onValueChange = { newText ->
+                    onTextChange(newText)
+                    isSuggestionsExpanded = newText.isNotEmpty() // Show suggestions only if there's text
+                },
+                placeholder = {
+                    Text(
+                        modifier = Modifier.alpha(ContentAlpha.medium),
+                        text = "Search here...",
+                        color = Color.White
                     )
-                }
-            },
-            trailingIcon = {
-                IconButton(
-                    onClick = {
+                },
+                textStyle = TextStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize),
+                singleLine = true,
+                leadingIcon = {
+                    IconButton(
+                        modifier = Modifier.alpha(ContentAlpha.medium),
+                        onClick = {}
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search Icon",
+                            tint = Color.White
+                        )
+                    }
+                },
+                trailingIcon = {
+                    IconButton(onClick = {
+                        hideKeyboard(context) // Close keyboard on close button click
                         if (text.isNotEmpty()) {
                             onTextChange("")
                         } else {
                             onCloseClicked()
                         }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Close Icon",
+                            tint = Color.White
+                        )
+                    }
+                },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(onSearch = {
+                    hideKeyboard(context) // Close keyboard on search button click
+                    onSearchClicked(text)
+                }),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    cursorColor = Color.White.copy(alpha = ContentAlpha.medium),
+                    textColor = Color.White
+                )
+            )
+
+            // Suggestions Popup
+            if (isSuggestionsExpanded && autocompleteSuggestions.isNotEmpty()) {
+                val dropdownOffsetY = with(LocalDensity.current) { 56.dp } // Adjust the value as needed
+                val offset = IntOffset(0, with(LocalDensity.current) { dropdownOffsetY.roundToPx() })
+
+                // Show the suggestions popup
+                Popup(
+                    alignment = Alignment.TopStart,
+                    offset = offset,
+                    onDismissRequest = {
+                        isSuggestionsExpanded = false
                     }
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close Icon",
-                        tint = Color.White
-                    )
+                    Surface(
+                        shape = RectangleShape,
+                        elevation = 4.dp,
+                        modifier = Modifier.fillMaxWidth().background(Color.White)
+                    ) {
+                        Column {
+                            autocompleteSuggestions.forEach { suggestion ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        hideKeyboard(context) // Close keyboard on suggestion click
+                                        onTextChange(suggestion)
+                                        onSearchClicked(suggestion)
+                                        isSuggestionsExpanded = false
+                                    }
+                                ) {
+                                    Text(
+                                        text = suggestion,
+                                        modifier = Modifier.padding(16.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Search
-            ),
-            keyboardActions = KeyboardActions(
-                onSearch = {
-                    onSearchClicked(text)
-                }
-            ),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-                cursorColor = Color.White.copy(alpha = ContentAlpha.medium),
-                textColor = Color.White
-            ))
-
-
+            }
+        }
     }
 }
 
+private fun hideKeyboard(context: Context) {
+    val inputMethodManager =
+        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    val currentFocus = (context as? Activity)?.currentFocus
+    if (currentFocus != null) {
+        inputMethodManager.hideSoftInputFromWindow(currentFocus.windowToken, 0)
+    }
+}
 @Composable
 fun AvailableTranslations(
     text: String,
@@ -667,13 +743,11 @@ private fun TranslationData(
     resultTl: String,
     translated: String
 ) {
-    Column(
-
-    ) {
+    Column {
         //Line 2 -Translated Word
-        Row() {
+        Row {
             Text(
-                text = "     ${resultTl}",
+                text = "     $resultTl",
                 style = MaterialTheme.typography.titleMedium
             )
             Text(

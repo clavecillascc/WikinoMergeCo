@@ -8,9 +8,9 @@ import com.clavecillascc.wikinomergeco.libraryscreen.BicolanoScreen
 import com.clavecillascc.wikinomergeco.libraryscreen.CebuanoScreen
 import com.clavecillascc.wikinomergeco.libraryscreen.IlocanoScreen
 import com.clavecillascc.wikinomergeco.otherScreens.CollaboratorScreen
-import com.clavecillascc.wikinomergeco.otherScreens.HomeScreen
 import com.clavecillascc.wikinomergeco.otherScreens.Languages
 import com.clavecillascc.wikinomergeco.otherScreens.LibraryScreen
+import com.clavecillascc.wikinomergeco.otherScreens.HomeScreen
 import com.clavecillascc.wikinomergeco.otherScreens.TranslateScreen
 
 
