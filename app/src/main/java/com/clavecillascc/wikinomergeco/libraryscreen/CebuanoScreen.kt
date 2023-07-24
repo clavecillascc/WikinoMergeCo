@@ -1,6 +1,7 @@
 package com.clavecillascc.wikinomergeco.libraryscreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,65 +26,80 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
-import com.clavecillascc.wikinomergeco.ui.theme.dividerColor
 import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
 import com.clavecillascc.wikinomergeco.ui.theme.textSentence
 import com.clavecillascc.wikinomergeco.ui.theme.textTerm
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.IOException
 
 @Composable
-fun CebuanoScreen() {
-    val textFilesState = remember { mutableStateOf<List<String>?>(null) }
+fun CebuanoScreen(navController: NavHostController) {
+    val wordsState = remember { mutableStateOf<List<WordItem>?>(null) }
+    val selectedWordContent = remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
-        if (textFilesState.value == null) {
-            textFilesState.value = fetchTextFilesFromFirebase()
+        if (wordsState.value == null) {
+            wordsState.value = fetchWordsFromFirebase()
         }
     }
 
-    val textFiles = textFilesState.value
+    val words = wordsState.value
 
-    if (textFiles == null) {
+    if (words == null) {
         // Loading indicator or skeleton UI while fetching
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     } else {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp)
-            .shadow(
-                shape = RoundedCornerShape(10.dp),
-                elevation = 5.dp,
-            )
-            .clip(RoundedCornerShape(10.dp))
-            .background(appWhiteYellow)
-            .padding(horizontal = 15.dp, vertical = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp)
+                .shadow(
+                    shape = RoundedCornerShape(10.dp),
+                    elevation = 5.dp,
+                )
+                .clip(RoundedCornerShape(10.dp))
+                .background(appWhiteYellow)
+                .padding(horizontal = 15.dp, vertical = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
             Text(text = "Cebuano:")
             LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                //add here the column modifier
-
-                items(textFiles.size) { index ->
-                    CebuanoLibrary(textContent = textFiles[index])
-                    Spacer(modifier = Modifier.size(5.dp))
-                    Divider(color = dividerColor, thickness = 2.dp)
+                items(words.size) { index ->
+                    val word = words[index]
+                    WordItem(word) {
+                        // Navigate to the new screen when a word is clicked
+                        navController.navigate("wordDetails/${word.content}")
+                    }
                 }
             }
         }
 
+        // Show TextFileItemUI when selectedWordContent is not null
+        if (selectedWordContent.value != null) {
+            TextFileItemUI(selectedWordContent.value!!)
+        }
     }
+}
+
+@Composable
+fun WordItem(word: WordItem, onItemClick: () -> Unit) {
+    val displayName = word.name.replace(".txt", "") // Remove ".txt" extension from the name
+    Text(
+        text = displayName,
+        style = MaterialTheme.typography.titleMedium,
+        color = textTerm,
+        modifier = Modifier.clickable { onItemClick() }
+    )
 }
 
 // Sample UI, same as Word of the Day. please update.
@@ -104,28 +119,28 @@ fun TextFileItemUI(textContent: String) {
         if (lines.size >= 6) {
             Text(
                 text = lines[1],
-                style = MaterialTheme.typography.titleMedium,
-                color = textTerm
+                style = MaterialTheme.typography.titleMedium, // Keep your custom typography
+                color = textTerm // Keep your custom color
             )
             Text(
                 text = lines[2],
-                style = MaterialTheme.typography.titleMedium,
-                color = appYellow
+                style = MaterialTheme.typography.titleMedium, // Keep your custom typography
+                color = appYellow // Keep your custom color
             )
             Text(
                 text = lines[3],
-                style = MaterialTheme.typography.titleMedium,
-                color = textOtherTerms
+                style = MaterialTheme.typography.titleMedium, // Keep your custom typography
+                color = textOtherTerms // Keep your custom color
             )
             Text(
                 text = lines[4],
-                style = MaterialTheme.typography.headlineSmall,
-                color = textTerm
+                style = MaterialTheme.typography.headlineSmall, // Keep your custom typography
+                color = textTerm // Keep your custom color
             )
             Text(
                 text = lines[5],
-                style = MaterialTheme.typography.headlineSmall,
-                color = textSentence
+                style = MaterialTheme.typography.headlineSmall, // Keep your custom typography
+                color = textSentence // Keep your custom color
             )
         } else {
             // Handle the case where there are less than 6 lines (optional)
@@ -133,61 +148,50 @@ fun TextFileItemUI(textContent: String) {
     }
 }
 
-@Composable
-fun CebuanoLibrary (textContent: String,color: Color = appWhiteYellow){
-    Column(verticalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .height(20.dp)
-            .padding(horizontal = 10.dp)
-    ) {
-        Text(text = "text 1")
-        Text(text = "text 2")
-        Text(text = "text 3")
-        Text(text = "text 4")
-    }
-}
-
 // Cache for storing fetched text content
 val textContentCache = mutableMapOf<String, String>()
 
-// Function to fetch text files from Firebase Cloud Storage
-suspend fun fetchTextFilesFromFirebase(): List<String> = coroutineScope {
+suspend fun fetchTextContentForWordFromFirebase(wordName: String): String = coroutineScope {
+    // Construct the storage reference for the specific word
+    val storageReference = Firebase.storage.reference.child("Cebuano/$wordName")
+
+    try {
+        val downloadUrl = storageReference.downloadUrl.await()
+        val cachedTextContent = textContentCache[downloadUrl.toString()]
+
+        if (cachedTextContent != null) {
+            return@coroutineScope cachedTextContent
+        } else {
+            // Fetch the content for the word
+            val textContent = readTextFromUrl(downloadUrl.toString())
+            textContentCache[downloadUrl.toString()] = textContent
+            return@coroutineScope textContent
+        }
+    } catch (e: IOException) {
+        // Handle the failure to fetch the text content for the word
+        return@coroutineScope ""
+    }
+}
+
+
+suspend fun fetchWordsFromFirebase(): List<WordItem> = coroutineScope {
     val storageReference = Firebase.storage.reference.child("Cebuano/")
-    val textFiles = mutableListOf<String>()
-    val deferredList = mutableListOf<Deferred<String>>()
+    val words = mutableListOf<WordItem>()
 
     try {
         val result = storageReference.listAll().await()
         val items = result.items
 
         for (item in items) {
-            val downloadUrl = item.downloadUrl.await()
-            val cachedTextContent = textContentCache[downloadUrl.toString()]
-
-            if (cachedTextContent != null) {
-                textFiles.add(cachedTextContent)
-            } else {
-                // Fetch in parallel
-                val deferredContent = async {
-                    readTextFromUrl(downloadUrl.toString())
-                }
-                deferredList.add(deferredContent)
-            }
-        }
-
-        // Wait for all the deferred tasks to complete
-        val newContents = deferredList.awaitAll()
-
-        for (newContent in newContents) {
-            if (newContent.isNotEmpty()) {
-                textFiles.add(newContent)
-            }
+            val name = item.name
+            val content = fetchTextContentForWordFromFirebase(name)
+            words.add(WordItem(name, content))
         }
     } catch (e: IOException) {
-        // Handle the failure to fetch the text files
+        // Handle the failure to fetch the words
     }
 
-    return@coroutineScope textFiles
+    return@coroutineScope words
 }
 // Function to read text content from a given URL
 private suspend fun readTextFromUrl(url: String): String {

@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.clavecillascc.wikinomergeco.libraryscreen.BicolanoScreen
 import com.clavecillascc.wikinomergeco.libraryscreen.CebuanoScreen
 import com.clavecillascc.wikinomergeco.libraryscreen.IlocanoScreen
+import com.clavecillascc.wikinomergeco.libraryscreen.TextFileItemUI
 import com.clavecillascc.wikinomergeco.otherScreens.CollaboratorScreen
 import com.clavecillascc.wikinomergeco.otherScreens.Languages
 import com.clavecillascc.wikinomergeco.otherScreens.LibraryScreen
@@ -30,7 +31,7 @@ fun Navigation(navController: NavHostController) {
             CollaboratorScreen()
         }
         composable("cebuanoScreen") {
-            CebuanoScreen()
+            CebuanoScreen(navController = navController)
         }
         composable("bicolanoScreen"){
             BicolanoScreen()
@@ -40,6 +41,12 @@ fun Navigation(navController: NavHostController) {
         }
         composable("languages") {
             Languages(navController = navController)
+        }
+        composable("wordDetails/{content}") { backStackEntry ->
+            val content = backStackEntry.arguments?.getString("content")
+            content?.let {
+                TextFileItemUI(it)
+            }
         }
     }
 }
