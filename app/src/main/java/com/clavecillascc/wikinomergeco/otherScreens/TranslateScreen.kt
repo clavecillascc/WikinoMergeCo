@@ -2,6 +2,7 @@ package com.clavecillascc.wikinomergeco.otherScreens
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -14,10 +15,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,13 +31,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -55,8 +52,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.window.Popup
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -71,6 +66,9 @@ import com.clavecillascc.wikinomergeco.services.DownVoteRequest
 import com.clavecillascc.wikinomergeco.services.UpvoteRequest
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.tasks.await
 
 @Composable
 fun TranslateScreen() {
@@ -100,13 +98,17 @@ fun TranslateScreen() {
         mutableStateOf("")
     }
 
-    val resultData by remember {
+    var resultData by remember {
         mutableStateOf("")
     }
 
     var commentList by remember {
         mutableStateOf<List<CommentWord>>(emptyList())
     }
+
+    var showResult by remember { mutableStateOf(false) }
+
+    var isLoading by remember { mutableStateOf(false) }
 
     val autocompleteViewModel: AutocompleteViewModel = viewModel()
 
@@ -135,6 +137,47 @@ fun TranslateScreen() {
         }
     })
 
+    var selectedLanguage by remember { mutableStateOf("") }
+    var isWordFound by remember { mutableStateOf(false) }
+
+    LaunchedEffect(search, selectedLanguage) {
+        if (search.isNotEmpty() && selectedLanguage.isNotEmpty()) {
+            val documentId = "$selectedLanguage:$search"
+
+            Log.d("MyApp", "Constructed documentId: $documentId")
+
+            val translationDocument = FirebaseFirestore.getInstance()
+                .collection("translation")
+                .document(documentId)
+                .get()
+                .await()
+
+            if (translationDocument.exists()) {
+                val translatedWord = translationDocument.getString("translatedword")
+                if (!translatedWord.isNullOrEmpty()) {
+                    translated = translatedWord
+                    isWordFound = true
+
+                    val storageReference = FirebaseStorage.getInstance().reference
+                    val filePath = "${selectedLanguage}/${translatedWord}.txt"
+
+                    isLoading = true
+
+                    storageReference.child(filePath).getBytes(Long.MAX_VALUE).addOnSuccessListener { bytes ->
+                        val fileData = String(bytes)
+                        resultData = fileData
+                        isLoading = false
+                    }.addOnFailureListener {
+                        resultData = "Error fetching data."
+                        isLoading = false
+                    }
+                }
+            } else {
+                isWordFound = false
+            }
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -153,10 +196,8 @@ fun TranslateScreen() {
                         resultsShow = false
                         commentList = emptyList()
                     } else if (text.length >= 2) {
-                        // Fetch autocomplete suggestions
                         autocompleteViewModel.fetchAutocompleteSuggestions(text)
                     } else {
-                        // Clear suggestions when text is less than 2 characters
                         autocompleteViewModel.fetchAutocompleteSuggestions("")
                     }
                 },
@@ -168,18 +209,16 @@ fun TranslateScreen() {
                 },
                 onSearchClicked = {
                     isShowCard = true
-                    // Add any specific action you want to perform when the user clicks the search button
-                    // For example, perform the search with the given text.
                 },
-                autocompleteSuggestions = autocompleteSuggestions // Pass the suggestions list
+                autocompleteSuggestions = autocompleteSuggestions
             )
             AvailableTranslations(
-                text = "Sample",
+                text = search,
                 visibility = isShowCard,
                 buttonClick = { isShow, tl ->
                     resultsShow = isShow
                     translated = tl
-
+                    selectedLanguage = tl
                 }
             )
 
@@ -187,7 +226,8 @@ fun TranslateScreen() {
                 text = search,
                 showResult = resultsShow,
                 translated = translated,
-                resultData = resultData
+                resultData = resultData,
+                isLoading = isLoading
             )
 
             TranslateBottomMenu(
@@ -283,6 +323,24 @@ fun TranslateScreen() {
             )
             if (showProgressDialog) {
                 ProgressDialog()
+            }
+
+            if (showResult && isWordFound) {
+                Column(
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Spacer(modifier = Modifier.size(15.dp))
+                    TranslationResultCard(
+                        textData = search,
+                        showResult = showResult,
+                        color = appWhiteYellow,
+                        translated = translated,
+                        result = resultData,
+                        isLoading = false
+                    )
+                }
+            } else if (showResult) {
+
             }
 
             CommentCard(
@@ -387,7 +445,6 @@ fun SearchAppBar(
         var isSuggestionsExpanded by remember { mutableStateOf(false) }
         val context = LocalContext.current
 
-        // Get the keyboard controller from LocalSoftwareKeyboardController
         val keyboardController = LocalSoftwareKeyboardController.current
 
         Box(modifier = Modifier.fillMaxSize()) {
@@ -396,7 +453,7 @@ fun SearchAppBar(
                 value = text,
                 onValueChange = { newText ->
                     onTextChange(newText)
-                    isSuggestionsExpanded = newText.isNotEmpty() // Show suggestions only if there's text
+                    isSuggestionsExpanded = newText.isNotEmpty()
                 },
                 placeholder = {
                     Text(
@@ -421,7 +478,7 @@ fun SearchAppBar(
                 },
                 trailingIcon = {
                     IconButton(onClick = {
-                        hideKeyboard(context) // Close keyboard on close button click
+                        hideKeyboard(context)
                         if (text.isNotEmpty()) {
                             onTextChange("")
                         } else {
@@ -469,7 +526,7 @@ fun SearchAppBar(
                             autocompleteSuggestions.forEach { suggestion ->
                                 DropdownMenuItem(
                                     onClick = {
-                                        hideKeyboard(context) // Close keyboard on suggestion click
+                                        hideKeyboard(context)
                                         onTextChange(suggestion)
                                         onSearchClicked(suggestion)
                                         isSuggestionsExpanded = false
@@ -589,24 +646,31 @@ fun TranslationResult(
     text: String,
     resultData: String,
     showResult: Boolean,
-    translated: String
+    translated: String,
+    isLoading: Boolean
 ) {
     if (showResult) {
         Column(
             horizontalAlignment = Alignment.Start
         ) {
             Spacer(modifier = Modifier.size(15.dp))
-            TranslationResultCard(
-                textData = text,
-                showResult = showResult,
-                color = appWhiteYellow,
-                translated = translated,
-                result = resultData
-            )
+            Box {
+                TranslationResultCard(
+                    textData = text,
+                    showResult = showResult,
+                    color = appWhiteYellow,
+                    translated = translated,
+                    result = resultData,
+                    isLoading = isLoading
+                )
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+            }
         }
     }
-
-
 }
 
 @Composable
@@ -615,7 +679,8 @@ fun TranslationResultCard(
     showResult: Boolean,
     result: String,
     color: Color,
-    translated: String
+    translated: String,
+    isLoading: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -636,13 +701,14 @@ fun TranslationResultCard(
             Text(
                 text = textData,
                 style = MaterialTheme.typography.headlineMedium,
-
-                )
-            Spacer(modifier = Modifier.size(5.dp))
-            TranslationData(
-                resultTl = "Sample Result",
-                translated = translated
             )
+            Spacer(modifier = Modifier.size(5.dp))
+
+            if (result.isNotEmpty()) {
+                TranslationData(
+                    resultTl = result
+                )
+            }
         }
     }
 }
@@ -740,18 +806,13 @@ fun TranslateBottomMenu(
 
 @Composable
 private fun TranslationData(
-    resultTl: String,
-    translated: String
+    resultTl: String
 ) {
     Column {
-        //Line 2 -Translated Word
+        //Line 2 - Translated Word
         Row {
             Text(
                 text = "     $resultTl",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = "(${translated})",
                 style = MaterialTheme.typography.titleMedium
             )
         }
@@ -899,4 +960,3 @@ private fun CommentListView(
     }
 
 }
-
