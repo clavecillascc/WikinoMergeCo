@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,11 +24,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
+import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 
 @Composable
 fun LibraryScreen(navController: NavHostController) {
@@ -52,7 +55,10 @@ fun Languages (navController: NavHostController, color: Color = appWhiteYellow )
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
     ) {
-        Text(text = "Available Languages:")
+        Text(text = "Available Languages:",
+             style = MaterialTheme.typography.labelMedium,
+             color = normalBlack,
+             fontWeight = FontWeight.Bold,)
         Spacer(modifier = Modifier.size(20.dp))
 
         Column(

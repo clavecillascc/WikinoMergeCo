@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -30,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
+import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import com.clavecillascc.wikinomergeco.ui.theme.colorCebuano
@@ -57,15 +65,16 @@ fun CebuanoScreen(navController: NavHostController) {
             wordsState.value = fetchWordsFromFirebase()
         }
     }
-
     val words = wordsState.value
-
     if (words == null) {
         // Loading indicator or skeleton UI while fetching
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     } else {
+        Column (verticalArrangement = Arrangement.spacedBy(10.dp)){
+
+        HeaderBox()
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -77,14 +86,27 @@ fun CebuanoScreen(navController: NavHostController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(appWhiteYellow)
                 .padding(horizontal = 15.dp, vertical = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(7.dp),
+            verticalArrangement = Arrangement.spacedBy(1.dp),
         ) {
-            Text(text = "Cebuano:",
-                style = MaterialTheme.typography.labelMedium,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = colorCebuano,)
+            Text(text = "Cebuano A - Z :",
+                style = MaterialTheme.typography.displayLarge,
+                color = colorCebuano)
             Divider(color = darkerdividerColor, thickness = 1.dp)
+            //Letters
+            Text(text = "   " + "A",
+                style = MaterialTheme.typography.displayLarge,
+                color = colorCebuano)
+            Divider(color = darkerdividerColor, thickness = 1.dp)
+            Text(text = "   " + "B",
+                style = MaterialTheme.typography.displayLarge,
+                color = colorCebuano)
+            Divider(color = darkerdividerColor, thickness = 1.dp)
+            Text(text = "   " + "C",
+                style = MaterialTheme.typography.displayLarge,
+                color = colorCebuano)
+            Divider(color = darkerdividerColor, thickness = 1.dp)
+            Spacer(modifier = Modifier.size(3.dp))
+
             LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp)) {
                 items(words.size) { index ->
                     val word = words[index]
@@ -97,6 +119,7 @@ fun CebuanoScreen(navController: NavHostController) {
                 }
             }
         }
+    }
 
         // Show TextFileItemUI when selectedWordContent is not null
         if (selectedWordContent.value != null) {
@@ -117,7 +140,30 @@ fun WordItem(word: WordItem, onItemClick: () -> Unit) {
         modifier = Modifier.clickable { onItemClick() }
     )
 }
+@Composable
+fun HeaderBox() {
+    Box(
+        modifier = Modifier
+            .background(colorCebuano)
+            .fillMaxWidth()
+            .height(50.dp)
+    ) {
+        Row (verticalAlignment = Alignment.CenterVertically,
+             modifier = Modifier.fillMaxSize()){
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back Icon",
+                    tint = Color.White)}
 
+            Text(text = "Cebuano Language",
+                style = MaterialTheme.typography.labelMedium,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = appWhite)
+        }
+    }
+}
 // Sample UI, same as Word of the Day. please update.
 @Composable
 fun TextFileItemUI(textContent: String) {

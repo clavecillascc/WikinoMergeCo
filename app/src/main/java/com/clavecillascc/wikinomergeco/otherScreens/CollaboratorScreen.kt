@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,6 +47,7 @@ import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 import com.clavecillascc.wikinomergeco.ui.theme.notSelectedGray
 import com.clavecillascc.wikinomergeco.ui.theme.selectedGray
 import com.clavecillascc.wikinomergeco.ui.theme.textHeaderBlack
+import com.clavecillascc.wikinomergeco.ui.theme.textSeeMore
 
 @Composable
 fun CollaboratorScreen() {
@@ -113,8 +115,11 @@ fun RecentlyAdded(
     color: Color = appWhiteYellow
 ) {
     Text(
-        text = "Recently Added",
-        style = MaterialTheme.typography.headlineMedium,
+        text = "Recently Added:",
+        style = MaterialTheme.typography.titleSmall,
+        fontSize = 18.sp,
+        color = textSeeMore,
+        fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(horizontal = 20.dp)
 
         )
