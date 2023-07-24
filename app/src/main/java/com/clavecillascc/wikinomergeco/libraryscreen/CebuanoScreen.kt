@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,10 +26,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
+import com.clavecillascc.wikinomergeco.ui.theme.colorCebuano
+import com.clavecillascc.wikinomergeco.ui.theme.darkerdividerColor
+import com.clavecillascc.wikinomergeco.ui.theme.dividerColor
+import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
 import com.clavecillascc.wikinomergeco.ui.theme.textSentence
 import com.clavecillascc.wikinomergeco.ui.theme.textTerm
@@ -70,16 +77,23 @@ fun CebuanoScreen(navController: NavHostController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(appWhiteYellow)
                 .padding(horizontal = 15.dp, vertical = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(7.dp),
         ) {
-            Text(text = "Cebuano:")
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(text = "Cebuano:",
+                style = MaterialTheme.typography.labelMedium,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = colorCebuano,)
+            Divider(color = darkerdividerColor, thickness = 1.dp)
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp)) {
                 items(words.size) { index ->
                     val word = words[index]
                     WordItem(word) {
                         // Navigate to the new screen when a word is clicked
                         navController.navigate("wordDetails/${word.content}")
                     }
+                    Spacer(modifier = Modifier.size(3.dp))
+                    Divider(color = darkerdividerColor, thickness = 1.dp)
                 }
             }
         }
@@ -95,9 +109,11 @@ fun CebuanoScreen(navController: NavHostController) {
 fun WordItem(word: WordItem, onItemClick: () -> Unit) {
     val displayName = word.name.replace(".txt", "") // Remove ".txt" extension from the name
     Text(
-        text = displayName,
-        style = MaterialTheme.typography.titleMedium,
-        color = textTerm,
+        text = "   " + displayName,
+        style = MaterialTheme.typography.labelMedium,
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Bold,
+        color = normalBlack,
         modifier = Modifier.clickable { onItemClick() }
     )
 }

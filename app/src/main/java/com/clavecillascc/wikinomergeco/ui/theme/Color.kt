@@ -44,6 +44,7 @@ val selectedGray = Color(0xFFCECBCB)
 val notSelectedGray = Color(0xFFF0F0F0)
 val logoGray = Color(0xFFC8C8C8)
 val dividerColor = Color(0xFFEAEAEA)
+val darkerdividerColor = Color(0xFF7D7D7D)
 
 
 //font color
@@ -54,3 +55,7 @@ val textOtherTerms = Color(0xFF006FF6)
 val textSentence = Color(0xFF746F6F)
 val textSeeMore = Color(0xFF5991FE)
 
+//Languages
+val colorCebuano = Color(0xFFF2870A)
+val colorIlocano = Color(0xFF5991FE)
+val colorBicolano = Color(0xFF8573FE)
