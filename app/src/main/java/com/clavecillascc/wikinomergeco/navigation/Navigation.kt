@@ -34,10 +34,10 @@ fun Navigation(navController: NavHostController) {
             CebuanoScreen(navController = navController)
         }
         composable("bicolanoScreen"){
-            BicolanoScreen()
+            BicolanoScreen(navController = navController)
         }
         composable("ilocanoScreen"){
-            IlocanoScreen()
+            IlocanoScreen(navController = navController)
         }
         composable("languages") {
             Languages(navController = navController)

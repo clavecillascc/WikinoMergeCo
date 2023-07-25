@@ -1,24 +1,49 @@
 package com.clavecillascc.wikinomergeco.libraryscreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.clavecillascc.wikinomergeco.ui.theme.appWhite
+import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
+import com.clavecillascc.wikinomergeco.ui.theme.appYellow
+import com.clavecillascc.wikinomergeco.ui.theme.colorCebuano
+import com.clavecillascc.wikinomergeco.ui.theme.darkerdividerColor
+import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
+import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
+import com.clavecillascc.wikinomergeco.ui.theme.textSentence
+import com.clavecillascc.wikinomergeco.ui.theme.textTerm
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Deferred
@@ -32,37 +57,119 @@ import java.io.IOException
 import java.net.URL
 
 @Composable
-fun BicolanoScreen() {
-    val textFilesState = remember { mutableStateOf<List<String>?>(null) }
+fun BicolanoScreen(navController: NavHostController) {
+    val wordsState = remember { mutableStateOf<List<WordItem>?>(null) }
+    val selectedWordContent = remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
-        if (textFilesState.value == null) {
-            textFilesState.value = fetchTextFilesFromFirebase2()
+        if (wordsState.value == null) {
+            wordsState.value = fetchWordsFromFirebaseWithContent2()
         }
     }
-
-    val textFiles = textFilesState.value
-
-    if (textFiles == null) {
+    val words = wordsState.value
+    if (words == null) {
         // Loading indicator or skeleton UI while fetching
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(textFiles.size) { index ->
-                TextFile2ItemUI(textContent = textFiles[index])
+        val wordsMap = words.groupBy { it.name.first().toString().uppercase() }
+
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            HeaderBox()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp)
+                    .shadow(
+                        shape = RoundedCornerShape(10.dp),
+                        elevation = 5.dp,
+                    )
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(appWhiteYellow)
+                    .padding(horizontal = 15.dp, vertical = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(1.dp),
+            ) {
+                Text(
+                    text = "Cebuano A - Z :",
+                    style = MaterialTheme.typography.displayLarge,
+                    color = colorCebuano
+                )
+                Divider(color = darkerdividerColor, thickness = 1.dp)
+
+                for ((letter, words) in wordsMap) {
+                    Text(
+                        text = "   " + letter,
+                        style = MaterialTheme.typography.displayLarge,
+                        color = colorCebuano
+                    )
+                    Divider(color = darkerdividerColor, thickness = 1.dp)
+                    Spacer(modifier = Modifier.size(3.dp))
+
+                    LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                        items(words.size) { index ->
+                            val word = words[index]
+                            WordItem2(word) {
+                                navController.navigate("wordDetails/${word.content}")
+                            }
+                            Spacer(modifier = Modifier.size(3.dp))
+                            Divider(color = darkerdividerColor, thickness = 1.dp)
+                        }
+                    }
+                }
             }
+        }
+
+        // Show TextFileItemUI when selectedWordContent is not null
+        if (selectedWordContent.value != null) {
+            TextFileItemUI2(selectedWordContent.value!!)
         }
     }
 }
 
-//UI for every text box (please update)
 @Composable
-fun TextFile2ItemUI(textContent: String) {
+fun WordItem2(word: WordItem, onItemClick: () -> Unit) {
+    val displayName = word.name.replace(".txt", "") // Remove ".txt" extension from the name
+    Text(
+        text = "   " + displayName,
+        style = MaterialTheme.typography.labelMedium,
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Bold,
+        color = normalBlack,
+        modifier = Modifier.clickable { onItemClick() }
+    )
+}
+@Composable
+fun HeaderBox2() {
+    Box(
+        modifier = Modifier
+            .background(colorCebuano)
+            .fillMaxWidth()
+            .height(50.dp)
+    ) {
+        Row (verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxSize()){
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back Icon",
+                    tint = Color.White)
+            }
+
+            Text(text = "Cebuano Language",
+                style = MaterialTheme.typography.labelMedium,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = appWhite
+            )
+        }
+    }
+}
+// Sample UI, same as Word of the Day. please update.
+@Composable
+fun TextFileItemUI2(textContent: String) {
+    val lines = textContent.lines()
+
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -71,51 +178,90 @@ fun TextFile2ItemUI(textContent: String) {
             .fillMaxWidth()
             .height(200.dp)
     ) {
-        Text(textContent)
+        Spacer(modifier = Modifier.size(5.dp))
+        if (lines.size >= 6) {
+            Text(
+                text = lines[1],
+                style = MaterialTheme.typography.titleMedium,
+                color = textTerm
+            )
+            Text(
+                text = lines[2],
+                style = MaterialTheme.typography.titleMedium,
+                color = appYellow
+            )
+            Text(
+                text = lines[3],
+                style = MaterialTheme.typography.titleMedium,
+                color = textOtherTerms
+            )
+            Text(
+                text = lines[4],
+                style = MaterialTheme.typography.headlineSmall,
+                color = textTerm
+            )
+            Text(
+                text = lines[5],
+                style = MaterialTheme.typography.headlineSmall,
+                color = textSentence
+            )
+        } else {
+
+        }
     }
 }
 
-// Cache for storing fetched text content
-val textContentCache1 = mutableMapOf<String, String>()
 
-// Function to fetch text files from Firebase Cloud Storage
-suspend fun fetchTextFilesFromFirebase2(): List<String> = coroutineScope {
+val textContentCache2 = mutableMapOf<String, String>()
+
+suspend fun fetchTextContentForWordFromFirebase2(wordName: String): String = coroutineScope {
+    // Construct the storage reference for the specific word
+    val storageReference = Firebase.storage.reference.child("Bicolano/$wordName")
+
+    try {
+        val downloadUrl = storageReference.downloadUrl.await()
+        val cachedTextContent = textContentCache2[downloadUrl.toString()]
+
+        if (cachedTextContent != null) {
+            return@coroutineScope cachedTextContent
+        } else {
+            // Fetch the content for the word
+            val textContent = readTextFromUrl(downloadUrl.toString())
+            textContentCache2[downloadUrl.toString()] = textContent
+            return@coroutineScope textContent
+        }
+    } catch (e: IOException) {
+        // Handle the failure to fetch the text content for the word
+        return@coroutineScope ""
+    }
+}
+
+
+// Replace the existing fetchWordsFromFirebase function with the following:
+suspend fun fetchWordsFromFirebaseWithContent2(): List<WordItem> = coroutineScope {
     val storageReference = Firebase.storage.reference.child("Bicolano/")
-    val textFiles = mutableListOf<String>()
-    val deferredList = mutableListOf<Deferred<String>>()
+    val words = mutableListOf<WordItem>()
 
     try {
         val result = storageReference.listAll().await()
         val items = result.items
 
-        for (item in items) {
-            val downloadUrl = item.downloadUrl.await()
-            val cachedTextContent = textContentCache1[downloadUrl.toString()]
-
-            if (cachedTextContent != null) {
-                textFiles.add(cachedTextContent)
-            } else {
-                // Fetch in parallel
-                val deferredContent = async {
-                    readTextFromUrl(downloadUrl.toString())
-                }
-                deferredList.add(deferredContent)
+        // Use map and parallel processing to fetch text content for all words concurrently
+        val contentDeferreds = items.map { item ->
+            async(Dispatchers.IO) {
+                val name = item.name
+                val content = fetchTextContentForWordFromFirebase2(name)
+                WordItem(name, content)
             }
         }
 
-        // Wait for all the deferred tasks to complete
-        val newContents = deferredList.awaitAll()
-
-        for (newContent in newContents) {
-            if (newContent.isNotEmpty()) {
-                textFiles.add(newContent)
-            }
-        }
+        // Await all deferred results and populate the words list
+        words.addAll(contentDeferreds.awaitAll())
     } catch (e: IOException) {
-        // Handle the failure to fetch the text files
+        // Handle the failure to fetch the words
     }
 
-    return@coroutineScope textFiles
+    return@coroutineScope words
 }
 // Function to read text content from a given URL
 private suspend fun readTextFromUrl(url: String): String {

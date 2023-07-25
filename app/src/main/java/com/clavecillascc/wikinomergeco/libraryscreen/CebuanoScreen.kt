@@ -50,6 +50,8 @@ import com.clavecillascc.wikinomergeco.ui.theme.textTerm
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -62,7 +64,7 @@ fun CebuanoScreen(navController: NavHostController) {
 
     LaunchedEffect(Unit) {
         if (wordsState.value == null) {
-            wordsState.value = fetchWordsFromFirebase()
+            wordsState.value = fetchWordsFromFirebaseWithContent()
         }
     }
     val words = wordsState.value
@@ -72,54 +74,55 @@ fun CebuanoScreen(navController: NavHostController) {
             CircularProgressIndicator()
         }
     } else {
-        Column (verticalArrangement = Arrangement.spacedBy(10.dp)){
+        // Group words by their starting letter
+        val wordsMap = words.groupBy { it.name.first().toString().uppercase() }
 
-        HeaderBox()
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp)
-                .shadow(
-                    shape = RoundedCornerShape(10.dp),
-                    elevation = 5.dp,
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            HeaderBox()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp)
+                    .shadow(
+                        shape = RoundedCornerShape(10.dp),
+                        elevation = 5.dp,
+                    )
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(appWhiteYellow)
+                    .padding(horizontal = 15.dp, vertical = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(1.dp),
+            ) {
+                Text(
+                    text = "Cebuano A - Z :",
+                    style = MaterialTheme.typography.displayLarge,
+                    color = colorCebuano
                 )
-                .clip(RoundedCornerShape(10.dp))
-                .background(appWhiteYellow)
-                .padding(horizontal = 15.dp, vertical = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(1.dp),
-        ) {
-            Text(text = "Cebuano A - Z :",
-                style = MaterialTheme.typography.displayLarge,
-                color = colorCebuano)
-            Divider(color = darkerdividerColor, thickness = 1.dp)
-            //Letters
-            Text(text = "   " + "A",
-                style = MaterialTheme.typography.displayLarge,
-                color = colorCebuano)
-            Divider(color = darkerdividerColor, thickness = 1.dp)
-            Text(text = "   " + "B",
-                style = MaterialTheme.typography.displayLarge,
-                color = colorCebuano)
-            Divider(color = darkerdividerColor, thickness = 1.dp)
-            Text(text = "   " + "C",
-                style = MaterialTheme.typography.displayLarge,
-                color = colorCebuano)
-            Divider(color = darkerdividerColor, thickness = 1.dp)
-            Spacer(modifier = Modifier.size(3.dp))
+                Divider(color = darkerdividerColor, thickness = 1.dp)
 
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp)) {
-                items(words.size) { index ->
-                    val word = words[index]
-                    WordItem(word) {
-                        // Navigate to the new screen when a word is clicked
-                        navController.navigate("wordDetails/${word.content}")
-                    }
-                    Spacer(modifier = Modifier.size(3.dp))
+                // Iterate through the letters and their associated words
+                for ((letter, words) in wordsMap) {
+                    Text(
+                        text = "   " + letter,
+                        style = MaterialTheme.typography.displayLarge,
+                        color = colorCebuano
+                    )
                     Divider(color = darkerdividerColor, thickness = 1.dp)
+                    Spacer(modifier = Modifier.size(3.dp))
+
+                    LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                        items(words.size) { index ->
+                            val word = words[index]
+                            WordItem(word) {
+                                // Navigate to the new screen when a word is clicked
+                                navController.navigate("wordDetails/${word.content}")
+                            }
+                            Spacer(modifier = Modifier.size(3.dp))
+                            Divider(color = darkerdividerColor, thickness = 1.dp)
+                        }
+                    }
                 }
             }
         }
-    }
 
         // Show TextFileItemUI when selectedWordContent is not null
         if (selectedWordContent.value != null) {
@@ -236,7 +239,8 @@ suspend fun fetchTextContentForWordFromFirebase(wordName: String): String = coro
 }
 
 
-suspend fun fetchWordsFromFirebase(): List<WordItem> = coroutineScope {
+// Replace the existing fetchWordsFromFirebase function with the following:
+suspend fun fetchWordsFromFirebaseWithContent(): List<WordItem> = coroutineScope {
     val storageReference = Firebase.storage.reference.child("Cebuano/")
     val words = mutableListOf<WordItem>()
 
@@ -244,11 +248,17 @@ suspend fun fetchWordsFromFirebase(): List<WordItem> = coroutineScope {
         val result = storageReference.listAll().await()
         val items = result.items
 
-        for (item in items) {
-            val name = item.name
-            val content = fetchTextContentForWordFromFirebase(name)
-            words.add(WordItem(name, content))
+        // Use map and parallel processing to fetch text content for all words concurrently
+        val contentDeferreds = items.map { item ->
+            async(Dispatchers.IO) {
+                val name = item.name
+                val content = fetchTextContentForWordFromFirebase(name)
+                WordItem(name, content)
+            }
         }
+
+        // Await all deferred results and populate the words list
+        words.addAll(contentDeferreds.awaitAll())
     } catch (e: IOException) {
         // Handle the failure to fetch the words
     }
