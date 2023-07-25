@@ -83,7 +83,13 @@ val Typography = Typography(
         fontFamily = Montserrat,
         fontWeight = FontWeight.Normal,
         fontSize = 35.sp,
-        color = appWhite)
+        color = appWhite),
+    //Letters
+    displayLarge = TextStyle(
+        fontFamily = Poppins,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+    )
 /* Other default text styles to override
 titleLarge = TextStyle(
     fontFamily = FontFamily.Default,

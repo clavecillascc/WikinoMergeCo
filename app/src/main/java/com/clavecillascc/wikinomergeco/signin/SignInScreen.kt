@@ -73,12 +73,14 @@ fun SignInScreen(
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             //sign-in
-            Button(modifier = Modifier
+            Button(
+                onClick = onSignInClick,
+                modifier = Modifier
                 .size(height = 40.dp, width = 300.dp)
                 .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                 backgroundColor = appYellow),
                 contentPadding = PaddingValues(0.dp),
-                onClick = onSignInClick) {
+                ) {
                 Text(text = "SIGN IN",
                     style = MaterialTheme.typography.displayMedium,
                     color = appWhite,
@@ -91,8 +93,8 @@ fun SignInScreen(
                 .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                 backgroundColor = appWhite),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { /*TODO*/ }) {
-                Row() {
+                onClick = {  }) {
+                Row {
                     Text(text = "NO ACCOUNT YET?",
                         style = MaterialTheme.typography.displayMedium,
                         color = appDarkBlue,
