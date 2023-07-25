@@ -215,7 +215,6 @@ fun TextFileItemUI2(textContent: String) {
 val textContentCache2 = mutableMapOf<String, String>()
 
 suspend fun fetchTextContentForWordFromFirebase2(wordName: String): String = coroutineScope {
-    // Construct the storage reference for the specific word
     val storageReference = Firebase.storage.reference.child("Bicolano/$wordName")
 
     try {
@@ -237,7 +236,6 @@ suspend fun fetchTextContentForWordFromFirebase2(wordName: String): String = cor
 }
 
 
-// Replace the existing fetchWordsFromFirebase function with the following:
 suspend fun fetchWordsFromFirebaseWithContent2(): List<WordItem> = coroutineScope {
     val storageReference = Firebase.storage.reference.child("Bicolano/")
     val words = mutableListOf<WordItem>()
@@ -246,7 +244,6 @@ suspend fun fetchWordsFromFirebaseWithContent2(): List<WordItem> = coroutineScop
         val result = storageReference.listAll().await()
         val items = result.items
 
-        // Use map and parallel processing to fetch text content for all words concurrently
         val contentDeferreds = items.map { item ->
             async(Dispatchers.IO) {
                 val name = item.name
@@ -255,7 +252,6 @@ suspend fun fetchWordsFromFirebaseWithContent2(): List<WordItem> = coroutineScop
             }
         }
 
-        // Await all deferred results and populate the words list
         words.addAll(contentDeferreds.awaitAll())
     } catch (e: IOException) {
         // Handle the failure to fetch the words

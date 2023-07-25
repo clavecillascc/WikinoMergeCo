@@ -80,7 +80,6 @@ fun IlocanoScreen(navController: NavHostController) {
             CircularProgressIndicator()
         }
     } else {
-        // Group words by their starting letter
         val wordsMap = words.groupBy { it.name.first().toString().uppercase() }
 
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -225,7 +224,6 @@ fun TextFileItemUI1(textContent: String) {
 val textContentCache1 = mutableMapOf<String, String>()
 
 suspend fun fetchTextContentForWordFromFirebase1(wordName: String): String = coroutineScope {
-    // Construct the storage reference for the specific word
     val storageReference = Firebase.storage.reference.child("Ilocano/$wordName")
 
     try {

@@ -74,7 +74,6 @@ fun CebuanoScreen(navController: NavHostController) {
             CircularProgressIndicator()
         }
     } else {
-        // Group words by their starting letter
         val wordsMap = words.groupBy { it.name.first().toString().uppercase() }
 
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -239,7 +238,6 @@ suspend fun fetchTextContentForWordFromFirebase(wordName: String): String = coro
 }
 
 
-// Replace the existing fetchWordsFromFirebase function with the following:
 suspend fun fetchWordsFromFirebaseWithContent(): List<WordItem> = coroutineScope {
     val storageReference = Firebase.storage.reference.child("Cebuano/")
     val words = mutableListOf<WordItem>()
@@ -248,7 +246,6 @@ suspend fun fetchWordsFromFirebaseWithContent(): List<WordItem> = coroutineScope
         val result = storageReference.listAll().await()
         val items = result.items
 
-        // Use map and parallel processing to fetch text content for all words concurrently
         val contentDeferreds = items.map { item ->
             async(Dispatchers.IO) {
                 val name = item.name
@@ -256,8 +253,6 @@ suspend fun fetchWordsFromFirebaseWithContent(): List<WordItem> = coroutineScope
                 WordItem(name, content)
             }
         }
-
-        // Await all deferred results and populate the words list
         words.addAll(contentDeferreds.awaitAll())
     } catch (e: IOException) {
         // Handle the failure to fetch the words
