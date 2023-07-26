@@ -7,8 +7,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,9 +21,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.clavecillascc.wikinomergeco.R
+import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
@@ -51,15 +61,20 @@ import com.clavecillascc.wikinomergeco.ui.theme.textSeeMore
 
 @Composable
 fun CollaboratorScreen() {
-    /*TODO*/
     Column (modifier = Modifier
         .verticalScroll(rememberScrollState())){
         CollaboratorFilter()
         Spacer(modifier = Modifier.size(15.dp))
         RecentlyAdded()
         Spacer(modifier = Modifier.size(75.dp))
-    }
 
+    }
+    Column(modifier = Modifier.fillMaxWidth().height(650.dp).
+        padding(15.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.End) {
+        AddTranslation()
+    }
 }
 
 @Composable
@@ -227,3 +242,36 @@ fun UserContribution (
 
     }
 }
+
+@Composable
+fun sdasda (){
+    Button(modifier = Modifier
+        .size(height = 110.dp, width = 92.dp)
+        .defaultMinSize(),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+        contentPadding = PaddingValues(0.dp),
+        elevation = null,
+        onClick = { /*TODO*/ }) {
+        Image(
+            painter = painterResource(id = R.drawable.add_button),
+            contentDescription = "Ilocano",
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxSize()
+        )
+    }
+}
+
+@Composable
+fun AddTranslation (){
+
+    FloatingActionButton(
+        onClick = {/*TODO*/},
+        backgroundColor = appDarkBlue,
+        contentColor = appYellow
+    ){
+        Icon(Icons.Filled.Add,"AddButton",
+            modifier = Modifier.size(30.dp))
+    }
+}
+
