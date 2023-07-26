@@ -77,7 +77,7 @@ fun CebuanoScreen(navController: NavHostController) {
         val wordsMap = words.groupBy { it.name.first().toString().uppercase() }
 
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            HeaderBox()
+            HeaderBoxC()
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -143,7 +143,7 @@ fun WordItem(word: WordItem, onItemClick: () -> Unit) {
     )
 }
 @Composable
-fun HeaderBox() {
+fun HeaderBoxC() {
     Box(
         modifier = Modifier
             .background(colorCebuano)

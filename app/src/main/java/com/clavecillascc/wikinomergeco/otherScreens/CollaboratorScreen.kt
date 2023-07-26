@@ -244,25 +244,6 @@ fun UserContribution (
 }
 
 @Composable
-fun sdasda (){
-    Button(modifier = Modifier
-        .size(height = 110.dp, width = 92.dp)
-        .defaultMinSize(),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-        contentPadding = PaddingValues(0.dp),
-        elevation = null,
-        onClick = { /*TODO*/ }) {
-        Image(
-            painter = painterResource(id = R.drawable.add_button),
-            contentDescription = "Ilocano",
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxSize()
-        )
-    }
-}
-
-@Composable
 fun AddTranslation (){
 
     FloatingActionButton(

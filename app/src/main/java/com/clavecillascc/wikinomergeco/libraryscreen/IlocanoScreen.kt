@@ -83,7 +83,7 @@ fun IlocanoScreen(navController: NavHostController) {
         val wordsMap = words.groupBy { it.name.first().toString().uppercase() }
 
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            HeaderBox()
+            HeaderBoxI()
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -149,7 +149,7 @@ fun WordItem1(word: WordItem, onItemClick: () -> Unit) {
     )
 }
 @Composable
-fun HeaderBox1() {
+fun HeaderBoxI() {
     Box(
         modifier = Modifier
             .background(colorIlocano)

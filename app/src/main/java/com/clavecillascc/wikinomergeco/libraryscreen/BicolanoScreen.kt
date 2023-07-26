@@ -76,7 +76,7 @@ fun BicolanoScreen(navController: NavHostController) {
         val wordsMap = words.groupBy { it.name.first().toString().uppercase() }
 
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            HeaderBox()
+            HeaderBoxB()
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -140,7 +140,7 @@ fun WordItem2(word: WordItem, onItemClick: () -> Unit) {
     )
 }
 @Composable
-fun HeaderBox2() {
+fun HeaderBoxB() {
     Box(
         modifier = Modifier
             .background(colorBicolano)
