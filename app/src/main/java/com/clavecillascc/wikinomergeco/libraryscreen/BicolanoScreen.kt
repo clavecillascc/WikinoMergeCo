@@ -38,7 +38,7 @@ import androidx.navigation.NavHostController
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
-import com.clavecillascc.wikinomergeco.ui.theme.colorCebuano
+import com.clavecillascc.wikinomergeco.ui.theme.colorBicolano
 import com.clavecillascc.wikinomergeco.ui.theme.darkerdividerColor
 import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
@@ -91,9 +91,9 @@ fun BicolanoScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(1.dp),
             ) {
                 Text(
-                    text = "Cebuano A - Z :",
+                    text = "Bicolano A - Z :",
                     style = MaterialTheme.typography.displayLarge,
-                    color = colorCebuano
+                    color = colorBicolano
                 )
                 Divider(color = darkerdividerColor, thickness = 1.dp)
 
@@ -101,7 +101,7 @@ fun BicolanoScreen(navController: NavHostController) {
                     Text(
                         text = "   " + letter,
                         style = MaterialTheme.typography.displayLarge,
-                        color = colorCebuano
+                        color = colorBicolano
                     )
                     Divider(color = darkerdividerColor, thickness = 1.dp)
                     Spacer(modifier = Modifier.size(3.dp))
@@ -143,7 +143,7 @@ fun WordItem2(word: WordItem, onItemClick: () -> Unit) {
 fun HeaderBox2() {
     Box(
         modifier = Modifier
-            .background(colorCebuano)
+            .background(colorBicolano)
             .fillMaxWidth()
             .height(50.dp)
     ) {
@@ -156,7 +156,7 @@ fun HeaderBox2() {
                     tint = Color.White)
             }
 
-            Text(text = "Cebuano Language",
+            Text(text = "Bicolano Language",
                 style = MaterialTheme.typography.labelMedium,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
