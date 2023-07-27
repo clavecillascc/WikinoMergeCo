@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
+import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
+import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import com.clavecillascc.wikinomergeco.ui.theme.colorCebuano
 
 @Composable
@@ -38,7 +40,7 @@ fun AddCollaboratorScreen(navController: NavController) {
 fun AddCollaboratorHeaderBox(navController: NavController) {
     Box(
         modifier = Modifier
-            .background(colorCebuano)
+            .background(appYellow)
             .fillMaxWidth()
             .height(50.dp)
     ) {
@@ -55,7 +57,7 @@ fun AddCollaboratorHeaderBox(navController: NavController) {
             }
 
             androidx.compose.material.Text(
-                text = "Alexis",
+                text = "Add new word ",
                 style = MaterialTheme.typography.labelMedium,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,

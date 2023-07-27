@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
@@ -76,7 +77,7 @@ fun BicolanoScreen(navController: NavHostController) {
         val wordsMap = words.groupBy { it.name.first().toString().uppercase() }
 
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            HeaderBoxB()
+            HeaderBoxB(navController)
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -140,7 +141,7 @@ fun WordItem2(word: WordItem, onItemClick: () -> Unit) {
     )
 }
 @Composable
-fun HeaderBoxB() {
+fun HeaderBoxB(navController: NavController) {
     Box(
         modifier = Modifier
             .background(colorBicolano)
@@ -149,7 +150,7 @@ fun HeaderBoxB() {
     ) {
         Row (verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxSize()){
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigate("library") }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back Icon",

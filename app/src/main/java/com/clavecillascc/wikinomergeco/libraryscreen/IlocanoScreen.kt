@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
@@ -83,7 +84,7 @@ fun IlocanoScreen(navController: NavHostController) {
         val wordsMap = words.groupBy { it.name.first().toString().uppercase() }
 
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            HeaderBoxI()
+            HeaderBoxI(navController)
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -149,7 +150,7 @@ fun WordItem1(word: WordItem, onItemClick: () -> Unit) {
     )
 }
 @Composable
-fun HeaderBoxI() {
+fun HeaderBoxI(navController: NavController) {
     Box(
         modifier = Modifier
             .background(colorIlocano)
@@ -158,7 +159,7 @@ fun HeaderBoxI() {
     ) {
         Row (verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxSize()){
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigate("library") }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back Icon",
