@@ -108,6 +108,12 @@ fun AddCollaboratorHeaderBox(navController: NavController) {
 fun AddNewTranslation(
     color: Color = appWhiteYellow
 ) {
+    var term by remember { mutableStateOf("") }
+    var language by remember { mutableStateOf("") }
+    var translationterm by remember { mutableStateOf("") }
+    var terminsentence by remember { mutableStateOf("") }
+    var translationsentence by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .padding(horizontal = 18.dp, vertical = 10.dp)
@@ -118,9 +124,8 @@ fun AddNewTranslation(
             .clip(RoundedCornerShape(10.dp))
             .background(appWhiteYellow)
             .padding(horizontal = 15.dp, vertical = 15.dp)
-            .fillMaxWidth()
-        //.height(200.dp),
-        , verticalArrangement = Arrangement.SpaceBetween
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Row() {
             Image(
@@ -158,7 +163,18 @@ fun AddNewTranslation(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            TextFields()
+            TextFields(
+                term,
+                language,
+                translationterm,
+                terminsentence,
+                translationsentence,
+                { term = it },
+                { language = it },
+                { translationterm = it },
+                { terminsentence = it },
+                { translationsentence = it }
+            )
         }
 
         Column(verticalArrangement = Arrangement.Center) {
@@ -189,16 +205,28 @@ fun AddNewTranslation(
                     }
                 }
 
-                //Upload Button
-                Button(modifier = Modifier
-                    .size(height = 35.dp, width = 100.dp)
-                    .defaultMinSize()
-                    .padding(top = 5.dp, end = 13.dp),
+                // Upload Button
+                Button(
+                    modifier = Modifier
+                        .size(height = 35.dp, width = 100.dp)
+                        .defaultMinSize()
+                        .padding(top = 5.dp, end = 13.dp),
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = appDarkBlue
                     ),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { }) {
+                    onClick = {
+                        val userInput = buildString {
+                            append("Term: ${term}\n")
+                            append("Language: ${language}\n")
+                            append("Translation of Term: ${translationterm}\n")
+                            append("Term used in a sentence: ${terminsentence}\n")
+                            append("Translation of Sentence: ${translationsentence}\n")
+                        }
+
+                        UploadData.uploadToFirebase(term, language, translationterm, terminsentence,translationsentence)
+                    }
+                ) {
                     Row {
                         Text(
                             text = "Upload",
@@ -212,57 +240,94 @@ fun AddNewTranslation(
         }
     }
 }
-@Preview
+
 @Composable
-fun TextFields() {
-
+fun TextFields(
+    term: String,
+    language: String,
+    translationterm: String,
+    terminsentence: String,
+    translationsentence: String,
+    onTermChange: (String) -> Unit,
+    onLanguageChange: (String) -> Unit,
+    onTranslationTermChange: (String) -> Unit,
+    onTermInSentenceChange: (String) -> Unit,
+    onTranslationSentenceChange: (String) -> Unit
+) {
     Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
-        var term by remember { mutableStateOf("")}
-        var language by remember { mutableStateOf("")}
-        var translationterm by remember { mutableStateOf("")}
-        var terminsentence by remember { mutableStateOf("")}
-        var translationsentence by remember { mutableStateOf("")}
-
         //1-Term
         TextField(
             label = { Text("Term") },
             value = term,
-            onValueChange = {term = it},
-            colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = textTerm, focusedLabelColor = appYellow,
-                unfocusedTextColor = textTerm, focusedTextColor = normalBlack))
+            onValueChange = onTermChange,
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = appWhite,
+                focusedContainerColor = appNotSoWhite,
+                unfocusedLabelColor = textTerm,
+                focusedLabelColor = appYellow,
+                unfocusedTextColor = textTerm,
+                focusedTextColor = normalBlack
+            )
+        )
 
         //2-Language of Term
         TextField(
             label = { Text("Language") },
             value = language,
-            onValueChange = {language = it},
-            colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = appYellow, focusedLabelColor = appYellow,
-                unfocusedTextColor = appYellow, focusedTextColor = normalBlack))
+            onValueChange = onLanguageChange,
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = appWhite,
+                focusedContainerColor = appNotSoWhite,
+                unfocusedLabelColor = appYellow,
+                focusedLabelColor = appYellow,
+                unfocusedTextColor = appYellow,
+                focusedTextColor = normalBlack
+            )
+        )
+
         //3-Translation of Term in tagalog/english?
         TextField(
             label = { Text("Translation of term") },
             value = translationterm,
-            onValueChange = {translationterm = it},
-            colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = textOtherTerms, focusedLabelColor = textOtherTerms,
-                unfocusedTextColor = textOtherTerms, focusedTextColor = normalBlack))
+            onValueChange = onTranslationTermChange,
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = appWhite,
+                focusedContainerColor = appNotSoWhite,
+                unfocusedLabelColor = textOtherTerms,
+                focusedLabelColor = textOtherTerms,
+                unfocusedTextColor = textOtherTerms,
+                focusedTextColor = normalBlack
+            )
+        )
+
         //4-Term used in a sentence
         TextField(
             label = { Text("Term used in a sentence") },
             value = terminsentence,
-            onValueChange = {terminsentence = it},
-            colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = textTerm, focusedLabelColor = textTerm,
-                unfocusedTextColor = textTerm, focusedTextColor = normalBlack))
+            onValueChange = onTermInSentenceChange,
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = appWhite,
+                focusedContainerColor = appNotSoWhite,
+                unfocusedLabelColor = textTerm,
+                focusedLabelColor = textTerm,
+                unfocusedTextColor = textTerm,
+                focusedTextColor = normalBlack
+            )
+        )
+
         //5-Term in tagalog/english?
         TextField(
             label = { Text("Translation of sentence") },
             value = translationsentence,
-            onValueChange = {translationsentence = it},
-            colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = textSentence, focusedLabelColor = textSentence,
-                unfocusedTextColor = textSentence, focusedTextColor = normalBlack))
+            onValueChange = onTranslationSentenceChange,
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = appWhite,
+                focusedContainerColor = appNotSoWhite,
+                unfocusedLabelColor = textSentence,
+                focusedLabelColor = textSentence,
+                unfocusedTextColor = textSentence,
+                focusedTextColor = normalBlack
+            )
+        )
     }
 }
