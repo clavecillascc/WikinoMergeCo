@@ -216,14 +216,6 @@ fun AddNewTranslation(
                     ),
                     contentPadding = PaddingValues(0.dp),
                     onClick = {
-                        val userInput = buildString {
-                            append("Term: ${term}\n")
-                            append("Language: ${language}\n")
-                            append("Translation of Term: ${translationterm}\n")
-                            append("Term used in a sentence: ${terminsentence}\n")
-                            append("Translation of Sentence: ${translationsentence}\n")
-                        }
-
                         UploadData.uploadToFirebase(term, language, translationterm, terminsentence,translationsentence)
                     }
                 ) {

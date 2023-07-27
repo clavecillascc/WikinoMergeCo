@@ -2,13 +2,17 @@ package com.clavecillascc.wikinomergeco.collaboratorscreen
 
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
+import java.util.Locale
 
 object UploadData {
     private val storage = FirebaseStorage.getInstance()
     private val storageReference = storage.reference
 
     fun uploadToFirebase(term: String, language: String, translationterm: String, terminsentence: String, translationsentence: String) {
-        val fileName = "$term.txt"
+
+        val capitalizedTerm = term.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+
+        val fileName = "$capitalizedTerm.txt"
         val folderPath = "$language/"
 
         val formattedContent = buildString {
