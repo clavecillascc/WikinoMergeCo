@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
@@ -77,7 +78,7 @@ fun CebuanoScreen(navController: NavHostController) {
         val wordsMap = words.groupBy { it.name.first().toString().uppercase() }
 
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            HeaderBox()
+            HeaderBoxC(navController)
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -143,7 +144,7 @@ fun WordItem(word: WordItem, onItemClick: () -> Unit) {
     )
 }
 @Composable
-fun HeaderBox() {
+fun HeaderBoxC(navController: NavController) {
     Box(
         modifier = Modifier
             .background(colorCebuano)
@@ -152,7 +153,7 @@ fun HeaderBox() {
     ) {
         Row (verticalAlignment = Alignment.CenterVertically,
              modifier = Modifier.fillMaxSize()){
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigate("library")}) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back Icon",

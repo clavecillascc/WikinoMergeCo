@@ -73,7 +73,8 @@ fun Languages (navController: NavHostController, color: Color = appWhiteYellow )
             ) {
                 Button(modifier = Modifier
                     .size(height = 110.dp, width = 92.dp)
-                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    .defaultMinSize(),
+                    colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),

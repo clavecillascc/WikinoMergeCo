@@ -38,12 +38,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
-import com.clavecillascc.wikinomergeco.ui.theme.colorCebuano
+import com.clavecillascc.wikinomergeco.ui.theme.colorIlocano
 import com.clavecillascc.wikinomergeco.ui.theme.darkerdividerColor
 import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
@@ -83,7 +84,7 @@ fun IlocanoScreen(navController: NavHostController) {
         val wordsMap = words.groupBy { it.name.first().toString().uppercase() }
 
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            HeaderBox()
+            HeaderBoxI(navController)
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -98,9 +99,9 @@ fun IlocanoScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(1.dp),
             ) {
                 Text(
-                    text = "Cebuano A - Z :",
+                    text = "Ilocano A - Z :",
                     style = MaterialTheme.typography.displayLarge,
-                    color = colorCebuano
+                    color = colorIlocano
                 )
                 Divider(color = darkerdividerColor, thickness = 1.dp)
 
@@ -109,7 +110,7 @@ fun IlocanoScreen(navController: NavHostController) {
                     Text(
                         text = "   " + letter,
                         style = MaterialTheme.typography.displayLarge,
-                        color = colorCebuano
+                        color = colorIlocano
                     )
                     Divider(color = darkerdividerColor, thickness = 1.dp)
                     Spacer(modifier = Modifier.size(3.dp))
@@ -149,23 +150,23 @@ fun WordItem1(word: WordItem, onItemClick: () -> Unit) {
     )
 }
 @Composable
-fun HeaderBox1() {
+fun HeaderBoxI(navController: NavController) {
     Box(
         modifier = Modifier
-            .background(colorCebuano)
+            .background(colorIlocano)
             .fillMaxWidth()
             .height(50.dp)
     ) {
         Row (verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxSize()){
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigate("library") }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back Icon",
                     tint = Color.White)
             }
 
-            Text(text = "Cebuano Language",
+            Text(text = "Ilocano Language",
                 style = MaterialTheme.typography.labelMedium,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,

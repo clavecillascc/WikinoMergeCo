@@ -1,5 +1,7 @@
 package com.clavecillascc.wikinomergeco.otherScreens
 
+import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,10 +21,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,12 +41,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.clavecillascc.wikinomergeco.R
+import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
@@ -49,30 +60,56 @@ import com.clavecillascc.wikinomergeco.ui.theme.selectedGray
 import com.clavecillascc.wikinomergeco.ui.theme.textHeaderBlack
 import com.clavecillascc.wikinomergeco.ui.theme.textSeeMore
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CollaboratorScreen() {
+fun CollaboratorScreen(navController: NavController) {
+
+    val ctx = LocalContext.current
     /*TODO*/
-    Column (modifier = Modifier
-        .verticalScroll(rememberScrollState())){
-        CollaboratorFilter()
-        Spacer(modifier = Modifier.size(15.dp))
-        RecentlyAdded()
-        Spacer(modifier = Modifier.size(75.dp))
-    }
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {navController.navigate("addCollaborator")},
+                backgroundColor = appDarkBlue,
+                modifier = Modifier
+                    .padding(top = 15.dp, start = 15.dp, bottom = 15.dp, end = 5.dp )
+                    .padding(bottom = 35.dp)
+            ){
+                Icon(Icons.Filled.Add,"AddButton",
+                    modifier = Modifier.size(30.dp), tint = appYellow)
+            }
+        },
+        content = {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+            ) {
+                CollaboratorFilter()
+                Spacer(modifier = Modifier.size(15.dp))
+                RecentlyAdded()
+                Spacer(modifier = Modifier.size(75.dp))
+            }
+        }
+    )
 
 }
 
 @Composable
-fun CollaboratorFilter(){
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .height(80.dp)
-        .background(appYellow))
-    {
-        Column(modifier = Modifier
+fun CollaboratorFilter() {
+    Box(
+        modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp),
-            verticalArrangement = Arrangement.Center) {
+            .height(80.dp)
+            .background(appYellow)
+    )
+    {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
             Spacer(Modifier.size(5.dp))
             Text(text = "    Available Laungages:", color = appWhite)
             Filter(chips = listOf("Tagalog", "Cebuano", "Bicolano"))
@@ -109,6 +146,7 @@ fun Filter(
         }
     }
 }
+
 @Preview
 @Composable
 fun RecentlyAdded(
@@ -122,7 +160,7 @@ fun RecentlyAdded(
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(horizontal = 20.dp)
 
-        )
+    )
     Column(
 
     ) {
@@ -131,21 +169,25 @@ fun RecentlyAdded(
         Spacer(modifier = Modifier.size(70.dp))
     }
 }
+
 @Composable
-fun UserContribution (
-    color: Color = appWhiteYellow){
-    Column(modifier = Modifier
-        .padding(horizontal = 18.dp, vertical = 10.dp)
-        .shadow(
-            shape = RoundedCornerShape(10.dp),
-            elevation = 5.dp,
-        )
-        .clip(RoundedCornerShape(10.dp))
-        .background(color)
-        .padding(horizontal = 15.dp, vertical = 15.dp)
-        .fillMaxWidth()
+fun UserContribution(
+    color: Color = appWhiteYellow
+) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 18.dp, vertical = 10.dp)
+            .shadow(
+                shape = RoundedCornerShape(10.dp),
+                elevation = 5.dp,
+            )
+            .clip(RoundedCornerShape(10.dp))
+            .background(color)
+            .padding(horizontal = 15.dp, vertical = 15.dp)
+            .fillMaxWidth()
         //.height(200.dp),
-        ,verticalArrangement = Arrangement.SpaceBetween) {
+        , verticalArrangement = Arrangement.SpaceBetween
+    ) {
         Row() {
             Image(
                 painter = painterResource(id = R.drawable.profilepic_sample),
@@ -153,11 +195,15 @@ fun UserContribution (
                 modifier = Modifier
                     .size(50.dp)
                     .clip(CircleShape)
-                    .border(width = 1.dp, color = normalBlack, CircleShape))
+                    .border(width = 1.dp, color = normalBlack, CircleShape)
+            )
             Column() {
-                Text(text = "Username", Modifier.padding(horizontal = 20.dp),
-                    style = MaterialTheme.typography.labelMedium )
-                Text(text = "user details", Modifier.padding(horizontal = 20.dp),
+                Text(
+                    text = "Username", Modifier.padding(horizontal = 20.dp),
+                    style = MaterialTheme.typography.labelMedium
+                )
+                Text(
+                    text = "user details", Modifier.padding(horizontal = 20.dp),
                     style = MaterialTheme.typography.labelMedium,
                     fontSize = 12.sp
                 )
@@ -184,39 +230,57 @@ fun UserContribution (
             Divider(color = dividerColor, thickness = 2.dp)
             Spacer(modifier = Modifier.size(5.dp))
             //See more clickable
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
 
-                Row(modifier = Modifier.height(20.dp)
+                Row(
+                    modifier = Modifier.height(20.dp)
                 ) {
                     IconButton(onClick = { /*TODO*/ }, Modifier.size(30.dp)) {
-                        Icon(painter = painterResource(id = R.drawable.follow_icon),
-                            contentDescription = "follow", Modifier.size(15.dp))
+                        Icon(
+                            painter = painterResource(id = R.drawable.follow_icon),
+                            contentDescription = "follow", Modifier.size(15.dp)
+                        )
                     }
                     Text(
                         text = "Follow",
-                        style = MaterialTheme.typography.labelSmall)
+                        style = MaterialTheme.typography.labelSmall
+                    )
                 }
 
-                Row(modifier = Modifier.height(20.dp)
+                Row(
+                    modifier = Modifier.height(20.dp)
                 ) {
                     IconButton(onClick = { /*TODO*/ }, Modifier.size(30.dp)) {
-                        Icon(painter = painterResource(id =R.drawable.chat_light),
-                            contentDescription = "comment", Modifier.size(20.dp))
+                        Icon(
+                            painter = painterResource(id = R.drawable.chat_light),
+                            contentDescription = "comment", Modifier.size(20.dp)
+                        )
                     }
                     Text(
                         text = "Comment",
-                        style = MaterialTheme.typography.labelSmall)
+                        style = MaterialTheme.typography.labelSmall
+                    )
                 }
 
-                Row(modifier = Modifier.height(20.dp)
+                Row(
+                    modifier = Modifier.height(20.dp)
                 ) {
                     IconButton(onClick = { /*TODO*/ }, Modifier.size(20.dp)) {
-                        Icon(painter = painterResource(R.drawable.upvote_icon),
-                            contentDescription = "upvote", Modifier.size(10.dp))}
+                        Icon(
+                            painter = painterResource(R.drawable.upvote_icon),
+                            contentDescription = "upvote", Modifier.size(10.dp)
+                        )
+                    }
 
                     IconButton(onClick = { /*TODO*/ }, Modifier.size(20.dp)) {
-                        Icon(painter = painterResource(R.drawable.downvote_icon),
-                            contentDescription = "downvote", Modifier.size(10.dp))}
+                        Icon(
+                            painter = painterResource(R.drawable.downvote_icon),
+                            contentDescription = "downvote", Modifier.size(10.dp)
+                        )
+                    }
 
 
                 }

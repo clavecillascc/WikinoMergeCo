@@ -45,6 +45,7 @@ val notSelectedGray = Color(0xFFF0F0F0)
 val logoGray = Color(0xFFC8C8C8)
 val dividerColor = Color(0xFFEAEAEA)
 val darkerdividerColor = Color(0xFF7D7D7D)
+val buttonCancel = Color(0xFFBBC3CD)
 
 
 //font color

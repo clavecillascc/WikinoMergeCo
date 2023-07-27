@@ -8,6 +8,7 @@ import com.clavecillascc.wikinomergeco.libraryscreen.BicolanoScreen
 import com.clavecillascc.wikinomergeco.libraryscreen.CebuanoScreen
 import com.clavecillascc.wikinomergeco.libraryscreen.IlocanoScreen
 import com.clavecillascc.wikinomergeco.libraryscreen.TextFileItemUI
+import com.clavecillascc.wikinomergeco.collaboratorscreen.AddCollaboratorScreen
 import com.clavecillascc.wikinomergeco.otherScreens.CollaboratorScreen
 import com.clavecillascc.wikinomergeco.otherScreens.Languages
 import com.clavecillascc.wikinomergeco.otherScreens.LibraryScreen
@@ -18,29 +19,32 @@ import com.clavecillascc.wikinomergeco.otherScreens.TranslateScreen
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "home") {
-        composable(route = "home"){
+        composable(route = "home") {
             HomeScreen()
         }
-        composable(route = "translate"){
+        composable(route = "translate") {
             TranslateScreen()
         }
-        composable(route = "library"){
+        composable(route = "library") {
             LibraryScreen(navController = navController)
         }
-        composable(route = "collaborator"){
-            CollaboratorScreen()
+        composable(route = "collaborator") {
+            CollaboratorScreen(navController)
         }
         composable("cebuanoScreen") {
             CebuanoScreen(navController = navController)
         }
-        composable("bicolanoScreen"){
+        composable("bicolanoScreen") {
             BicolanoScreen(navController = navController)
         }
-        composable("ilocanoScreen"){
+        composable("ilocanoScreen") {
             IlocanoScreen(navController = navController)
         }
         composable("languages") {
             Languages(navController = navController)
+        }
+        composable("addCollaborator") {
+            AddCollaboratorScreen(navController = navController)
         }
         composable("wordDetails/{content}") { backStackEntry ->
             val content = backStackEntry.arguments?.getString("content")
