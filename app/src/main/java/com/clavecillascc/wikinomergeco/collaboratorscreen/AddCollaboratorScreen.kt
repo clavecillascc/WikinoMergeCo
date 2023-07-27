@@ -229,8 +229,8 @@ fun TextFields() {
             value = term,
             onValueChange = {term = it},
             colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = textTerm, focusedLabelColor = appYellow,
-                unfocusedTextColor = textTerm, focusedTextColor = normalBlack))
+                unfocusedLabelColor = logoGray, focusedLabelColor = textTerm,
+                unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
 
         //2-Language of Term
         TextField(
@@ -238,31 +238,31 @@ fun TextFields() {
             value = language,
             onValueChange = {language = it},
             colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = appYellow, focusedLabelColor = appYellow,
-                unfocusedTextColor = appYellow, focusedTextColor = normalBlack))
+                unfocusedLabelColor = logoGray, focusedLabelColor = appYellow,
+                unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
         //3-Translation of Term in tagalog/english?
         TextField(
             label = { Text("Translation of term") },
             value = translationterm,
             onValueChange = {translationterm = it},
             colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = textOtherTerms, focusedLabelColor = textOtherTerms,
-                unfocusedTextColor = textOtherTerms, focusedTextColor = normalBlack))
+                unfocusedLabelColor = logoGray, focusedLabelColor = textOtherTerms,
+                unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
         //4-Term used in a sentence
         TextField(
             label = { Text("Term used in a sentence") },
             value = terminsentence,
             onValueChange = {terminsentence = it},
             colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = textTerm, focusedLabelColor = textTerm,
-                unfocusedTextColor = textTerm, focusedTextColor = normalBlack))
+                unfocusedLabelColor = logoGray, focusedLabelColor = textTerm,
+                unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
         //5-Term in tagalog/english?
         TextField(
             label = { Text("Translation of sentence") },
             value = translationsentence,
             onValueChange = {translationsentence = it},
             colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = textSentence, focusedLabelColor = textSentence,
+                unfocusedLabelColor = logoGray, focusedLabelColor = textSentence,
                 unfocusedTextColor = textSentence, focusedTextColor = normalBlack))
     }
 }
