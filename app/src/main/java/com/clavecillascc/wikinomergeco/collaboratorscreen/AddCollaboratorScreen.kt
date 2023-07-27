@@ -263,6 +263,6 @@ fun TextFields() {
             onValueChange = {translationsentence = it},
             colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
                 unfocusedLabelColor = logoGray, focusedLabelColor = textSentence,
-                unfocusedTextColor = textSentence, focusedTextColor = normalBlack))
+                unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
     }
 }
