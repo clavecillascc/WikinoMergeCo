@@ -1,6 +1,5 @@
 package com.clavecillascc.wikinomergeco.otherScreens
 import android.util.Log
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,23 +25,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
-import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.tasks.await
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
 import com.clavecillascc.wikinomergeco.ui.theme.textSentence
 import com.clavecillascc.wikinomergeco.ui.theme.textTerm
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 
 @Composable
 fun HomeScreen() {
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
-        ) {
+    ) {
         Spacer(modifier = Modifier.size(15.dp))
         WordOfTheDay()
         FAQ()
@@ -51,9 +51,7 @@ fun HomeScreen() {
 }
 
 @Composable
-fun WordOfTheDay(
-    color: Color = appWhiteYellow,
-) {
+fun WordOfTheDay(color: Color = appWhiteYellow) {
     val word = rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
     val sharedPreferences = remember(context) {
@@ -63,12 +61,11 @@ fun WordOfTheDay(
     // Function to retrieve a random word from Firebase Storage
     suspend fun getRandomWord() {
         val storage = FirebaseStorage.getInstance()
-        val storageRef = storage.reference
-        val ONE_MEGABYTE: Long = 1024 * 1024
+        val storageRef = storage.reference.child("Words/")
 
         try {
             // Retrieve a list of all file names in the desired folder
-            val fileNames = storageRef.child("Words/").listAll().await().items.map { it.name }
+            val fileNames = storageRef.listAll().await().items.map { it.name }
 
             val previousFileId = sharedPreferences.getString("previousFileId", null)
             val filteredFileNames = if (previousFileId != null) {
@@ -83,7 +80,8 @@ fun WordOfTheDay(
                 val randomFileName = shuffledFileNames.first()
 
                 // Download the content of the random file
-                val bytes = storageRef.child("Words/$randomFileName").getBytes(ONE_MEGABYTE).await()
+                val ONE_MEGABYTE: Long = 1024 * 1024
+                val bytes = storageRef.child(randomFileName).getBytes(ONE_MEGABYTE).await()
 
                 word.value = String(bytes)
 

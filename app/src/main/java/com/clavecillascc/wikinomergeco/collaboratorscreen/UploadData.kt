@@ -8,7 +8,15 @@ object UploadData {
     private val storage = FirebaseStorage.getInstance()
     private val storageReference = storage.reference
 
-    fun uploadToFirebase(term: String, language: String, translationterm: String, terminsentence: String, translationsentence: String) {
+    val recentlyAddedContributions = mutableListOf<String>()
+
+    fun uploadToFirebase(
+        term: String,
+        language: String,
+        translationterm: String,
+        terminsentence: String,
+        translationsentence: String
+    ) {
 
         val capitalizedTerm = term.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
 
@@ -29,6 +37,7 @@ object UploadData {
                 }
             }
         }
+        recentlyAddedContributions.add(formattedContent)
 
         val data = formattedContent.toByteArray(Charsets.UTF_8)
 

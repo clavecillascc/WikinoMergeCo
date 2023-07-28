@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.clavecillascc.wikinomergeco.R
+import com.clavecillascc.wikinomergeco.collaboratorscreen.UploadData
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
@@ -65,6 +66,7 @@ import com.clavecillascc.wikinomergeco.ui.theme.textSeeMore
 fun CollaboratorScreen(navController: NavController) {
 
     val ctx = LocalContext.current
+    /*TODO*/
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -84,6 +86,7 @@ fun CollaboratorScreen(navController: NavController) {
                     .verticalScroll(rememberScrollState())
                     .fillMaxSize()
             ) {
+                CollaboratorFilter()
                 Spacer(modifier = Modifier.size(15.dp))
                 RecentlyAdded()
                 Spacer(modifier = Modifier.size(75.dp))
@@ -93,59 +96,58 @@ fun CollaboratorScreen(navController: NavController) {
 
 }
 
-//@Composable
-//fun CollaboratorFilter() {
-//    Box(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(80.dp)
-//            .background(appYellow)
-//    )
-//    {
-//        Column(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(80.dp),
-//            verticalArrangement = Arrangement.Center
-//        ) {
-//            Spacer(Modifier.size(5.dp))
-//            Text(text = "    Available Laungages:", color = appWhite)
-//            Filter(chips = listOf("Tagalog", "Cebuano", "Bicolano"))
-//        }
-//    }
-//}
+@Composable
+fun CollaboratorFilter() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .background(appYellow)
+    )
+    {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Spacer(Modifier.size(5.dp))
+            Text(text = "    Available Laungages:", color = appWhite)
+            Filter(chips = listOf("Tagalog", "Cebuano", "Bicolano"))
+        }
+    }
+}
 
-//@Composable
-//fun Filter(
-//    chips: List<String>,
-//
-//    ) {
-//    var selectedChipIndex by remember {
-//        mutableStateOf(0)
-//    }
-//    LazyRow {
-//        items(chips.size) {
-//            Box(
-//                contentAlignment = Alignment.Center,
-//                modifier = Modifier
-//                    .padding(start = 15.dp, top = 10.dp, bottom = 10.dp)
-//                    .clickable {
-//                        selectedChipIndex = it
-//                    }
-//                    .clip(RoundedCornerShape(5.dp))
-//                    .background(
-//                        if (selectedChipIndex == it) selectedGray
-//                        else notSelectedGray
-//                    )
-//                    .padding(start = 10.dp, top = 5.dp, bottom = 5.dp, end = 10.dp)
-//            ) {
-//                Text(text = chips[it], color = textHeaderBlack, fontSize = 12.sp)
-//            }
-//        }
-//    }
-//}
+@Composable
+fun Filter(
+    chips: List<String>,
 
-@Preview
+    ) {
+    var selectedChipIndex by remember {
+        mutableStateOf(0)
+    }
+    LazyRow {
+        items(chips.size) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .padding(start = 15.dp, top = 10.dp, bottom = 10.dp)
+                    .clickable {
+                        selectedChipIndex = it
+                    }
+                    .clip(RoundedCornerShape(5.dp))
+                    .background(
+                        if (selectedChipIndex == it) selectedGray
+                        else notSelectedGray
+                    )
+                    .padding(start = 10.dp, top = 5.dp, bottom = 5.dp, end = 10.dp)
+            ) {
+                Text(text = chips[it], color = textHeaderBlack, fontSize = 12.sp)
+            }
+        }
+    }
+}
+
 @Composable
 fun RecentlyAdded(
     color: Color = appWhiteYellow
@@ -157,20 +159,20 @@ fun RecentlyAdded(
         color = textSeeMore,
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(horizontal = 20.dp)
-
     )
-    Column(
-
-    ) {
-        UserContribution()
-        UserContribution()
+    Column {
+        // Iterate over the recently added contributions and display them
+        UploadData.recentlyAddedContributions.forEachIndexed { index, contribution ->
+            UserContribution(contribution, index % 2 == 0) // Pass the contribution and a boolean to alternate background color
+        }
         Spacer(modifier = Modifier.size(70.dp))
     }
 }
 
 @Composable
 fun UserContribution(
-    color: Color = appWhiteYellow
+    contribution: String,
+    isEven: Boolean,
 ) {
     Column(
         modifier = Modifier
@@ -180,11 +182,10 @@ fun UserContribution(
                 elevation = 5.dp,
             )
             .clip(RoundedCornerShape(10.dp))
-            .background(color)
+            .background(if (isEven) appWhiteYellow else appWhite)
             .padding(horizontal = 15.dp, vertical = 15.dp)
-            .fillMaxWidth()
-        //.height(200.dp),
-        , verticalArrangement = Arrangement.SpaceBetween
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Row() {
             Image(
@@ -221,73 +222,74 @@ fun UserContribution(
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Translation()
+            Text(
+                text = contribution,
+                style = MaterialTheme.typography.labelMedium
+            )
         }
+
+        Column {
+            Divider(color = dividerColor, thickness = 2.dp)
+            Spacer(modifier = Modifier.size(5.dp))
+            //See more clickable
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Row(
+                    modifier = Modifier.height(20.dp)
+                ) {
+                    IconButton(onClick = { /*TODO*/ }, Modifier.size(30.dp)) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.follow_icon),
+                            contentDescription = "follow", Modifier.size(15.dp)
+                        )
+                    }
+                    Text(
+                        text = "Follow",
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.height(20.dp)
+                ) {
+                    IconButton(onClick = { /*TODO*/ }, Modifier.size(30.dp)) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.chat_light),
+                            contentDescription = "comment", Modifier.size(20.dp)
+                        )
+                    }
+                    Text(
+                        text = "Comment",
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.height(20.dp)
+                ) {
+                    IconButton(onClick = { /*TODO*/ }, Modifier.size(20.dp)) {
+                        Icon(
+                            painter = painterResource(R.drawable.upvote_icon),
+                            contentDescription = "upvote", Modifier.size(10.dp)
+                        )
+                    }
+
+                    IconButton(onClick = { /*TODO*/ }, Modifier.size(20.dp)) {
+                        Icon(
+                            painter = painterResource(R.drawable.downvote_icon),
+                            contentDescription = "downvote", Modifier.size(10.dp)
+                        )
+                    }
+
+
+                }
+
+            }
+        }
+
+
     }
 }
-//
-//        Column {
-//            Divider(color = dividerColor, thickness = 2.dp)
-//            Spacer(modifier = Modifier.size(5.dp))
-//            //See more clickable
-//            Row(
-//                modifier = Modifier.fillMaxWidth(),
-//                horizontalArrangement = Arrangement.SpaceBetween
-//            )
-//            {
-//                Row(
-//                    modifier = Modifier.height(20.dp)
-//                ) {
-//                    IconButton(onClick = { /*TODO*/ }, Modifier.size(30.dp)) {
-//                        Icon(
-//                            painter = painterResource(id = R.drawable.follow_icon),
-//                            contentDescription = "follow", Modifier.size(15.dp)
-//                        )
-//                    }
-//                    Text(
-//                        text = "Follow",
-//                        style = MaterialTheme.typography.labelSmall
-//                    )
-//                }
-//
-//                Row(
-//                    modifier = Modifier.height(20.dp)
-//                ) {
-//                    IconButton(onClick = { /*TODO*/ }, Modifier.size(30.dp)) {
-//                        Icon(
-//                            painter = painterResource(id = R.drawable.chat_light),
-//                            contentDescription = "comment", Modifier.size(20.dp)
-//                        )
-//                    }
-//                    Text(
-//                        text = "Comment",
-//                        style = MaterialTheme.typography.labelSmall
-//                    )
-//                }
-//
-//                Row(
-//                    modifier = Modifier.height(20.dp)
-//                ) {
-//                    IconButton(onClick = { /*TODO*/ }, Modifier.size(20.dp)) {
-//                        Icon(
-//                            painter = painterResource(R.drawable.upvote_icon),
-//                            contentDescription = "upvote", Modifier.size(10.dp)
-//                        )
-//                    }
-//
-//                    IconButton(onClick = { /*TODO*/ }, Modifier.size(20.dp)) {
-//                        Icon(
-//                            painter = painterResource(R.drawable.downvote_icon),
-//                            contentDescription = "downvote", Modifier.size(10.dp)
-//                        )
-//                    }
-//
-//
-//                }
-//
-//            }
-//        }
-//
-//
-//    }
-//}
