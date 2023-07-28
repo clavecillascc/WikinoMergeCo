@@ -17,13 +17,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -46,13 +47,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.clavecillascc.wikinomergeco.R
+import com.clavecillascc.wikinomergeco.ui.theme.TextWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appNotSoWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
@@ -60,9 +65,12 @@ import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import com.clavecillascc.wikinomergeco.ui.theme.buttonCancel
 import com.clavecillascc.wikinomergeco.ui.theme.colorCebuano
+import com.clavecillascc.wikinomergeco.ui.theme.colorIndicator
+import com.clavecillascc.wikinomergeco.ui.theme.colorinactiveIndicator
 import com.clavecillascc.wikinomergeco.ui.theme.dividerColor
 import com.clavecillascc.wikinomergeco.ui.theme.logoBlue
 import com.clavecillascc.wikinomergeco.ui.theme.logoGray
+import com.clavecillascc.wikinomergeco.ui.theme.logoRed
 import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 import com.clavecillascc.wikinomergeco.ui.theme.notSelectedGray
 import com.clavecillascc.wikinomergeco.ui.theme.selectedGray
@@ -301,3 +309,4 @@ fun TextFields() {
                 unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
     }
 }
+

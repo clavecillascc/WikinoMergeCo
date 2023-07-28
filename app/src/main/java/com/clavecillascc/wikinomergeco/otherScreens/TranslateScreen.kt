@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+
 package com.clavecillascc.wikinomergeco.otherScreens
 
 import android.app.Activity
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,7 +29,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -52,7 +57,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.clavecillascc.wikinomergeco.R
@@ -64,14 +71,22 @@ import com.clavecillascc.wikinomergeco.models.Upvote
 import com.clavecillascc.wikinomergeco.services.CommentRequest
 import com.clavecillascc.wikinomergeco.services.DownVoteRequest
 import com.clavecillascc.wikinomergeco.services.UpvoteRequest
+import com.clavecillascc.wikinomergeco.ui.theme.TextWhite
+import com.clavecillascc.wikinomergeco.ui.theme.appNotSoWhite
+import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
+import com.clavecillascc.wikinomergeco.ui.theme.colorIndicator
+import com.clavecillascc.wikinomergeco.ui.theme.colorinactiveIndicator
+import com.clavecillascc.wikinomergeco.ui.theme.logoGray
+import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
 @Composable
 fun TranslateScreen() {
+
     /*TODO*/
     //Text(text = "Translate")
     var search by remember {
@@ -443,6 +458,8 @@ fun SearchAppBar(
         color = appYellow
     ) {
         var isSuggestionsExpanded by remember { mutableStateOf(false) }
+        var isLanguageExpanded by remember { mutableStateOf(false) }
+        var language by remember { mutableStateOf("") }
         val context = LocalContext.current
 
         val keyboardController = LocalSoftwareKeyboardController.current
@@ -464,16 +481,19 @@ fun SearchAppBar(
                 },
                 textStyle = TextStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize),
                 singleLine = true,
+
+                //Language Icon
                 leadingIcon = {
                     IconButton(
                         modifier = Modifier.alpha(ContentAlpha.medium),
-                        onClick = {}
+                        onClick = {isLanguageExpanded = true }
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Search Icon",
-                            tint = Color.White
-                        )
+                        Icon(painter = painterResource(id = R.drawable.language_icon),
+                            contentDescription = "Language Icon",
+                            Modifier.size(30.dp),
+                            tint = appWhite)
+
+                        DropDown()
                     }
                 },
                 trailingIcon = {
@@ -520,7 +540,9 @@ fun SearchAppBar(
                     Surface(
                         shape = RectangleShape,
                         elevation = 4.dp,
-                        modifier = Modifier.fillMaxWidth().background(Color.White)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.White)
                     ) {
                         Column {
                             autocompleteSuggestions.forEach { suggestion ->
@@ -959,4 +981,59 @@ private fun CommentListView(
         }
     }
 
+}
+@Composable
+fun DropDown() {
+
+    var language by remember { mutableStateOf("") }
+    var isExpanded by remember { mutableStateOf(false) }
+
+    androidx.compose.material3.ExposedDropdownMenuBox(
+        expanded = isExpanded,
+        onExpandedChange = { isExpanded = it })
+    {
+        androidx.compose.material3.TextField(
+            value = language,
+            onValueChange = {},
+            readOnly = true,
+            colors = androidx.compose.material3.TextFieldDefaults.colors(
+                unfocusedContainerColor = appYellow,
+                focusedContainerColor = appYellow,
+                unfocusedTextColor = TextWhite,
+                focusedTextColor = appWhite,
+                unfocusedLeadingIconColor = appWhite,
+                focusedLeadingIconColor = normalBlack,
+                unfocusedIndicatorColor = colorinactiveIndicator,
+                focusedIndicatorColor = colorIndicator
+            ),
+            textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp,),
+            leadingIcon = {
+                androidx.compose.material3.Icon(
+                    painter = painterResource(id = R.drawable.language_icon),
+                    contentDescription = "comment", Modifier.size(20.dp)
+                )
+            },
+            modifier = Modifier.menuAnchor()
+                .width(98.dp)
+        )
+
+        ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false })
+        {
+            DropdownMenuItem(text = { Text(text = "Cebuano") },
+                onClick = {
+                    isExpanded = false
+                    language = "CEB"
+                })
+            DropdownMenuItem(text = { Text(text = "Ilocano") },
+                onClick = {
+                    isExpanded = false
+                    language = "ILO"
+                })
+            DropdownMenuItem(text = { Text(text = "Bicolano") },
+                onClick = {
+                    isExpanded = false
+                    language = "BIC"
+                })
+        }
+    }
 }
