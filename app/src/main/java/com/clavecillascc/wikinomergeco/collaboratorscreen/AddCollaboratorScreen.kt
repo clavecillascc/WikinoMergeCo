@@ -1,8 +1,11 @@
 package com.clavecillascc.wikinomergeco.collaboratorscreen
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,20 +18,31 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,36 +54,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.clavecillascc.wikinomergeco.R
+import com.clavecillascc.wikinomergeco.interfaces.FirebaseStorageListener
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appNotSoWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import com.clavecillascc.wikinomergeco.ui.theme.buttonCancel
-import com.clavecillascc.wikinomergeco.ui.theme.colorCebuano
 import com.clavecillascc.wikinomergeco.ui.theme.dividerColor
-import com.clavecillascc.wikinomergeco.ui.theme.logoBlue
-import com.clavecillascc.wikinomergeco.ui.theme.logoGray
 import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
-import com.clavecillascc.wikinomergeco.ui.theme.notSelectedGray
-import com.clavecillascc.wikinomergeco.ui.theme.selectedGray
 import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
-import com.clavecillascc.wikinomergeco.ui.theme.textSeeMore
 import com.clavecillascc.wikinomergeco.ui.theme.textSentence
 import com.clavecillascc.wikinomergeco.ui.theme.textTerm
 
 @Composable
 fun AddCollaboratorScreen(navController: NavController) {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    val context = LocalContext.current
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+
+        ) {
         AddCollaboratorHeaderBox(navController)
-        AddNewTranslation()
+        AddNewTranslation(navController = navController, ctx = context)
     }
 }
 
@@ -106,13 +122,19 @@ fun AddCollaboratorHeaderBox(navController: NavController) {
 
 @Composable
 fun AddNewTranslation(
-    color: Color = appWhiteYellow
+    color: Color = appWhiteYellow,
+    navController: NavController,
+    ctx: Context
 ) {
     var term by remember { mutableStateOf("") }
     var language by remember { mutableStateOf("") }
     var translationterm by remember { mutableStateOf("") }
     var terminsentence by remember { mutableStateOf("") }
     var translationsentence by remember { mutableStateOf("") }
+    if (language.isEmpty()) {
+        language = "Bicolano"
+    }
+
 
     Column(
         modifier = Modifier
@@ -127,7 +149,9 @@ fun AddNewTranslation(
             .fillMaxWidth(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Row() {
+        Row(
+            modifier = Modifier.verticalScroll(rememberScrollState())
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.profilepic_sample),
                 contentDescription = "Logo",
@@ -176,7 +200,7 @@ fun AddNewTranslation(
                 { translationsentence = it }
             )
         }
-
+        Spacer(modifier = Modifier.size(15.dp))
         Column(verticalArrangement = Arrangement.Center) {
             Divider(color = dividerColor, thickness = 2.dp)
             Spacer(modifier = Modifier.size(5.dp))
@@ -194,7 +218,7 @@ fun AddNewTranslation(
                         backgroundColor = buttonCancel
                     ),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { }) {
+                    onClick = { navController.navigate("collaborator") }) {
                     Row {
                         Text(
                             text = "Cancel",
@@ -216,7 +240,30 @@ fun AddNewTranslation(
                     ),
                     contentPadding = PaddingValues(0.dp),
                     onClick = {
-                        UploadData.uploadToFirebase(term, language, translationterm, terminsentence,translationsentence)
+                        UploadData.uploadToFirebase(
+                            term,
+                            language,
+                            translationterm,
+                            terminsentence,
+                            translationsentence,
+                            object : FirebaseStorageListener {
+                                override fun <T> success(any: Any) {
+                                    Toast.makeText(
+                                        ctx,
+                                        "File Uploaded Successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                override fun error(error: Error) {
+                                    Toast.makeText(
+                                        ctx,
+                                        "File Upload Unsuccessful",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        )
                     }
                 ) {
                     Row {
@@ -249,6 +296,7 @@ fun TextFields(
     Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
         //1-Term
         TextField(
+            textStyle = TextStyle(fontSize = 12.sp),
             label = { Text("Term") },
             value = term,
             onValueChange = onTermChange,
@@ -262,23 +310,28 @@ fun TextFields(
             )
         )
 
-        //2-Language of Term
-        TextField(
-            label = { Text("Language") },
-            value = language,
-            onValueChange = onLanguageChange,
+
+        CustomSpinner(
+            textStyle = TextStyle(fontSize = 12.sp),
+            items = listOf("Bicolano", "Cebuano", "Ilocano"),
+            selectedItem = language,
+            onItemSelected = onLanguageChange,
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = appWhite,
-                focusedContainerColor = appNotSoWhite,
+                focusedContainerColor = appWhite,
                 unfocusedLabelColor = appYellow,
                 focusedLabelColor = appYellow,
                 unfocusedTextColor = appYellow,
-                focusedTextColor = normalBlack
+                focusedTextColor = normalBlack,
+                disabledContainerColor = appWhite,
+                disabledTextColor = normalBlack,
+                disabledPlaceholderColor = normalBlack
             )
         )
 
         //3-Translation of Term in tagalog/english?
         TextField(
+            textStyle = TextStyle(fontSize = 12.sp),
             label = { Text("Translation of term") },
             value = translationterm,
             onValueChange = onTranslationTermChange,
@@ -294,6 +347,7 @@ fun TextFields(
 
         //4-Term used in a sentence
         TextField(
+            textStyle = TextStyle(fontSize = 12.sp),
             label = { Text("Term used in a sentence") },
             value = terminsentence,
             onValueChange = onTermInSentenceChange,
@@ -309,6 +363,7 @@ fun TextFields(
 
         //5-Term in tagalog/english?
         TextField(
+            textStyle = TextStyle(fontSize = 12.sp),
             label = { Text("Translation of sentence") },
             value = translationsentence,
             onValueChange = onTranslationSentenceChange,
@@ -321,5 +376,56 @@ fun TextFields(
                 focusedTextColor = normalBlack
             )
         )
+    }
+}
+
+@Composable
+fun CustomSpinner(
+    textStyle: TextStyle,
+    items: List<String>,
+    selectedItem: String,
+    onItemSelected: (String) -> Unit,
+    colors: TextFieldColors
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .wrapContentSize()
+            .clickable { expanded = true }
+    ) {
+        TextField(
+            textStyle = textStyle,
+            label = { Text("Language of term") },
+            value = selectedItem,
+            onValueChange = onItemSelected,
+            colors = colors,
+            enabled = false,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { expanded = false }
+            ),
+        )
+
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            items.forEach { item ->
+                DropdownMenuItem(onClick = {
+                    onItemSelected(item)
+                    expanded = false
+                }) {
+                    Text(
+                        text = item,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
+        }
     }
 }
