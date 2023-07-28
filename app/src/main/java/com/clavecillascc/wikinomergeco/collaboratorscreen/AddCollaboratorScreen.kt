@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.clavecillascc.wikinomergeco.collaboratorscreen
 
 import androidx.compose.foundation.Image
@@ -26,6 +28,10 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -222,6 +228,7 @@ fun TextFields() {
         var translationterm by remember { mutableStateOf("")}
         var terminsentence by remember { mutableStateOf("")}
         var translationsentence by remember { mutableStateOf("")}
+        var isExpanded by remember { mutableStateOf(false)}
 
         //1-Term
         TextField(
@@ -233,13 +240,39 @@ fun TextFields() {
                 unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
 
         //2-Language of Term
-        TextField(
-            label = { Text("Language") },
-            value = language,
-            onValueChange = {language = it},
-            colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = logoGray, focusedLabelColor = appYellow,
-                unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
+        ExposedDropdownMenuBox(expanded = isExpanded , onExpandedChange = { isExpanded = it })
+        {
+            TextField(
+                label = { Text("Language") },
+                value = language,
+                onValueChange = {},
+                readOnly = true,
+                colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
+                    unfocusedLabelColor = logoGray, focusedLabelColor = appYellow,
+                    unfocusedTextColor = normalBlack, focusedTextColor = normalBlack),
+                trailingIcon = {ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)},
+                modifier = Modifier.menuAnchor())
+
+            ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false })
+                {
+                    DropdownMenuItem(text = { Text(text = "Cebuano") },
+                        onClick = {
+                            isExpanded = false
+                            language = "Cebuano"
+                        })
+                    DropdownMenuItem(text = { Text(text = "Ilocano") },
+                        onClick = {
+                            isExpanded = false
+                            language = "Ilocano"
+                        })
+                    DropdownMenuItem(text = { Text(text = "Bicolano") },
+                        onClick = {
+                            isExpanded = false
+                            language = "Bicolano"
+                        })
+                }
+        }
+
         //3-Translation of Term in tagalog/english?
         TextField(
             label = { Text("Translation of term") },
@@ -248,6 +281,7 @@ fun TextFields() {
             colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
                 unfocusedLabelColor = logoGray, focusedLabelColor = textOtherTerms,
                 unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
+
         //4-Term used in a sentence
         TextField(
             label = { Text("Term used in a sentence") },
@@ -256,6 +290,7 @@ fun TextFields() {
             colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
                 unfocusedLabelColor = logoGray, focusedLabelColor = textTerm,
                 unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
+
         //5-Term in tagalog/english?
         TextField(
             label = { Text("Translation of sentence") },
