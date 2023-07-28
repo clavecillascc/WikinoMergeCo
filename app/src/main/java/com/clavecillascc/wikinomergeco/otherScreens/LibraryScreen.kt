@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,7 +35,6 @@ import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 
 @Composable
 fun LibraryScreen(navController: NavHostController) {
-    /*TODO*/
     //Text(text = "Library")
     Column {
         Spacer(modifier = Modifier.size(15.dp))
@@ -46,6 +46,7 @@ fun LibraryScreen(navController: NavHostController) {
 fun Languages (navController: NavHostController, color: Color = appWhiteYellow ) {
     Column(
         modifier = Modifier
+            .height(635.dp)
             .padding(10.dp)
             .shadow(
                 shape = RoundedCornerShape(10.dp),
