@@ -3,6 +3,7 @@ package com.clavecillascc.wikinomergeco.collaboratorscreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,12 +22,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -46,6 +53,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.compose.material3.DropdownMenuItem
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appNotSoWhite
@@ -165,12 +173,12 @@ fun AddNewTranslation(
         ) {
             TextFields(
                 term,
-                language,
+                language  = language,
                 translationterm,
                 terminsentence,
                 translationsentence,
                 { term = it },
-                { language = it },
+                onLanguageChange = { language = it },
                 { translationterm = it },
                 { terminsentence = it },
                 { translationsentence = it }
@@ -216,7 +224,13 @@ fun AddNewTranslation(
                     ),
                     contentPadding = PaddingValues(0.dp),
                     onClick = {
-                        UploadData.uploadToFirebase(term, language, translationterm, terminsentence,translationsentence)
+                        UploadData.uploadToFirebase(
+                            term,
+                            language,
+                            translationterm,
+                            terminsentence,
+                            translationsentence
+                        )
                     }
                 ) {
                     Row {
@@ -233,6 +247,7 @@ fun AddNewTranslation(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextFields(
     term: String,
@@ -246,6 +261,8 @@ fun TextFields(
     onTermInSentenceChange: (String) -> Unit,
     onTranslationSentenceChange: (String) -> Unit
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
+
     Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
         //1-Term
         TextField(
@@ -255,27 +272,59 @@ fun TextFields(
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = appWhite,
                 focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = textTerm,
-                focusedLabelColor = appYellow,
-                unfocusedTextColor = textTerm,
+                unfocusedLabelColor = logoGray,
+                focusedLabelColor = textTerm,
+                unfocusedTextColor = normalBlack,
                 focusedTextColor = normalBlack
             )
         )
 
         //2-Language of Term
-        TextField(
-            label = { Text("Language") },
-            value = language,
-            onValueChange = onLanguageChange,
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = appWhite,
-                focusedContainerColor = appNotSoWhite,
-                unfocusedLabelColor = appYellow,
-                focusedLabelColor = appYellow,
-                unfocusedTextColor = appYellow,
-                focusedTextColor = normalBlack
+        ExposedDropdownMenuBox(
+            expanded = isExpanded,
+            onExpandedChange = { isExpanded = it }
+        ) {
+            TextField(
+                label = { Text("Language") },
+                value = language,
+                onValueChange = onLanguageChange, // Update the language value here
+                readOnly = true,
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = appWhite,
+                    focusedContainerColor = appNotSoWhite,
+                    unfocusedLabelColor = logoGray,
+                    focusedLabelColor = appYellow,
+                    unfocusedTextColor = normalBlack,
+                    focusedTextColor = normalBlack
+                ),
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
+                modifier = Modifier.menuAnchor()
             )
-        )
+
+            ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
+                DropdownMenuItem(
+                    text = { Text(text = "Cebuano") },
+                    onClick = {
+                        isExpanded = false
+                        onLanguageChange("Cebuano")
+                    }
+                )
+                DropdownMenuItem(
+                    text = { Text(text = "Ilocano") },
+                    onClick = {
+                        isExpanded = false
+                        onLanguageChange("Ilocano")
+                    }
+                )
+                DropdownMenuItem(
+                    text = { Text(text = "Bicolano") },
+                    onClick = {
+                        isExpanded = false
+                        onLanguageChange("Bicolano")
+                    }
+                )
+            }
+        }
 
         //3-Translation of Term in tagalog/english?
         TextField(
