@@ -46,6 +46,8 @@ val logoGray = Color(0xFFC8C8C8)
 val dividerColor = Color(0xFFEAEAEA)
 val darkerdividerColor = Color(0xFF7D7D7D)
 val buttonCancel = Color(0xFFBBC3CD)
+val colorIndicator = Color(0xFF7416CF)
+val colorinactiveIndicator = Color(0xFFFFBB00)
 
 
 //font color
