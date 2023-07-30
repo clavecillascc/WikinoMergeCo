@@ -9,6 +9,7 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -198,8 +200,8 @@ fun TopBar(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
 @Composable
 fun Drawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState, userData: UserData?, navController: NavController, onSignOut: () -> Unit) {
     Column(modifier = Modifier
-            .background(Color.White)
-            .fillMaxSize()
+        .background(Color.White)
+        .fillMaxSize()
     ) {
         Header(userData = userData)
         val menuItem = listOf(
@@ -212,7 +214,9 @@ fun Drawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState, userDat
 
         ModalDrawerSheet(
             drawerShape = RectangleShape,
-            drawerContainerColor = Color.White
+            drawerContainerColor = Color.White,
+            modifier = Modifier
+                .fillMaxSize()
         )
         {
             menuItem.forEach { menuItem ->
@@ -245,20 +249,28 @@ fun Drawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState, userDat
                     )
             }
             Divider()
-            NavigationDrawerItem(
-                shape = RectangleShape,
-                icon = {
-                    Icon(
-                        painter = painterResource(R.drawable.logout),
-                        contentDescription = "logout",
-                        modifier = Modifier.size(18.dp)
-                    )
-                },
-                label = { Text(text = "Sign out") },
-                selected = false,
-                onClick = onSignOut
-            )
-            Divider()
+            Spacer(modifier = Modifier.weight(1f))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
+                Divider()
+                NavigationDrawerItem(
+                    shape = RectangleShape,
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.logout),
+                            contentDescription = "logout",
+                            modifier = Modifier.size(18.dp)
+                        )
+                    },
+                    label = { Text(text = "Sign out") },
+                    selected = false,
+                    onClick = onSignOut
+                )
+                Divider()
+            }
         }
     }
 }

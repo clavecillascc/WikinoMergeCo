@@ -1,14 +1,20 @@
 package com.clavecillascc.wikinomergeco.otherScreens
 import android.util.Log
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -17,9 +23,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +41,9 @@ import androidx.navigation.NavHostController
 import androidx.preference.PreferenceManager
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
+import com.clavecillascc.wikinomergeco.ui.theme.logoGray
+import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
+import com.clavecillascc.wikinomergeco.ui.theme.notSelectedGray
 import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
 import com.clavecillascc.wikinomergeco.ui.theme.textSentence
 import com.clavecillascc.wikinomergeco.ui.theme.textTerm
@@ -48,7 +59,6 @@ fun HomeScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.size(15.dp))
         WordOfTheDay()
         FAQ()
-        HomeForum()
         Spacer(modifier = Modifier.size(70.dp))
     }
 }
@@ -128,12 +138,12 @@ fun WordOfTheDay(color: Color = appWhiteYellow) {
 
     Column(
         modifier = Modifier
-            .padding(start = 20.dp, top = 15.dp, end = 20.dp, bottom = 15.dp)
+            .padding(start = 20.dp, top = 10.dp, end = 20.dp, bottom = 10.dp)
             .shadow(
-                //shape = RoundedCornerShape(10.dp),
-                elevation = 3.dp,
+                shape = RoundedCornerShape(10.dp),
+                elevation = 4.dp,
             )
-            //.clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
@@ -185,150 +195,154 @@ fun FAQ(
 ) {
     Column(
         modifier = Modifier
-            .padding(start = 20.dp, top = 15.dp, end = 20.dp, bottom = 15.dp)
+            .padding(start = 20.dp, top = 10.dp, end = 20.dp, bottom = 10.dp)
             .shadow(
-                //shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(10.dp),
                 elevation = 4.dp,
             )
-            //.clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 15.dp)
-            .fillMaxWidth()
-            .height(200.dp),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-
-        Column {
-            //Header
+        Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(
-                text = "FAQ",
+                text = "Frequenty Asked Questions",
                 style = MaterialTheme.typography.headlineMedium,
-
-                )
-            //Word of the Day
-            Text(
-                text = "   "+"• "+"sample 1",
-                style = MaterialTheme.typography.labelMedium
-
-            )
-            //Other terms
-            Text(
-                text = "   "+"• "+"sample 2",
-                style = MaterialTheme.typography.labelMedium
-
-            )
-            //In sentence
-            Text(
-                text = "   "+"• "+"sample 3",
-                style = MaterialTheme.typography.labelMedium
-
-            )
-
-        }
-        //See more clickable
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Text(text = "See more",
-                modifier = Modifier.align(alignment = Alignment.End),
-                style = MaterialTheme.typography.displaySmall,
-
-                )
+                fontSize = 20.sp)
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                ExpandableBox1()
+                ExpandableBox3()
+                ExpandableBox2()
+            }
         }
     }
 }
 
-
 @Composable
-fun HomeForum ( color: Color = appWhiteYellow){
-    Column(
+fun ExpandableBox1(color: Color = appWhiteYellow) {
+    var isExpanded by remember { mutableStateOf(false) }
+    val height by animateDpAsState(if (isExpanded) 190.dp else 45.dp)
+    val width by animateDpAsState(if (isExpanded) 300.dp else 300.dp)
+    Box(
         modifier = Modifier
-            .padding(start = 20.dp, top = 15.dp, end = 20.dp, bottom = 15.dp)
-            .shadow(
-                //shape = RoundedCornerShape(10.dp),
-                elevation = 5.dp,
-            )
-            //.clip(RoundedCornerShape(10.dp))
-            .background(color)
-            .padding(horizontal = 15.dp, vertical = 15.dp)
-            .fillMaxWidth()
-            .height(200.dp),
-        verticalArrangement = Arrangement.SpaceBetween
+            .fillMaxSize()
+            .animateContentSize()
+            .background(notSelectedGray)
+            .clickable {
+                isExpanded = !isExpanded
+            }
     ) {
-
-        Column {
-            //Header
-            Text(
-                text = "Forum",
-                style = MaterialTheme.typography.headlineMedium,
-
-                )
-            //Word of the Day
-            Text(
-                text = "",
-                style = MaterialTheme.typography.titleMedium
-
-            )
-            //Other terms
-            Text(
-                text = ""
-
-            )
-            //In sentence
-            Text(
-                text = ""
-
-            )
-
-        }
-        //See more clickable
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Text(text = "See more",
-                modifier = Modifier.align(alignment = Alignment.End),
-                style = MaterialTheme.typography.displaySmall,
+        Box(
+            modifier = Modifier
+                .padding(start = 15.dp, top = 2.dp, end = 15.dp, bottom = 2.dp)
+                .background(notSelectedGray)
+                .padding(horizontal = 5.dp, vertical = 5.dp)
+                .height(height)
+                .width(width)
+                .background(notSelectedGray)
+        ) {
+            Column(modifier = Modifier
+                .fillMaxSize(),
+                verticalArrangement = Arrangement.Center) {
+                Text(
+                    text =  "• " + "How do I navigate to different screens in the app?",
+                    style = MaterialTheme.typography.labelMedium
 
                 )
-
+                Text(
+                    text =  "- " + "You can navigate to different screens using the bottom navigation bar at the bottom of the screen, and drawer at the top-left of the screen. Each icon represents a different screen. Simply tap on the icon to go to the corresponding screen.",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontSize = 14.sp,
+                    color = normalBlack
+                )
+            }
         }
     }
 }
 
 @Composable
-fun Translation(color: Color = appWhiteYellow){
-    Column {
-        //Line 2 -Translated Word
-        Row {
-            Text(
-                text = "     " + "Naglamis",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = "(Ilocano)",
-                style = MaterialTheme.typography.titleMedium
-            )
+fun ExpandableBox2(color: Color = appWhiteYellow) {
+    var isExpanded by remember { mutableStateOf(false) }
+    val height by animateDpAsState(if (isExpanded) 165.dp else 20.dp)
+    val width by animateDpAsState(if (isExpanded) 300.dp else 300.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .animateContentSize()
+            .background(notSelectedGray)
+            .clickable {
+                isExpanded = !isExpanded
+            }
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(start = 15.dp, top = 2.dp, end = 15.dp, bottom = 2.dp)
+                .background(notSelectedGray)
+                .padding(horizontal = 5.dp, vertical = 5.dp)
+                .height(height)
+                .width(width)
+                .background(notSelectedGray)
+        ) {
+            Column(modifier = Modifier
+                .fillMaxSize(),
+                verticalArrangement = Arrangement.Center) {
+                Text(
+                    text =  "• " + "How do I add a new word?",
+                    style = MaterialTheme.typography.labelMedium
+                )
+
+                Text(
+                    text =  "- " + "To add a new word, navigate to the 'Collaborator' screen using the drawer menu found in the top-left bar. Click on the floating action button (the plus icon) in the bottom-right corner. Fill in the required information for the new word and click 'Upload' to add them.",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontSize = 14.sp,
+                    color = normalBlack
+                )
+            }
         }
+    }
+}
 
-        //Line 3 - Other terms
-        Text(
-            text = "     "  + "• " + "ang lamig, malamig",
-            style = MaterialTheme.typography.titleSmall
+@Composable
+fun ExpandableBox3(color: Color = appWhiteYellow) {
+    var isExpanded by remember { mutableStateOf(false) }
+    val height by animateDpAsState(if (isExpanded) 310.dp else 45.dp)
+    val width by animateDpAsState(if (isExpanded) 300.dp else 300.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .animateContentSize()
+            .background(notSelectedGray)
+            .clickable {
+                isExpanded = !isExpanded
+            }
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(start = 15.dp, top = 2.dp, end = 15.dp, bottom = 2.dp)
+                .background(notSelectedGray)
+                .padding(horizontal = 5.dp, vertical = 5.dp)
+                .height(height)
+                .width(width)
+                .background(notSelectedGray)
+        ) {
+            Column(modifier = Modifier
+                .fillMaxSize(),
+                verticalArrangement = Arrangement.Center) {
+                Text(
+                    text =  "• " + "How do I search for a word or phrase to translate?",
+                    style = MaterialTheme.typography.labelMedium
+                )
 
-        )
-        Spacer(modifier = Modifier.size(10.dp))
-        //Line 4 - Sentence in same language
-        Text(
-            text ="       "  + "Naglamiis ti angin!",
-            style = MaterialTheme.typography.bodySmall
-        )
-        //Line 5 - Sentence in chosen language
-        Text(
-            text = "          "  + "Ang lamig ng hangin!",
-            style = MaterialTheme.typography.headlineSmall
-        )
-        //Line 6 - Sentence in english language
-
-        Text(
-            text = "          "  + "The wind is so cold!",
-            style = MaterialTheme.typography.headlineSmall
-        )
+                Text(
+                    text =  "- " + "To search for a word or phrase to translate, navigate to the 'Translate' screen using the bottom navigation bar at the bottom of the screen. Simply enter the text in the search bar at the top of the 'Translate' screen and tap the word suggested that you want to translate.After choosing the word you want to translate, the app will display available translation languages below the search bar. To select a language, tap on the respective language button (e.g., Bicolano, Cebuano, or Ilocano).",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontSize = 14.sp,
+                    color = normalBlack
+                )
+            }
+        }
     }
 }

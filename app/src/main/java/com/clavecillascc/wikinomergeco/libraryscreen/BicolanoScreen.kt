@@ -97,7 +97,7 @@ fun BicolanoScreen(navController: NavHostController) {
                 Column(modifier = Modifier
                     .verticalScroll(rememberScrollState())
                     .fillMaxWidth()
-                    .height(730.dp)) {
+                    .height(700.dp)) {
                     Text(
                         text = "Bicolano A - Z :",
                         style = MaterialTheme.typography.displayLarge,

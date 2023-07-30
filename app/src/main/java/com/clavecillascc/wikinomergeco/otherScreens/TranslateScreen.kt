@@ -8,10 +8,12 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,7 +33,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -70,11 +71,16 @@ import com.clavecillascc.wikinomergeco.services.CommentRequest
 import com.clavecillascc.wikinomergeco.services.DownVoteRequest
 import com.clavecillascc.wikinomergeco.services.UpvoteRequest
 import com.clavecillascc.wikinomergeco.ui.theme.TextWhite
+import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import com.clavecillascc.wikinomergeco.ui.theme.colorIndicator
 import com.clavecillascc.wikinomergeco.ui.theme.colorinactiveIndicator
+import com.clavecillascc.wikinomergeco.ui.theme.darkerdividerColor
+import com.clavecillascc.wikinomergeco.ui.theme.dividerColor
+import com.clavecillascc.wikinomergeco.ui.theme.logoGreen
+import com.clavecillascc.wikinomergeco.ui.theme.logoRed
 import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
 import com.clavecillascc.wikinomergeco.ui.theme.textSentence
@@ -85,8 +91,6 @@ import kotlinx.coroutines.tasks.await
 
 @Composable
 fun TranslateScreen(navController: NavHostController) {
-    /*TODO*/
-    //Text(text = "Translate")
     var search by remember {
         mutableStateOf("")
     }
@@ -190,254 +194,243 @@ fun TranslateScreen(navController: NavHostController) {
             }
         }
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
 
     ) {
         Column(
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+            //modifier = Modifier.verticalScroll(rememberScrollState())
 
         ) {
-            SearchAppBar(
-                text = search,
-                onTextChange = { text ->
-                    search = text
-                    if (text.isEmpty()) {
+            //COLUMN NA NASA TAAS
+            Column() {
+                SearchAppBar(
+                    text = search,
+                    onTextChange = { text ->
+                        search = text
+                        if (text.isEmpty()) {
+                            isShowCard = false
+                            resultsShow = false
+                            commentList = emptyList()
+                        } else if (text.length >= 2) {
+                            autocompleteViewModel.fetchAutocompleteSuggestions(text)
+                        } else {
+                            autocompleteViewModel.fetchAutocompleteSuggestions("")
+                        }
+                    },
+                    onCloseClicked = {
                         isShowCard = false
                         resultsShow = false
+                        search = ""
                         commentList = emptyList()
-                    } else if (text.length >= 2) {
-                        autocompleteViewModel.fetchAutocompleteSuggestions(text)
-                    } else {
-                        autocompleteViewModel.fetchAutocompleteSuggestions("")
+                    },
+                    onSearchClicked = {
+                        isShowCard = true
+                    },
+                    autocompleteSuggestions = autocompleteSuggestions
+                )
+                AvailableTranslations(
+                    text = search,
+                    visibility = isShowCard,
+                    buttonClick = { isShow, tl ->
+                        resultsShow = isShow
+                        translated = tl
+                        selectedLanguage = tl
                     }
-                },
-                onCloseClicked = {
-                    isShowCard = false
-                    resultsShow = false
-                    search = ""
-                    commentList = emptyList()
-                },
-                onSearchClicked = {
-                    isShowCard = true
-                },
-                autocompleteSuggestions = autocompleteSuggestions
-            )
-            AvailableTranslations(
-                text = search,
-                visibility = isShowCard,
-                buttonClick = { isShow, tl ->
-                    resultsShow = isShow
-                    translated = tl
-                    selectedLanguage = tl
-                }
-            )
+                )
 
-            TranslationResult(
-                text = search,
-                showResult = resultsShow,
-                translated = translated,
-                resultData = resultData,
-                isLoading = isLoading
-            )
-
-            TranslateBottomMenu(
-                context = ctx,
-                showResult = resultsShow,
-                upVoteListener = {
-                    if (showProgressDialog) {
-                        Toast.makeText(
-                            ctx,
-                            "Can't do upvote right now, There is still an ongoing request",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        showProgressDialog = true
-                        val upvote = Upvote.UpvoteBuilder()
-                            .setTranslation(translated)
-                            .setWord(search)
-                            .setCount(1)
-                            .build()
-                        val request = UpvoteRequest()
-                        request.insertUpvote(upvote, object : DBResponseListener {
-                            override fun <T> success(any: Any) {
-                                showProgressDialog = false
-                                Toast.makeText(
-                                    ctx,
-                                    "Successfully Added Upvote",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                            override fun error(error: Error) {
-                                showProgressDialog = false
-                                Toast.makeText(
-                                    ctx,
-                                    "Something error happen, please try again later",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        })
-                    }
-
-                },
-                downVoteListener = {
-                    if (showProgressDialog) {
-                        Toast.makeText(
-                            ctx,
-                            "Can't do down vote right now, There is still ongoing request",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        val downVote = DownVote.DownVoteBuilder()
-                            .setTranslation(translated)
-                            .setWord(search)
-                            .setCount(1)
-                            .build()
-                        val request = DownVoteRequest()
-                        showProgressDialog = true
-                        request.insertDownVote(downVote, object : DBResponseListener {
-                            override fun <T> success(any: Any) {
-                                showProgressDialog = false
-                                Toast.makeText(
-                                    ctx,
-                                    "Successfully Added Down Vote",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                            override fun error(error: Error) {
-                                showProgressDialog = false
-                                Toast.makeText(
-                                    ctx,
-                                    "Something error happen, please try again later",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                        })
-                    }
-
-                },
-                openComment = {
-                    if (showProgressDialog) {
-                        Toast.makeText(
-                            ctx,
-                            "Can't open comment right now, There is still ongoing request",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        showComment = !showComment
-                    }
-
-                },
-            )
-            if (showProgressDialog) {
-                ProgressDialog()
+                TranslationResult(
+                    text = search,
+                    showResult = resultsShow,
+                    translated = translated,
+                    resultData = resultData,
+                    isLoading = isLoading
+                )
             }
 
-            if (showResult && isWordFound) {
-                Column(
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    Spacer(modifier = Modifier.size(15.dp))
-                    TranslationResultCard(
-                        textData = search,
-                        showResult = showResult,
-                        color = appWhiteYellow,
-                        translated = translated,
-                        result = resultData,
-                        isLoading = false
-                    )
-                }
-            } else if (showResult) {
-
-            }
-
-            CommentCard(
-                color = appWhiteYellow,
-                commentVisible = showComment,
-                saveCommentListener = { comment ->
-                    if (comment.isNotEmpty()) {
-                        showComment = false
-                        showProgressDialog = true
-
-                        val commentWord = CommentWord.CommentWordBuilder()
-                            .setWord(search)
-                            .setComments(comment)
-                            .build()
-                        val request = CommentRequest()
-                        request.insertComment(commentWord, object : DBResponseListener {
-                            override fun <T> success(any: Any) {
-                                showProgressDialog = false
-                                Toast.makeText(
-                                    ctx,
-                                    "Successfully Saved Comment",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                commentList = emptyList()
-                                request.getComments(search, object : DBResponseListener {
-                                    override fun <T> success(any: Any) {
-                                        if (any is List<*>) {
-                                            val list = any.filterIsInstance<CommentWord>()
-                                            if (list.isNotEmpty()) {
-                                                commentList = list
-                                            }
-                                        }
-                                    }
-
-                                    override fun error(error: Error) {
-                                        TODO("Not yet implemented")
-                                    }
-                                })
-                            }
-
-                            override fun error(error: Error) {
-                                showProgressDialog = false
-                                Toast.makeText(
-                                    ctx,
-                                    "Failed to save comment, please try again later",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        })
-
-                    } else {
-                        Toast.makeText(
-                            ctx,
-                            "Please Don't Leave Comment Field Empty",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            )
-            CommentListView(
-                list = commentList,
-                showCommentList = if (showComment) false else resultsShow,
-            )
-
-        }
-
-    }
-
-}
-
-
-@Composable
-fun SearchBar() {
-    Box(
-        modifier = Modifier
-            .background(appYellow)
-            .fillMaxWidth()
-            .height(70.dp)
-    ) {
-        Row {
-
+            //COLUMN NA NASA BABA
+//            Column() {
+//                TranslateBottomMenu(
+//                    context = ctx,
+//                    showResult = resultsShow,
+//                    upVoteListener = {
+//                        if (showProgressDialog) {
+//                            Toast.makeText(
+//                                ctx,
+//                                "Can't do upvote right now, There is still an ongoing request",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        } else {
+//                            showProgressDialog = true
+//                            val upvote = Upvote.UpvoteBuilder()
+//                                .setTranslation(translated)
+//                                .setWord(search)
+//                                .setCount(1)
+//                                .build()
+//                            val request = UpvoteRequest()
+//                            request.insertUpvote(upvote, object : DBResponseListener {
+//                                override fun <T> success(any: Any) {
+//                                    showProgressDialog = false
+//                                    Toast.makeText(
+//                                        ctx,
+//                                        "Successfully Added Upvote",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                }
+//
+//                                override fun error(error: Error) {
+//                                    showProgressDialog = false
+//                                    Toast.makeText(
+//                                        ctx,
+//                                        "Something error happen, please try again later",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                }
+//                            })
+//                        }
+//
+//                    },
+//                    downVoteListener = {
+//                        if (showProgressDialog) {
+//                            Toast.makeText(
+//                                ctx,
+//                                "Can't do down vote right now, There is still ongoing request",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        } else {
+//                            val downVote = DownVote.DownVoteBuilder()
+//                                .setTranslation(translated)
+//                                .setWord(search)
+//                                .setCount(1)
+//                                .build()
+//                            val request = DownVoteRequest()
+//                            showProgressDialog = true
+//                            request.insertDownVote(downVote, object : DBResponseListener {
+//                                override fun <T> success(any: Any) {
+//                                    showProgressDialog = false
+//                                    Toast.makeText(
+//                                        ctx,
+//                                        "Successfully Added Down Vote",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                }
+//
+//                                override fun error(error: Error) {
+//                                    showProgressDialog = false
+//                                    Toast.makeText(
+//                                        ctx,
+//                                        "Something error happen, please try again later",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                }
+//
+//                            })
+//                        }
+//
+//                    },
+//                    openComment = {
+//                        if (showProgressDialog) {
+//                            Toast.makeText(
+//                                ctx,
+//                                "Can't open comment right now, There is still ongoing request",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        } else {
+//                            showComment = !showComment
+//                        }
+//
+//                    },
+//                )
+//                if (showProgressDialog) {
+//                    ProgressDialog()
+//                }
+//
+//                if (showResult && isWordFound) {
+//                    Column(
+//                        horizontalAlignment = Alignment.Start
+//                    ) {
+//                        Spacer(modifier = Modifier.size(15.dp))
+//                        TranslationResultCard(
+//                            textData = search,
+//                            showResult = showResult,
+//                            color = appWhiteYellow,
+//                            translated = translated,
+//                            result = resultData,
+//                            isLoading = false
+//                        )
+//                    }
+//                } else if (showResult) {
+//
+//                }
+//                CommentCard(
+//                    color = appWhiteYellow,
+//                    commentVisible = showComment,
+//                    saveCommentListener = { comment ->
+//                        if (comment.isNotEmpty()) {
+//                            showComment = false
+//                            showProgressDialog = true
+//
+//                            val commentWord = CommentWord.CommentWordBuilder()
+//                                .setWord(search)
+//                                .setComments(comment)
+//                                .build()
+//                            val request = CommentRequest()
+//                            request.insertComment(commentWord, object : DBResponseListener {
+//                                override fun <T> success(any: Any) {
+//                                    showProgressDialog = false
+//                                    Toast.makeText(
+//                                        ctx,
+//                                        "Successfully Saved Comment",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                    commentList = emptyList()
+//                                    request.getComments(search, object : DBResponseListener {
+//                                        override fun <T> success(any: Any) {
+//                                            if (any is List<*>) {
+//                                                val list = any.filterIsInstance<CommentWord>()
+//                                                if (list.isNotEmpty()) {
+//                                                    commentList = list
+//                                                }
+//                                            }
+//                                        }
+//
+//                                        override fun error(error: Error) {
+//                                            TODO("Not yet implemented")
+//                                        }
+//                                    })
+//                                }
+//
+//                                override fun error(error: Error) {
+//                                    showProgressDialog = false
+//                                    Toast.makeText(
+//                                        ctx,
+//                                        "Failed to save comment, please try again later",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                }
+//                            })
+//
+//                        } else {
+//                            Toast.makeText(
+//                                ctx,
+//                                "Please Don't Leave Comment Field Empty",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
+//                    }
+//                )
+//                CommentListView(
+//                    list = commentList,
+//                    showCommentList = if (showComment) false else resultsShow,
+//                )
+//            }
         }
     }
 }
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -513,9 +506,12 @@ fun SearchAppBar(
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
                     cursorColor = Color.White.copy(alpha = ContentAlpha.medium),
-                    textColor = Color.White
+                    textColor = Color.White,
+                    focusedIndicatorColor = logoRed
                 )
             )
+
+
 
             // Suggestions Popup
             if (isSuggestionsExpanded && autocompleteSuggestions.isNotEmpty()) {
@@ -533,7 +529,9 @@ fun SearchAppBar(
                     Surface(
                         shape = RectangleShape,
                         elevation = 4.dp,
-                        modifier = Modifier.fillMaxWidth().background(Color.White)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.White)
                     ) {
                         Column {
                             autocompleteSuggestions.forEach { suggestion ->
@@ -595,13 +593,14 @@ fun AvailableTranslations(
             ) {
                 Text(
                     text = "Available Languages:",
+                    style = MaterialTheme.typography.titleLarge,
                     color = Color.White
                 )
                 Row(
                     verticalAlignment = Alignment.Top
                 ) {
                     Button(
-                        colors = ButtonDefaults.buttonColors(backgroundColor = if (clickBicolano) Color.Blue else Color.White),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = if (clickBicolano) appDarkBlue else appWhite),
                         onClick = {
                             clickBicolano = !clickBicolano
                             clickIlocano = false
@@ -612,12 +611,15 @@ fun AvailableTranslations(
                         }) {
                         Text(
                             text = "Bicolano",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
                             color = if (clickBicolano) Color.White else Color.Black
                         )
                     }
                     Spacer(modifier = Modifier.size(10.dp))
                     Button(
-                        colors = ButtonDefaults.buttonColors(backgroundColor = if (clickCebuano) Color.Blue else Color.White),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = if (clickCebuano) appDarkBlue else appWhite),
                         onClick = {
                             clickCebuano = !clickCebuano
                             clickBicolano = false
@@ -626,12 +628,15 @@ fun AvailableTranslations(
                         }) {
                         Text(
                             text = "Cebuano",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
                             color = if (clickCebuano) Color.White else Color.Black
                         )
                     }
                     Spacer(modifier = Modifier.size(10.dp))
                     Button(
-                        colors = ButtonDefaults.buttonColors(backgroundColor = if (clickIlocano) Color.Blue else Color.White),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = if (clickIlocano) appDarkBlue else appWhite),
                         onClick = {
                             clickIlocano = !clickIlocano
                             clickBicolano = false
@@ -640,6 +645,9 @@ fun AvailableTranslations(
                         }) {
                         Text(
                             text = "Ilocano",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
                             color = if (clickIlocano) Color.White else Color.Black
                         )
                     }
@@ -695,126 +703,231 @@ fun TranslationResultCard(
     translated: String,
     isLoading: Boolean
 ) {
-    Column(
-        modifier = Modifier
-            .padding(10.dp)
-            .shadow(
-                shape = RoundedCornerShape(10.dp),
-                elevation = 5.dp,
+    Column(modifier = Modifier
+        .padding(horizontal = 15.dp, vertical = 0.dp)
+        .fillMaxWidth()
+        ) {
+        // Line 1 - Header
+        Row() {
+            Text(
+                text = "Result for: ",
+                style = MaterialTheme.typography.headlineMedium,
+                fontSize = 18.sp
             )
-            .clip(RoundedCornerShape(10.dp))
-            .background(color)
-            .padding(horizontal = 15.dp, vertical = 20.dp)
-            .fillMaxWidth()
-        //.height(200.dp)
-    ) {
-        Column {
-            //Word of the Day
-            // Line 1 - Header
             Text(
                 text = textData,
                 style = MaterialTheme.typography.headlineMedium,
+                fontSize = 18.sp
             )
-            Spacer(modifier = Modifier.size(5.dp))
+        }
+
+        Spacer(modifier = Modifier.size(5.dp))
+
+        Column(
+            modifier = Modifier
+                .padding(10.dp)
+                .shadow(
+                    shape = RoundedCornerShape(10.dp),
+                    elevation = 5.dp,
+                )
+                .clip(RoundedCornerShape(10.dp))
+                .background(color)
+                .padding(horizontal = 15.dp, vertical = 20.dp)
+                .fillMaxWidth()
+        ) {
 
             if (result.isNotEmpty()) {
                 TranslationData(
                     resultTl = result
                 )
             }
+
+            Column (modifier = Modifier.padding(start = 10.dp, end = 15.dp)
+            ){
+                Spacer(modifier = Modifier.size(10.dp))
+                //LikeDislike composable
+//                LikeDislike()
+            }
         }
+//        CommentPart()
     }
 }
 
 @Composable
-fun TranslateBottomMenu(
-    context: Context,
-    showResult: Boolean,
-    upVoteListener: () -> Unit,
-    downVoteListener: () -> Unit,
-    openComment: () -> Unit
-) {
-
-    Column(
+fun LikeDislike (){
+    Row(horizontalArrangement = Arrangement.End,
         modifier = Modifier
+            .height(10.dp)
             .fillMaxWidth()
-            .wrapContentHeight()
-            .background(Color.Transparent)
-            .alpha(if (showResult) 1f else 0f),
-        horizontalAlignment = Alignment.Start,
+    ) {
+        IconButton(onClick = { /*TODO*/ }, Modifier.size(20.dp)) {
+            Icon(
+                painter = painterResource(R.drawable.upvote_icon),
+                contentDescription = "upvote", modifier = Modifier.size(10.dp)
 
-        ) {
-
-        Row(
-            modifier = Modifier.background(Color.Transparent)
-        ) {
-            /* FOLLOW*/
-            Image(
-                painter = painterResource(id = R.drawable.ic_heart),
-                contentDescription = "Follow"
             )
-            Spacer(
-                modifier = Modifier
-                    .size(5.dp)
-            )
-            Text(
-                text = "Follow",
-                modifier = Modifier
-                    .clickable {
-                        Toast
-                            .makeText(context, "Clicked", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-            )
-            Spacer(
-                modifier = Modifier
-                    .size(15.dp)
-            )
-
-            /* COMMENT*/
-            Image(
-                painter = painterResource(id = R.drawable.ic_comment),
-                contentDescription = "Comment"
-            )
-            Spacer(
-                modifier = Modifier
-                    .size(5.dp)
-            )
-            Text(
-                text = "Comment",
-                modifier = Modifier
-                    .clickable {
-                        openComment()
-                    }
-            )
-
-            Spacer(
-                modifier = Modifier
-                    .size(15.dp)
-            )
-
-            Image(
-                painter = painterResource(id = R.drawable.ic_upvote),
-                contentDescription = "Up Vote",
-                modifier = Modifier.clickable {
-                    upVoteListener()
-                }
-            )
-            Spacer(
-                modifier = Modifier
-                    .size(5.dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ic_downvote),
-                contentDescription = "Up Vote",
-                modifier = Modifier.clickable {
-                    downVoteListener()
-                }
-            )
-
         }
+
+        IconButton(onClick = { /*TODO*/ }, Modifier.size(20.dp)) {
+            Icon(
+                painter = painterResource(R.drawable.downvote_icon),
+                contentDescription = "downvote", Modifier.size(10.dp)
+            )
+        }
+
     }
 }
+
+//@Composable
+//fun CommentPart (){
+//    Column(verticalArrangement = Arrangement.spacedBy(10.dp),
+//    modifier = Modifier
+//        .padding(10.dp)
+//        .shadow(
+//            shape = RoundedCornerShape(10.dp),
+//            elevation = 5.dp,
+//        )
+//        .clip(RoundedCornerShape(10.dp))
+//        .background(appWhiteYellow)
+//        .padding(horizontal = 15.dp, vertical = 20.dp)
+//        .fillMaxWidth()) {
+//        Text(
+//            text = "All Comments:",
+//            style = MaterialTheme.typography.headlineMedium,
+//            fontSize = 14.sp)
+//
+//        Divider(color = dividerColor, thickness = 2.dp)
+//
+//        Column(modifier = Modifier
+//            .padding(start = 10.dp)
+//            .fillMaxWidth()
+//            .height(54.dp)
+//            .verticalScroll(rememberScrollState())) {
+//            Text(text = "comments....")
+//            Text(text = "comments........")
+//            Text(text = "comments........")
+//            Text(text = "comments........")
+//            Text(text = "comments........")
+//        }
+//
+//        OutlinedTextField(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(25.dp),
+//            value = "comment",
+//            textStyle = TextStyle(
+//                fontSize = MaterialTheme.typography.bodySmall.fontSize
+//            ),
+//            onValueChange = { /*TODO*/
+//            },
+//            placeholder = {
+//                Text(
+//                    text = "Enter Comment"
+//                )
+//            },
+//            colors = TextFieldDefaults.textFieldColors(
+//                backgroundColor = Color.Transparent,
+//                cursorColor = Color.White.copy(alpha = ContentAlpha.medium),
+//                textColor = Color.Black
+//            ),
+//            maxLines = 3,
+//            minLines = 1
+//        )
+//    }
+//}
+
+//@Composable
+//fun TranslateBottomMenu(
+//    context: Context,
+//    showResult: Boolean,
+//    upVoteListener: () -> Unit,
+//    downVoteListener: () -> Unit,
+//    openComment: () -> Unit
+//) {
+//
+//    Column(
+//        modifier = Modifier
+//            .padding(start = 20.dp, top = 1.dp, end = 20.dp, bottom = 10.dp)
+//            .padding(horizontal = 15.dp, vertical = 20.dp)
+//            .height(30.dp)
+//            .fillMaxWidth()
+//            .wrapContentHeight()
+//            .background(appYellow)
+//            .alpha(if (showResult) 1f else 0f),
+//        horizontalAlignment = Alignment.Start,
+//
+//        ) {
+//
+//        Row(
+//            modifier = Modifier.background(Color.Transparent)
+//        ) {
+//            /* FOLLOW*/
+//            Image(
+//                painter = painterResource(id = R.drawable.ic_heart),
+//                contentDescription = "Follow"
+//            )
+//            Spacer(
+//                modifier = Modifier
+//                    .size(5.dp)
+//            )
+//            Text(
+//                text = "Follow",
+//                modifier = Modifier
+//                    .clickable {
+//                        Toast
+//                            .makeText(context, "Clicked", Toast.LENGTH_SHORT)
+//                            .show()
+//                    }
+//            )
+//            Spacer(
+//                modifier = Modifier
+//                    .size(15.dp)
+//            )
+//
+//            /* COMMENT*/
+//            Image(
+//                painter = painterResource(id = R.drawable.ic_comment),
+//                contentDescription = "Comment"
+//            )
+//            Spacer(
+//                modifier = Modifier
+//                    .size(5.dp)
+//            )
+//            Text(
+//                text = "Comment",
+//                modifier = Modifier
+//                    .clickable {
+//                        openComment()
+//                    }
+//            )
+//
+//            Spacer(
+//                modifier = Modifier
+//                    .size(15.dp)
+//            )
+//
+//            Image(
+//                painter = painterResource(id = R.drawable.ic_upvote),
+//                contentDescription = "Up Vote",
+//                modifier = Modifier.clickable {
+//                    upVoteListener()
+//                }
+//            )
+//            Spacer(
+//                modifier = Modifier
+//                    .size(5.dp)
+//            )
+//            Image(
+//                painter = painterResource(id = R.drawable.ic_downvote),
+//                contentDescription = "Up Vote",
+//                modifier = Modifier.clickable {
+//                    downVoteListener()
+//                }
+//            )
+//
+//        }
+//    }
+//}
 
 
 @Composable
@@ -827,32 +940,30 @@ private fun TranslationData(resultTl: String) {
         Text(
             text = lines[1],
             style = MaterialTheme.typography.titleMedium,
-            color = textTerm,
-            modifier = Modifier.padding(5.dp)
+            fontSize = 25.sp,
+            color = textTerm
         )
         Text(
             text = lines[2],
             style = MaterialTheme.typography.titleMedium,
-            color = appYellow,
-            modifier = Modifier.padding(5.dp)
+            fontSize = 22.sp,
+            color = appYellow
         )
         Text(
             text = lines[3],
             style = MaterialTheme.typography.titleMedium,
-            color = textOtherTerms,
-            modifier = Modifier.padding(5.dp)
+            fontSize = 18.sp,
+            color = textOtherTerms
         )
         Text(
             text = lines[4],
             style = MaterialTheme.typography.headlineSmall,
-            color = textTerm,
-            modifier = Modifier.padding(5.dp)
+            color = textTerm
         )
         Text(
             text = lines[5],
             style = MaterialTheme.typography.headlineSmall,
-            color = textSentence,
-            modifier = Modifier.padding(5.dp)
+            color = textSentence
         )
     }
 }
@@ -862,7 +973,7 @@ fun ProgressDialog() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp),
+            .height(10.dp),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator()

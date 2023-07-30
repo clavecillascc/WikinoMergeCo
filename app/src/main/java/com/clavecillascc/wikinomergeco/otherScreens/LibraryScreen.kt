@@ -1,5 +1,6 @@
 package com.clavecillascc.wikinomergeco.otherScreens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -35,7 +37,6 @@ import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 
 @Composable
 fun LibraryScreen(navController: NavHostController) {
-    //Text(text = "Library")
     Column {
         Spacer(modifier = Modifier.size(15.dp))
         Languages(navController = navController)
@@ -44,9 +45,10 @@ fun LibraryScreen(navController: NavHostController) {
 
 @Composable
 fun Languages (navController: NavHostController, color: Color = appWhiteYellow ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
-            .height(635.dp)
+            .height(580.dp)
             .padding(10.dp)
             .shadow(
                 shape = RoundedCornerShape(10.dp),
@@ -61,11 +63,10 @@ fun Languages (navController: NavHostController, color: Color = appWhiteYellow )
              color = normalBlack,
              fontWeight = FontWeight.Bold,)
         Spacer(modifier = Modifier.size(20.dp))
-
         Column(
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.spacedBy(50.dp),
             modifier = Modifier
-                .height(220.dp)
+                .height(640.dp)
                 .padding(horizontal = 10.dp)
         ) {
             Row(
@@ -126,6 +127,128 @@ fun Languages (navController: NavHostController, color: Color = appWhiteYellow )
                     Image(
                         painter = painterResource(id = R.drawable.button_bicolano),
                         contentDescription = "Bicolano",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
+                }
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(modifier = Modifier
+                    .size(height = 110.dp, width = 92.dp)
+                    .defaultMinSize(),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.White
+                    ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {
+                        Toast.makeText(context, "Not yet available", Toast.LENGTH_SHORT).show()
+                    }
+
+                ) {
+                    //Text(text = "Cebuano")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_ibanag),
+                        contentDescription = "Ibanag",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
+                }
+                Button(modifier = Modifier
+                    .size(height = 110.dp, width = 92.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {
+                        Toast.makeText(context, "Not yet available", Toast.LENGTH_SHORT).show()
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.button_itawis),
+                        contentDescription = "Itawis",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
+                }
+                Button(modifier = Modifier
+                    .size(height = 110.dp, width = 92.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White
+                ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {
+                        Toast.makeText(context, "Not yet available", Toast.LENGTH_SHORT).show()
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.button_tausug),
+                        contentDescription = "Tausug",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
+                }
+            }
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(modifier = Modifier
+                    .size(height = 110.dp, width = 92.dp)
+                    .defaultMinSize(),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.White
+                    ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {
+                        Toast.makeText(context, "Not yet available", Toast.LENGTH_SHORT).show()
+                    }
+
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.button_waray),
+                        contentDescription = "Waray",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
+                }
+                Button(modifier = Modifier
+                    .size(height = 110.dp, width = 92.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {
+                        Toast.makeText(context, "Not yet available", Toast.LENGTH_SHORT).show()
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.button_maranao),
+                        contentDescription = "Maranao",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
+                }
+                Button(modifier = Modifier
+                    .size(height = 110.dp, width = 92.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White
+                ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {
+                        Toast.makeText(context, "Not yet available", Toast.LENGTH_SHORT).show()
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.button_tagalog),
+                        contentDescription = "Tagalog",
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxSize()
