@@ -41,6 +41,9 @@ import androidx.navigation.NavHostController
 import androidx.preference.PreferenceManager
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
+import com.clavecillascc.wikinomergeco.ui.theme.logoGray
+import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
+import com.clavecillascc.wikinomergeco.ui.theme.notSelectedGray
 import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
 import com.clavecillascc.wikinomergeco.ui.theme.textSentence
 import com.clavecillascc.wikinomergeco.ui.theme.textTerm
@@ -204,13 +207,16 @@ fun FAQ(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column {
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
             Text(
-                text = "FAQ",
-                style = MaterialTheme.typography.headlineMedium)
-            ExpandableBox1()
-            Spacer(modifier = Modifier.size(15.dp))
-            ExpandableBox2()
+                text = "Frequenty Asked Questions",
+                style = MaterialTheme.typography.headlineMedium,
+                fontSize = 20.sp)
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                ExpandableBox1()
+                ExpandableBox2()
+            }
+
         }
     }
 }
@@ -224,33 +230,33 @@ fun ExpandableBox1(color: Color = appWhiteYellow) {
         modifier = Modifier
             .fillMaxSize()
             .animateContentSize()
-            .background(color)
+            .background(notSelectedGray)
             .clickable {
                 isExpanded = !isExpanded
             }
     ) {
         Box(
             modifier = Modifier
-                .padding(start = 2.dp, top = 2.dp, end = 2.dp, bottom = 2.dp)
-                .shadow(
-                    shape = RoundedCornerShape(5.dp),
-                    elevation = 5.dp,
-                )
-                .clip(RoundedCornerShape(5.dp))
-                .background(color)
+                .padding(start = 15.dp, top = 2.dp, end = 15.dp, bottom = 2.dp)
+                .background(notSelectedGray)
                 .padding(horizontal = 5.dp, vertical = 5.dp)
                 .height(height)
                 .width(width)
-                .background(appWhiteYellow)
+                .background(notSelectedGray)
         ) {
-            Column {
+            Column(modifier = Modifier
+                .fillMaxSize(),
+                verticalArrangement = Arrangement.Center) {
                 Text(
-                    text = "   " + "• " + "How do I navigate to different screens in the app?",
+                    text =  "• " + "How do I navigate to different screens in the app?",
                     style = MaterialTheme.typography.labelMedium
+
                 )
                 Text(
-                    text = "   " + "• " + "You can navigate to different screens using the bottom navigation bar at the bottom of the screen. Each icon represents a different screen. Simply tap on the icon to go to the corresponding screen.",
-                    style = MaterialTheme.typography.labelMedium
+                    text =  "- " + "You can navigate to different screens using the bottom navigation bar at the bottom of the screen. Each icon represents a different screen. Simply tap on the icon to go to the corresponding screen.",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontSize = 14.sp,
+                    color = normalBlack
                 )
             }
         }
@@ -260,39 +266,39 @@ fun ExpandableBox1(color: Color = appWhiteYellow) {
 @Composable
 fun ExpandableBox2(color: Color = appWhiteYellow) {
     var isExpanded by remember { mutableStateOf(false) }
-    val height by animateDpAsState(if (isExpanded) 210.dp else 25.dp)
+    val height by animateDpAsState(if (isExpanded) 210.dp else 50.dp)
     val width by animateDpAsState(if (isExpanded) 300.dp else 300.dp)
     Box(
         modifier = Modifier
             .fillMaxSize()
             .animateContentSize()
-            .background(color)
+            .background(notSelectedGray)
             .clickable {
                 isExpanded = !isExpanded
             }
     ) {
         Box(
             modifier = Modifier
-                .padding(start = 2.dp, top = 2.dp, end = 2.dp, bottom = 2.dp)
-                .shadow(
-                    shape = RoundedCornerShape(5.dp),
-                    elevation = 5.dp,
-                )
-                .clip(RoundedCornerShape(5.dp))
-                .background(color)
+                .padding(start = 15.dp, top = 2.dp, end = 15.dp, bottom = 2.dp)
+                .background(notSelectedGray)
                 .padding(horizontal = 5.dp, vertical = 5.dp)
                 .height(height)
                 .width(width)
-                .background(appWhiteYellow)
+                .background(notSelectedGray)
         ) {
-            Column {
+            Column(modifier = Modifier
+                .fillMaxSize(),
+                verticalArrangement = Arrangement.Center) {
                 Text(
-                    text = "   " + "• " + "How do I add a new word?",
+                    text =  "• " + "How do I add a new word?",
                     style = MaterialTheme.typography.labelMedium
                 )
+
                 Text(
-                    text = "   " + "• " + "To add a new collaborator, navigate to the 'Collaborator' screen using the drawer menu found in the top bar. Click on the floating action button (the plus icon) in the bottom right corner. Fill in the required information for the new word and click 'Upload' to add them.",
-                    style = MaterialTheme.typography.labelMedium
+                    text =  "- " + "To add a new collaborator, navigate to the 'Collaborator' screen using the drawer menu found in the top bar. Click on the floating action button (the plus icon) in the bottom right corner. Fill in the required information for the new word and click 'Upload' to add them.",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontSize = 14.sp,
+                    color = normalBlack
                 )
             }
         }
