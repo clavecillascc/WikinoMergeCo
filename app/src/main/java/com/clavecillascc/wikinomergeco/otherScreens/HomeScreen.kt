@@ -129,10 +129,10 @@ fun WordOfTheDay(color: Color = appWhiteYellow) {
         modifier = Modifier
             .padding(start = 20.dp, top = 10.dp, end = 20.dp, bottom = 10.dp)
             .shadow(
-                //shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(10.dp),
                 elevation = 4.dp,
             )
-            //.clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
@@ -186,10 +186,10 @@ fun FAQ(
         modifier = Modifier
             .padding(start = 20.dp, top = 10.dp, end = 20.dp, bottom = 10.dp)
             .shadow(
-                //shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(10.dp),
                 elevation = 4.dp,
             )
-            //.clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 15.dp)
             .fillMaxWidth()
@@ -243,10 +243,10 @@ fun HomeForum ( color: Color = appWhiteYellow){
         modifier = Modifier
             .padding(start = 20.dp, top = 10.dp, end = 20.dp, bottom = 80.dp)
             .shadow(
-                //shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(10.dp),
                 elevation = 5.dp,
             )
-            //.clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 15.dp)
             .fillMaxWidth()
