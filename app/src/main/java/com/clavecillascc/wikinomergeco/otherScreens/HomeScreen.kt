@@ -198,31 +198,36 @@ fun FAQ(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Column {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            ) {
             //Header
             Text(
                 text = "FAQ",
                 style = MaterialTheme.typography.headlineMedium,
+                )
+
+            Column(modifier = Modifier.padding(start = 20.dp)) {
+                //Word of the Day
+                Text(
+                    text = "• "+"How do I navigate to different screens in the app?",
+                    style = MaterialTheme.typography.labelMedium
 
                 )
-            //Word of the Day
-            Text(
-                text = "   "+"• "+"How do I navigate to different screens in the app?",
-                style = MaterialTheme.typography.labelMedium
+                //Other terms
+                Text(
+                    text = "• "+"How do I add a new word?",
+                    style = MaterialTheme.typography.labelMedium
 
-            )
-            //Other terms
-            Text(
-                text = "   "+"• "+"How do I add a new word?",
-                style = MaterialTheme.typography.labelMedium
+                )
+                //In sentence
+                Text(
+                    text = "• "+"How do I view my recently added contributions?",
+                    style = MaterialTheme.typography.labelMedium
 
-            )
-            //In sentence
-            Text(
-                text = "   "+"• "+"How do I view my recently added contributions?",
-                style = MaterialTheme.typography.labelMedium
+                )
+            }
 
-            )
         }
         }
     }
