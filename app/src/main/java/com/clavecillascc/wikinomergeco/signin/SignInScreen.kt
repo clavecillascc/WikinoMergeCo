@@ -48,7 +48,7 @@ fun SignInScreen(
             Toast.makeText(
                 context,
                 error,
-                Toast.LENGTH_LONG
+                Toast.LENGTH_SHORT
             ).show()
         }
     }
@@ -99,19 +99,12 @@ fun SignInScreen(
                 .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                 backgroundColor = appWhite),
                 contentPadding = PaddingValues(0.dp),
-                onClick = {  }) {
+                onClick = { Toast.makeText(context, "Not yet available", Toast.LENGTH_SHORT).show() }) {
                 Row {
                     Text(
-                        text = "NO ACCOUNT YET?",
+                        text = "GUEST",
                         style = MaterialTheme.typography.displayMedium,
                         color = appDarkBlue,
-                        fontSize = 14.sp
-                    )
-
-                    Text(
-                        text = " SIGN UP",
-                        style = MaterialTheme.typography.displayMedium,
-                        color = appYellow,
                         fontSize = 14.sp
                     )
                 }
