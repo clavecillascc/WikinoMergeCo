@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -81,7 +84,7 @@ fun CebuanoScreen(navController: NavHostController) {
             HeaderBoxC(navController)
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .padding(10.dp)
                     .shadow(
                         shape = RoundedCornerShape(10.dp),
@@ -92,32 +95,41 @@ fun CebuanoScreen(navController: NavHostController) {
                     .padding(horizontal = 15.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(1.dp),
             ) {
-                Text(
-                    text = "Cebuano A - Z :",
-                    style = MaterialTheme.typography.displayLarge,
-                    color = colorCebuano
-                )
-                Divider(color = darkerdividerColor, thickness = 1.dp)
 
-                // Iterate through the letters and their associated words
-                for ((letter, words) in wordsMap) {
+                Column(modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxWidth()
+                    .height(630.dp)) {
                     Text(
-                        text = "   " + letter,
+                        text = "Cebuano A - Z :",
                         style = MaterialTheme.typography.displayLarge,
                         color = colorCebuano
                     )
                     Divider(color = darkerdividerColor, thickness = 1.dp)
-                    Spacer(modifier = Modifier.size(3.dp))
 
-                    LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp)) {
-                        items(words.size) { index ->
-                            val word = words[index]
-                            WordItem(word) {
-                                // Navigate to the new screen when a word is clicked
-                                navController.navigate("wordDetails/${word.content}")
+                    // Iterate through the letters and their associated words
+                    for ((letter, words) in wordsMap) {
+                        Text(
+                            text = "   " + letter,
+                            style = MaterialTheme.typography.displayLarge,
+                            color = colorCebuano
+                        )
+                        Divider(color = darkerdividerColor, thickness = 1.dp)
+                        Spacer(modifier = Modifier.size(3.dp))
+
+                        LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp),
+                            userScrollEnabled = false, modifier = Modifier.wrapContentHeight()
+                        ) {
+                            items(words.size) { index ->
+                                val word = words[index]
+                                WordItem(word) {
+                                    // Navigate to the new screen when a word is clicked
+                                    navController.navigate("wordDetails/${word.content}")
+                                }
+                                Spacer(modifier = Modifier.size(3.dp))
+                                Divider(color = darkerdividerColor, thickness = 1.dp)
                             }
-                            Spacer(modifier = Modifier.size(3.dp))
-                            Divider(color = darkerdividerColor, thickness = 1.dp)
+
                         }
                     }
                 }
@@ -284,3 +296,4 @@ private suspend fun readTextFromUrl(url: String): String {
         }
     }
 }
+
