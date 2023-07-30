@@ -87,7 +87,6 @@ import kotlinx.coroutines.tasks.await
 @Composable
 fun TranslateScreen() {
 
-    /*TODO*/
     //Text(text = "Translate")
     var search by remember {
         mutableStateOf("")
