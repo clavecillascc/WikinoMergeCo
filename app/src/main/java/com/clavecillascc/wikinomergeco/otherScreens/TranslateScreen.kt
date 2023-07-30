@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
-
 package com.clavecillascc.wikinomergeco.otherScreens
 
 import android.app.Activity
@@ -29,9 +27,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -62,6 +59,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.components.AutocompleteViewModel
 import com.clavecillascc.wikinomergeco.interfaces.DBResponseListener
@@ -72,21 +70,18 @@ import com.clavecillascc.wikinomergeco.services.CommentRequest
 import com.clavecillascc.wikinomergeco.services.DownVoteRequest
 import com.clavecillascc.wikinomergeco.services.UpvoteRequest
 import com.clavecillascc.wikinomergeco.ui.theme.TextWhite
-import com.clavecillascc.wikinomergeco.ui.theme.appNotSoWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import com.clavecillascc.wikinomergeco.ui.theme.colorIndicator
 import com.clavecillascc.wikinomergeco.ui.theme.colorinactiveIndicator
-import com.clavecillascc.wikinomergeco.ui.theme.logoGray
 import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun TranslateScreen() {
-
+fun TranslateScreen(navController: NavHostController) {
     /*TODO*/
     //Text(text = "Translate")
     var search by remember {
@@ -123,6 +118,8 @@ fun TranslateScreen() {
 
     var showResult by remember { mutableStateOf(false) }
 
+    var isSearchClicked by remember { mutableStateOf(false) }
+
     var isLoading by remember { mutableStateOf(false) }
 
     val autocompleteViewModel: AutocompleteViewModel = viewModel()
@@ -155,8 +152,8 @@ fun TranslateScreen() {
     var selectedLanguage by remember { mutableStateOf("") }
     var isWordFound by remember { mutableStateOf(false) }
 
-    LaunchedEffect(search, selectedLanguage) {
-        if (search.isNotEmpty() && selectedLanguage.isNotEmpty()) {
+    LaunchedEffect(search, selectedLanguage, isSearchClicked) {
+        if (isSearchClicked && search.isNotEmpty() && selectedLanguage.isNotEmpty()) {
             val documentId = "$selectedLanguage:$search"
 
             Log.d("MyApp", "Constructed documentId: $documentId")
@@ -176,6 +173,9 @@ fun TranslateScreen() {
                     val storageReference = FirebaseStorage.getInstance().reference
                     val filePath = "${selectedLanguage}/${translatedWord}.txt"
 
+                    Log.d("MyApp", "Constructed filePath: $filePath")
+
+                    showResult = true
                     isLoading = true
 
                     storageReference.child(filePath).getBytes(Long.MAX_VALUE).addOnSuccessListener { bytes ->
@@ -189,8 +189,11 @@ fun TranslateScreen() {
                 }
             } else {
                 isWordFound = false
+                showResult = false
             }
         }
+
+        isSearchClicked = false
     }
 
     Box(
@@ -222,24 +225,19 @@ fun TranslateScreen() {
                     search = ""
                     commentList = emptyList()
                 },
-                onSearchClicked = {
-                    isShowCard = true
+                onSearchClicked = { searchText ->
+                    isSearchClicked = true
                 },
-                autocompleteSuggestions = autocompleteSuggestions
-            )
-            AvailableTranslations(
-                text = search,
-                visibility = isShowCard,
-                buttonClick = { isShow, tl ->
-                    resultsShow = isShow
-                    translated = tl
-                    selectedLanguage = tl
-                }
+                autocompleteSuggestions = autocompleteSuggestions,
+                selectedLanguage = selectedLanguage,
+                onLanguageSelected = { language ->
+                    selectedLanguage = language
+                },
             )
 
             TranslationResult(
                 text = search,
-                showResult = resultsShow,
+                resultsShow = showResult,
                 translated = translated,
                 resultData = resultData,
                 isLoading = isLoading
@@ -345,17 +343,9 @@ fun TranslateScreen() {
                     horizontalAlignment = Alignment.Start
                 ) {
                     Spacer(modifier = Modifier.size(15.dp))
-                    TranslationResultCard(
-                        textData = search,
-                        showResult = showResult,
-                        color = appWhiteYellow,
-                        translated = translated,
-                        result = resultData,
-                        isLoading = false
-                    )
                 }
             } else if (showResult) {
-
+                // This block is empty, it's not required.
             }
 
             CommentCard(
@@ -419,27 +409,10 @@ fun TranslateScreen() {
                 list = commentList,
                 showCommentList = if (showComment) false else resultsShow,
             )
-
-        }
-
-    }
-
-}
-
-
-@Composable
-fun SearchBar() {
-    Box(
-        modifier = Modifier
-            .background(appYellow)
-            .fillMaxWidth()
-            .height(70.dp)
-    ) {
-        Row {
-
         }
     }
 }
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -449,6 +422,8 @@ fun SearchAppBar(
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
     autocompleteSuggestions: List<String>,
+    selectedLanguage: String, // Add selectedLanguage parameter here
+    onLanguageSelected: (String) -> Unit, // Add the callback for language selection here
 ) {
     Surface(
         modifier = Modifier
@@ -458,8 +433,6 @@ fun SearchAppBar(
         color = appYellow
     ) {
         var isSuggestionsExpanded by remember { mutableStateOf(false) }
-        var isLanguageExpanded by remember { mutableStateOf(false) }
-        var language by remember { mutableStateOf("") }
         val context = LocalContext.current
 
         val keyboardController = LocalSoftwareKeyboardController.current
@@ -481,19 +454,21 @@ fun SearchAppBar(
                 },
                 textStyle = TextStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize),
                 singleLine = true,
-
-                //Language Icon
                 leadingIcon = {
                     IconButton(
                         modifier = Modifier.alpha(ContentAlpha.medium),
-                        onClick = {isLanguageExpanded = true }
+                        onClick = {}
                     ) {
-                        Icon(painter = painterResource(id = R.drawable.language_icon),
-                            contentDescription = "Language Icon",
-                            Modifier.size(30.dp),
-                            tint = appWhite)
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search Icon",
+                            tint = Color.White
+                        )
 
-                        DropDown()
+                        DropDown(
+                            selectedLanguage = selectedLanguage, // Pass the selected language
+                            onLanguageSelected = onLanguageSelected, // Pass the callback for language selection
+                        )
                     }
                 },
                 trailingIcon = {
@@ -540,9 +515,7 @@ fun SearchAppBar(
                     Surface(
                         shape = RectangleShape,
                         elevation = 4.dp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.White)
+                        modifier = Modifier.fillMaxWidth().background(Color.White)
                     ) {
                         Column {
                             autocompleteSuggestions.forEach { suggestion ->
@@ -576,102 +549,84 @@ private fun hideKeyboard(context: Context) {
         inputMethodManager.hideSoftInputFromWindow(currentFocus.windowToken, 0)
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AvailableTranslations(
-    text: String,
-    visibility: Boolean,
-    buttonClick: (Boolean, String) -> Unit,
+fun DropDown(
+    selectedLanguage: String,
+    onLanguageSelected: (String) -> Unit
 ) {
-    var clickBicolano by remember {
-        mutableStateOf(false)
-    }
-    var clickCebuano by remember {
-        mutableStateOf(false)
-    }
-    var clickIlocano by remember {
-        mutableStateOf(false)
-    }
-    if (visibility) {
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            color = appYellow
-        ) {
-            Column(
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text(
-                    text = "Available Languages:",
-                    color = Color.White
+    val languageMapping = mapOf(
+        "Cebuano" to "CEB",
+        "Ilocano" to "ILO",
+        "Bicolano" to "BIC"
+    )
+
+    var language by remember { mutableStateOf("") }
+    var isExpanded by remember { mutableStateOf(false) }
+
+    androidx.compose.material3.ExposedDropdownMenuBox(
+        expanded = isExpanded,
+        onExpandedChange = { isExpanded = it })
+    {
+        androidx.compose.material3.TextField(
+            value = languageMapping[selectedLanguage] ?: "",
+            onValueChange = {},
+            readOnly = true,
+            colors = androidx.compose.material3.TextFieldDefaults.colors(
+                unfocusedContainerColor = appYellow,
+                focusedContainerColor = appYellow,
+                unfocusedTextColor = TextWhite,
+                focusedTextColor = appWhite,
+                unfocusedLeadingIconColor = appWhite,
+                focusedLeadingIconColor = normalBlack,
+                unfocusedIndicatorColor = colorinactiveIndicator,
+                focusedIndicatorColor = colorIndicator
+            ),
+            textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp,),
+            leadingIcon = {
+                androidx.compose.material3.Icon(
+                    painter = painterResource(id = R.drawable.language_icon),
+                    contentDescription = "comment", Modifier.size(20.dp)
                 )
-                Row(
-                    verticalAlignment = Alignment.Top
-                ) {
-                    Button(
-                        colors = ButtonDefaults.buttonColors(backgroundColor = if (clickBicolano) Color.Blue else Color.White),
-                        onClick = {
-                            clickBicolano = !clickBicolano
-                            clickIlocano = false
-                            clickCebuano = false
-                            buttonClick(clickBicolano, "Bicolano")
+            },
+            modifier = Modifier.menuAnchor()
+                .width(98.dp)
+        )
 
-
-                        }) {
-                        Text(
-                            text = "Bicolano",
-                            color = if (clickBicolano) Color.White else Color.Black
-                        )
-                    }
-                    Spacer(modifier = Modifier.size(10.dp))
-                    Button(
-                        colors = ButtonDefaults.buttonColors(backgroundColor = if (clickCebuano) Color.Blue else Color.White),
-                        onClick = {
-                            clickCebuano = !clickCebuano
-                            clickBicolano = false
-                            clickIlocano = false
-                            buttonClick(clickCebuano, "Cebuano")
-                        }) {
-                        Text(
-                            text = "Cebuano",
-                            color = if (clickCebuano) Color.White else Color.Black
-                        )
-                    }
-                    Spacer(modifier = Modifier.size(10.dp))
-                    Button(
-                        colors = ButtonDefaults.buttonColors(backgroundColor = if (clickIlocano) Color.Blue else Color.White),
-                        onClick = {
-                            clickIlocano = !clickIlocano
-                            clickBicolano = false
-                            clickCebuano = false
-                            buttonClick(clickIlocano, "Ilocano")
-                        }) {
-                        Text(
-                            text = "Ilocano",
-                            color = if (clickIlocano) Color.White else Color.Black
-                        )
-                    }
-                }
-            }
+        ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false })
+        {
+            androidx.compose.material3.DropdownMenuItem(text = { Text(text = "Cebuano") },
+                onClick = {
+                    isExpanded = false
+                    language = "Cebuano"
+                    onLanguageSelected(language)
+                })
+            androidx.compose.material3.DropdownMenuItem(text = { Text(text = "Ilocano") },
+                onClick = {
+                    isExpanded = false
+                    language = "Ilocano"
+                    onLanguageSelected(language)
+                })
+            androidx.compose.material3.DropdownMenuItem(text = { Text(text = "Bicolano") },
+                onClick = {
+                    isExpanded = false
+                    language = "Bicolano"
+                    onLanguageSelected(language)
+                })
         }
-    } else {
-        clickBicolano = false
-        clickCebuano = false
-        clickIlocano = false
     }
-
 }
 
 @Composable
 fun TranslationResult(
     text: String,
     resultData: String,
-    showResult: Boolean,
+    resultsShow: Boolean, // Use resultsShow instead of showResult
     translated: String,
     isLoading: Boolean
 ) {
-    if (showResult) {
+    if (resultsShow) { // Use resultsShow here
         Column(
             horizontalAlignment = Alignment.Start
         ) {
@@ -679,17 +634,12 @@ fun TranslationResult(
             Box {
                 TranslationResultCard(
                     textData = text,
-                    showResult = showResult,
+                    showResult = resultsShow, // Use resultsShow here
                     color = appWhiteYellow,
                     translated = translated,
                     result = resultData,
                     isLoading = isLoading
                 )
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
             }
         }
     }
@@ -704,32 +654,38 @@ fun TranslationResultCard(
     translated: String,
     isLoading: Boolean
 ) {
-    Column(
-        modifier = Modifier
-            .padding(10.dp)
-            .shadow(
-                shape = RoundedCornerShape(10.dp),
-                elevation = 5.dp,
-            )
-            .clip(RoundedCornerShape(10.dp))
-            .background(color)
-            .padding(horizontal = 15.dp, vertical = 20.dp)
-            .fillMaxWidth()
-        //.height(200.dp)
-    ) {
-        Column {
-            //Word of the Day
-            // Line 1 - Header
-            Text(
-                text = textData,
-                style = MaterialTheme.typography.headlineMedium,
-            )
-            Spacer(modifier = Modifier.size(5.dp))
-
-            if (result.isNotEmpty()) {
-                TranslationData(
-                    resultTl = result
+    if (showResult) {
+        Column(
+            modifier = Modifier
+                .padding(10.dp)
+                .shadow(
+                    shape = RoundedCornerShape(10.dp),
+                    elevation = 5.dp,
                 )
+                .clip(RoundedCornerShape(10.dp))
+                .background(color)
+                .padding(horizontal = 15.dp, vertical = 20.dp)
+                .fillMaxWidth()
+        ) {
+            Column {
+                // Line 1 - Header
+                Text(
+                    text = textData,
+                    style = MaterialTheme.typography.headlineMedium,
+                )
+                Spacer(modifier = Modifier.size(5.dp))
+
+                if (isLoading) {
+                    // Show loading indicator while loading
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                } else if (result.isNotEmpty()) {
+                    // Show TranslationData when result is not empty
+                    TranslationData(
+                        resultTl = result
+                    )
+                }
             }
         }
     }
@@ -981,59 +937,4 @@ private fun CommentListView(
         }
     }
 
-}
-@Composable
-fun DropDown() {
-
-    var language by remember { mutableStateOf("") }
-    var isExpanded by remember { mutableStateOf(false) }
-
-    androidx.compose.material3.ExposedDropdownMenuBox(
-        expanded = isExpanded,
-        onExpandedChange = { isExpanded = it })
-    {
-        androidx.compose.material3.TextField(
-            value = language,
-            onValueChange = {},
-            readOnly = true,
-            colors = androidx.compose.material3.TextFieldDefaults.colors(
-                unfocusedContainerColor = appYellow,
-                focusedContainerColor = appYellow,
-                unfocusedTextColor = TextWhite,
-                focusedTextColor = appWhite,
-                unfocusedLeadingIconColor = appWhite,
-                focusedLeadingIconColor = normalBlack,
-                unfocusedIndicatorColor = colorinactiveIndicator,
-                focusedIndicatorColor = colorIndicator
-            ),
-            textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp,),
-            leadingIcon = {
-                androidx.compose.material3.Icon(
-                    painter = painterResource(id = R.drawable.language_icon),
-                    contentDescription = "comment", Modifier.size(20.dp)
-                )
-            },
-            modifier = Modifier.menuAnchor()
-                .width(98.dp)
-        )
-
-        ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false })
-        {
-            DropdownMenuItem(text = { Text(text = "Cebuano") },
-                onClick = {
-                    isExpanded = false
-                    language = "CEB"
-                })
-            DropdownMenuItem(text = { Text(text = "Ilocano") },
-                onClick = {
-                    isExpanded = false
-                    language = "ILO"
-                })
-            DropdownMenuItem(text = { Text(text = "Bicolano") },
-                onClick = {
-                    isExpanded = false
-                    language = "BIC"
-                })
-        }
-    }
 }

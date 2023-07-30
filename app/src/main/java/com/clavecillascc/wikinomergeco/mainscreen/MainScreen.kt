@@ -7,14 +7,20 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -29,8 +35,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.BottomSheetDefaults.ContainerColor
 import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -54,13 +63,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter.State.Empty.painter
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.navigation.NavigationItems
+import com.clavecillascc.wikinomergeco.otherScreens.CollaboratorScreen
 import com.clavecillascc.wikinomergeco.signin.UserData
 import com.clavecillascc.wikinomergeco.ui.theme.ErasDemiITC
+import com.clavecillascc.wikinomergeco.ui.theme.TextWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
+import com.clavecillascc.wikinomergeco.ui.theme.selectedGray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -81,9 +94,9 @@ fun MainScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TopBar(coroutineScope, scaffoldState) },
-        content = { ContentArea(navController) },
+        content = { ContentArea(navController, userData) },
         bottomBar = { BottomNavigationBar(navController) },
-        drawerContent = { ModalNavigationDrawer(userData, onSignOut) }
+        drawerContent = { Drawer(coroutineScope, scaffoldState, userData, navController, onSignOut)}
     )
 
     BackPressHandler{
@@ -102,8 +115,8 @@ fun MainScreen(
 }
 
 @Composable
-fun ContentArea(navController: NavHostController) {
-    com.clavecillascc.wikinomergeco.navigation.Navigation(navController = navController)
+fun ContentArea(navController: NavHostController, userData: UserData?) {
+    com.clavecillascc.wikinomergeco.navigation.Navigation(navController = navController, userData = userData)
 }
 
 @Composable
@@ -112,8 +125,7 @@ fun BottomNavigationBar(navController: NavController) {
     val menuItem = listOf(
         NavigationItems.Home,
         NavigationItems.Translate,
-        NavigationItems.Library,
-        NavigationItems.Collaborator
+        NavigationItems.Library
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -184,45 +196,64 @@ fun TopBar(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
 }
 
 @Composable
-fun ModalNavigationDrawer(userData: UserData?, onSignOut: () -> Unit) {
-    Column {
-        ModalDrawerSheet {
-            Row(
-                modifier = Modifier.padding(20.dp)
-            ) {
-            if (userData?.profilePictureUrl != null) {
-                AsyncImage(
-                    model = userData.profilePictureUrl,
-                    contentDescription = "Profile picture",
-                    modifier = Modifier
-                        .size(75.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.width(20.dp))
-            }
-            if (userData?.username != null) {
-                Text(
-                    text = userData.username,
-                    textAlign = TextAlign.Center,
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
+fun Drawer(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState, userData: UserData?, navController: NavController, onSignOut: () -> Unit) {
+    Column(modifier = Modifier
+            .background(Color.White)
+            .fillMaxSize()
+    ) {
+        Header(userData = userData)
+        val menuItem = listOf(
+            NavigationItems.Collaborator,
+            NavigationItems.About
+        )
+
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+
+        ModalDrawerSheet(
+            drawerShape = RectangleShape,
+            drawerContainerColor = Color.White
+        )
+        {
+            menuItem.forEach { menuItem ->
+                Divider()
+                    NavigationDrawerItem(
+                        shape = RectangleShape,
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = menuItem.icon),
+                                contentDescription = menuItem.title,
+                                modifier = Modifier.size(27.dp)
+                            )
+                        },
+                        label = { Text(text = menuItem.title) },
+                        selected = currentRoute == menuItem.route,
+                        onClick = {
+                            navController.navigate(menuItem.route) {
+                                navController.graph.startDestinationRoute?.let { route ->
+                                    popUpTo(route = route) {
+                                        saveState = true
+                                    }
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                                coroutineScope.launch {
+                                    scaffoldState.drawerState.close()
+                                }
+                            }
+                        }
+                    )
             }
             Divider()
             NavigationDrawerItem(
                 shape = RectangleShape,
-                label = { Text(text = "Drawer Item") },
-                selected = false,
-                onClick = { /*TODO*/ },
-            )
-            Divider()
-            Spacer(modifier = Modifier.size(540.dp))
-            Divider()
-            NavigationDrawerItem(
-                shape = RectangleShape,
+                icon = {
+                    Icon(
+                        painter = painterResource(R.drawable.logout),
+                        contentDescription = "logout",
+                        modifier = Modifier.size(18.dp)
+                    )
+                },
                 label = { Text(text = "Sign out") },
                 selected = false,
                 onClick = onSignOut
@@ -231,24 +262,52 @@ fun ModalNavigationDrawer(userData: UserData?, onSignOut: () -> Unit) {
         }
     }
 }
-    @Composable
-    fun BackPressHandler(
-        backPressedDispatcher: OnBackPressedDispatcher? = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher,
-        onBackPressed: () -> Unit
-    ) {
-        val currentOnBackPressed by rememberUpdatedState(newValue = onBackPressed)
-        val backCallback = remember {
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    currentOnBackPressed()
-                }
-            }
-        }
 
-        DisposableEffect(key1 = backPressedDispatcher) {
-            backPressedDispatcher?.addCallback(backCallback)
-            onDispose {
-                backCallback.remove()
+
+@Composable
+fun Header(userData: UserData?) {
+    Row(modifier = Modifier.padding(20.dp))
+    {
+        if (userData?.profilePictureUrl != null) {
+            AsyncImage(
+                model = userData.profilePictureUrl,
+                contentDescription = "Profile picture",
+                modifier = Modifier
+                    .size(75.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.width(20.dp))
+        }
+        if (userData?.username != null) {
+            Text(
+                text = userData.username,
+                textAlign = TextAlign.Center,
+                fontSize = 25.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+fun BackPressHandler(
+    backPressedDispatcher: OnBackPressedDispatcher? = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher,
+    onBackPressed: () -> Unit) {
+    val currentOnBackPressed by rememberUpdatedState(newValue = onBackPressed)
+    val backCallback = remember {
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                currentOnBackPressed()
             }
         }
     }
+
+    DisposableEffect(key1 = backPressedDispatcher) {
+        backPressedDispatcher?.addCallback(backCallback)
+        onDispose {
+            backCallback.remove()
+        }
+    }
+}

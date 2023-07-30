@@ -49,6 +49,7 @@ val buttonCancel = Color(0xFFBBC3CD)
 val colorIndicator = Color(0xFF7416CF)
 val colorinactiveIndicator = Color(0xFFFFBB00)
 
+
 //font color
 val textHeaderBlack = Color(0xFF242424)
 val normalBlack = Color(0xFF242424)

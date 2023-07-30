@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -41,15 +42,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.collaboratorscreen.UploadData
+import com.clavecillascc.wikinomergeco.mainscreen.Header
+import com.clavecillascc.wikinomergeco.signin.UserData
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
@@ -63,17 +69,17 @@ import com.clavecillascc.wikinomergeco.ui.theme.textSeeMore
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CollaboratorScreen(navController: NavController) {
+fun CollaboratorScreen(navController: NavController, userData: UserData?) {
 
     val ctx = LocalContext.current
-    /*TODO*/
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {navController.navigate("addCollaborator")},
                 backgroundColor = appDarkBlue,
                 modifier = Modifier
-                    .padding(top = 15.dp, start = 15.dp, bottom = 15.dp, end = 5.dp )
+                    .padding(top = 15.dp, start = 15.dp, bottom = 15.dp, end = 5.dp)
                     .padding(bottom = 35.dp)
             ){
                 Icon(Icons.Filled.Add,"AddButton",
@@ -86,9 +92,8 @@ fun CollaboratorScreen(navController: NavController) {
                     .verticalScroll(rememberScrollState())
                     .fillMaxSize()
             ) {
-                CollaboratorFilter()
                 Spacer(modifier = Modifier.size(15.dp))
-                RecentlyAdded()
+                RecentlyAdded(userData = userData)
                 Spacer(modifier = Modifier.size(75.dp))
             }
         }
@@ -97,60 +102,8 @@ fun CollaboratorScreen(navController: NavController) {
 }
 
 @Composable
-fun CollaboratorFilter() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp)
-            .background(appYellow)
-    )
-    {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Spacer(Modifier.size(5.dp))
-            Text(text = "    Available Laungages:", color = appWhite)
-            Filter(chips = listOf("Tagalog", "Cebuano", "Bicolano"))
-        }
-    }
-}
-
-@Composable
-fun Filter(
-    chips: List<String>,
-
-    ) {
-    var selectedChipIndex by remember {
-        mutableStateOf(0)
-    }
-    LazyRow {
-        items(chips.size) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .padding(start = 15.dp, top = 10.dp, bottom = 10.dp)
-                    .clickable {
-                        selectedChipIndex = it
-                    }
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(
-                        if (selectedChipIndex == it) selectedGray
-                        else notSelectedGray
-                    )
-                    .padding(start = 10.dp, top = 5.dp, bottom = 5.dp, end = 10.dp)
-            ) {
-                Text(text = chips[it], color = textHeaderBlack, fontSize = 12.sp)
-            }
-        }
-    }
-}
-
-@Composable
 fun RecentlyAdded(
-    color: Color = appWhiteYellow
+    color: Color = appWhiteYellow, userData: UserData?
 ) {
     Text(
         text = "Recently Added:",
@@ -163,7 +116,7 @@ fun RecentlyAdded(
     Column {
         // Iterate over the recently added contributions and display them
         UploadData.recentlyAddedContributions.forEachIndexed { index, contribution ->
-            UserContribution(contribution, index % 2 == 0) // Pass the contribution and a boolean to alternate background color
+            UserContribution(contribution, index % 2 == 0, userData = userData) // Pass the contribution and a boolean to alternate background color
         }
         Spacer(modifier = Modifier.size(70.dp))
     }
@@ -173,6 +126,7 @@ fun RecentlyAdded(
 fun UserContribution(
     contribution: String,
     isEven: Boolean,
+    userData: UserData?
 ) {
     Column(
         modifier = Modifier
@@ -187,27 +141,7 @@ fun UserContribution(
             .fillMaxWidth(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Row() {
-            Image(
-                painter = painterResource(id = R.drawable.profilepic_sample),
-                contentDescription = "Logo",
-                modifier = Modifier
-                    .size(50.dp)
-                    .clip(CircleShape)
-                    .border(width = 1.dp, color = normalBlack, CircleShape)
-            )
-            Column() {
-                Text(
-                    text = "Username", Modifier.padding(horizontal = 20.dp),
-                    style = MaterialTheme.typography.labelMedium
-                )
-                Text(
-                    text = "user details", Modifier.padding(horizontal = 20.dp),
-                    style = MaterialTheme.typography.labelMedium,
-                    fontSize = 12.sp
-                )
-            }
-        }
+        HeaderCollab(userData = userData)
         //collaborator added word
         Column(
             modifier = Modifier
@@ -227,69 +161,32 @@ fun UserContribution(
                 style = MaterialTheme.typography.labelMedium
             )
         }
+    }
+}
 
-        Column {
-            Divider(color = dividerColor, thickness = 2.dp)
-            Spacer(modifier = Modifier.size(5.dp))
-            //See more clickable
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Row(
-                    modifier = Modifier.height(20.dp)
-                ) {
-                    IconButton(onClick = { /*TODO*/ }, Modifier.size(30.dp)) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.follow_icon),
-                            contentDescription = "follow", Modifier.size(15.dp)
-                        )
-                    }
-                    Text(
-                        text = "Follow",
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                }
-
-                Row(
-                    modifier = Modifier.height(20.dp)
-                ) {
-                    IconButton(onClick = { /*TODO*/ }, Modifier.size(30.dp)) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.chat_light),
-                            contentDescription = "comment", Modifier.size(20.dp)
-                        )
-                    }
-                    Text(
-                        text = "Comment",
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                }
-
-                Row(
-                    modifier = Modifier.height(20.dp)
-                ) {
-                    IconButton(onClick = { /*TODO*/ }, Modifier.size(20.dp)) {
-                        Icon(
-                            painter = painterResource(R.drawable.upvote_icon),
-                            contentDescription = "upvote", Modifier.size(10.dp)
-                        )
-                    }
-
-                    IconButton(onClick = { /*TODO*/ }, Modifier.size(20.dp)) {
-                        Icon(
-                            painter = painterResource(R.drawable.downvote_icon),
-                            contentDescription = "downvote", Modifier.size(10.dp)
-                        )
-                    }
-
-
-                }
-
-            }
+@Composable
+fun HeaderCollab(userData: UserData?) {
+    Row(modifier = Modifier.padding(20.dp))
+    {
+        if (userData?.profilePictureUrl != null) {
+            AsyncImage(
+                model = userData.profilePictureUrl,
+                contentDescription = "Profile picture",
+                modifier = Modifier
+                    .size(50.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.width(20.dp))
         }
-
-
+        if (userData?.username != null) {
+            androidx.compose.material.Text(
+                text = userData.username,
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
     }
 }
