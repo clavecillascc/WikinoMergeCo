@@ -48,7 +48,7 @@ fun HomeScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.size(15.dp))
         WordOfTheDay()
         FAQ()
-        HomeForum()
+        Spacer(modifier = Modifier.size(70.dp))
     }
 }
 
@@ -207,34 +207,25 @@ fun FAQ(
                 )
             //Word of the Day
             Text(
-                text = "   "+"• "+"sample 1",
+                text = "   "+"• "+"How do I navigate to different screens in the app?",
                 style = MaterialTheme.typography.labelMedium
 
             )
             //Other terms
             Text(
-                text = "   "+"• "+"sample 2",
+                text = "   "+"• "+"How do I add a new word?",
                 style = MaterialTheme.typography.labelMedium
 
             )
             //In sentence
             Text(
-                text = "   "+"• "+"sample 3",
+                text = "   "+"• "+"How do I view my recently added contributions?",
                 style = MaterialTheme.typography.labelMedium
 
             )
-
         }
-        //See more clickable
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Text(text = "See more",
-                modifier = Modifier.align(alignment = Alignment.End),
-                style = MaterialTheme.typography.displaySmall,
-
-                )
         }
     }
-}
 
 
 @Composable

@@ -102,7 +102,6 @@ fun AddCollaboratorHeaderBox(navController: NavController) {
                     tint = Color.White
                 )
             }
-
             androidx.compose.material.Text(
                 text = "Add new translation ",
                 style = MaterialTheme.typography.labelMedium,
