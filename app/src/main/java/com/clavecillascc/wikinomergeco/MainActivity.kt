@@ -8,6 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -18,7 +19,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.clavecillascc.wikinomergeco.mainScreen.MainScreen
+import com.clavecillascc.wikinomergeco.components.SplashViewModel
+import com.clavecillascc.wikinomergeco.mainscreen.MainScreen
 import com.clavecillascc.wikinomergeco.signin.GoogleAuthUiClient
 import com.clavecillascc.wikinomergeco.signin.SignInScreen
 import com.clavecillascc.wikinomergeco.signin.SignInViewModel
@@ -35,6 +37,9 @@ class MainActivity : ComponentActivity() {
             oneTapClient = Identity.getSignInClient(applicationContext)
         )
     }
+
+    private val viewModel:SplashViewModel by viewModels()
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +47,11 @@ class MainActivity : ComponentActivity() {
         //initialize Firebase
         FirebaseApp.initializeApp(this)
 
-        installSplashScreen()
+        installSplashScreen().apply {
+            setKeepOnScreenCondition{
+                viewModel.isLoading.value
+            }
+        }
         setContent {
             WikinoMergeCoTheme {
                     val navController = rememberNavController()

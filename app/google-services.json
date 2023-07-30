@@ -15,7 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "515146928597-ees1u9rfkaeo6amhe3f5e9iejtrt4il7.apps.googleusercontent.com",
+          "client_id": "515146928597-6ur969rcfesemor9v1oge217pict77uq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.clavecillascc.wikinomergeco",
+            "certificate_hash": "129cba6bda3478a1c96e6f099f712c25f248e355"
+          }
+        },
+        {
+          "client_id": "515146928597-uv2hl5u6cmnn7ctf3venarmuopc70nn7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

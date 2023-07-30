@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,24 +25,28 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
+import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 
 @Composable
-fun LibraryScreen() {
-    /*TODO*/
+fun LibraryScreen(navController: NavHostController) {
     //Text(text = "Library")
     Column {
         Spacer(modifier = Modifier.size(15.dp))
-        Languages()
+        Languages(navController = navController)
     }
 }
 
 @Composable
-fun Languages (color: Color = appWhiteYellow, ) {
+fun Languages (navController: NavHostController, color: Color = appWhiteYellow ) {
     Column(
         modifier = Modifier
+            .height(635.dp)
             .padding(10.dp)
             .shadow(
                 shape = RoundedCornerShape(10.dp),
@@ -51,7 +56,10 @@ fun Languages (color: Color = appWhiteYellow, ) {
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
     ) {
-        Text(text = "Available Languages:")
+        Text(text = "Available Languages:",
+             style = MaterialTheme.typography.labelMedium,
+             color = normalBlack,
+             fontWeight = FontWeight.Bold,)
         Spacer(modifier = Modifier.size(20.dp))
 
         Column(
@@ -66,11 +74,15 @@ fun Languages (color: Color = appWhiteYellow, ) {
             ) {
                 Button(modifier = Modifier
                     .size(height = 110.dp, width = 92.dp)
-                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    .defaultMinSize(),
+                    colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        navController.navigate("cebuanoScreen")
+                    }
+
                 ) {
                     //Text(text = "Cebuano")
                     Image(
@@ -86,7 +98,9 @@ fun Languages (color: Color = appWhiteYellow, ) {
                     .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        navController.navigate("ilocanoScreen")
+                    }
                 ) {
                     //Text(text = "Ilocano")
                     Image(
@@ -104,7 +118,9 @@ fun Languages (color: Color = appWhiteYellow, ) {
                     backgroundColor = Color.White
                 ),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        navController.navigate("bicolanoScreen")
+                    }
                 ) {
                     //Text(text = "Bicolano")
                     Image(

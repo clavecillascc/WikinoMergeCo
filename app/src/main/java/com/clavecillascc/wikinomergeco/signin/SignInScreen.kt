@@ -17,6 +17,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.Icon
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,7 +48,7 @@ fun SignInScreen(
             Toast.makeText(
                 context,
                 error,
-                Toast.LENGTH_LONG
+                Toast.LENGTH_SHORT
             ).show()
         }
     }
@@ -73,13 +74,20 @@ fun SignInScreen(
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             //sign-in
-            Button(modifier = Modifier
-                .size(height = 40.dp, width = 300.dp)
-                .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+            Button(
+                onClick = onSignInClick,
+                modifier = Modifier
+                    .size(height = 40.dp, width = 300.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                 backgroundColor = appYellow),
                 contentPadding = PaddingValues(0.dp),
-                onClick = onSignInClick) {
-                Text(text = "SIGN IN",
+                ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_google_logo),
+                    contentDescription = "Google Button",
+                    tint = Color.Unspecified)
+                Spacer(modifier = Modifier.size(3.dp))
+                Text(text = "GOOGLE SIGN IN",
                     style = MaterialTheme.typography.displayMedium,
                     color = appWhite,
                     fontSize = 14.sp) }
@@ -91,27 +99,15 @@ fun SignInScreen(
                 .defaultMinSize(), colors = ButtonDefaults.buttonColors(
                 backgroundColor = appWhite),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { /*TODO*/ }) {
-                Row() {
-                    Text(text = "NO ACCOUNT YET?",
+                onClick = { Toast.makeText(context, "Not yet available", Toast.LENGTH_SHORT).show() }) {
+                Row {
+                    Text(
+                        text = "GUEST",
                         style = MaterialTheme.typography.displayMedium,
                         color = appDarkBlue,
-                        fontSize = 14.sp)
-
-                    Text(text = " SIGN UP",
-                        style = MaterialTheme.typography.displayMedium,
-                        color = appYellow,
-                        fontSize = 14.sp) } }
-            //skip
-            TextButton(modifier = Modifier
-                .size(height = 40.dp, width = 300.dp)
-                .defaultMinSize(),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { /*TODO*/ }) {
-                Text(text = "skip for now >",
-                    style = MaterialTheme.typography.displayMedium,
-                    color = appWhite,
-                    fontSize = 14.sp)
+                        fontSize = 14.sp
+                    )
+                }
             }
         }
     }
