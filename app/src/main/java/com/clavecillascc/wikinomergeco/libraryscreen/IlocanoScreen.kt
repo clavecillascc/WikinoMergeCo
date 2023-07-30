@@ -182,27 +182,34 @@ fun TextFileItemUI1(textContent: String) {
 
     Column(
         modifier = Modifier
-            .padding(10.dp)
-            .background(Color.LightGray)
-            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 15.dp)
+            .shadow(
+                shape = RoundedCornerShape(10.dp),
+                elevation = 3.dp,
+            )
+            .clip(RoundedCornerShape(10.dp))
+            .background(appWhiteYellow)
+            .padding(horizontal = 15.dp, vertical = 30.dp)
             .fillMaxWidth()
-            .height(200.dp)
     ) {
-        Spacer(modifier = Modifier.size(5.dp))
+
         if (lines.size >= 6) {
             Text(
                 text = lines[1],
-                style = MaterialTheme.typography.titleMedium, // Keep your custom typography
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 25.sp,// Keep your custom typography
                 color = textTerm // Keep your custom color
             )
             Text(
                 text = lines[2],
-                style = MaterialTheme.typography.titleMedium, // Keep your custom typography
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 22.sp,// Keep your custom typography
                 color = appYellow // Keep your custom color
             )
             Text(
                 text = lines[3],
-                style = MaterialTheme.typography.titleMedium, // Keep your custom typography
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 18.sp,// Keep your custom typography
                 color = textOtherTerms // Keep your custom color
             )
             Text(

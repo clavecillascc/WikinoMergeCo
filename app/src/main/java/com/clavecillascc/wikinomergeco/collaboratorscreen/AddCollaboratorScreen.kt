@@ -107,7 +107,7 @@ fun AddCollaboratorHeaderBox(navController: NavController) {
                 )
             }
 
-            androidx.compose.material.Text(
+            Text(
                 text = "Add new translation ",
                 style = MaterialTheme.typography.labelMedium,
                 fontSize = 20.sp,
@@ -262,23 +262,23 @@ fun TextFields() {
                 modifier = Modifier.menuAnchor())
 
             ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false })
-                {
-                    DropdownMenuItem(text = { Text(text = "Cebuano") },
-                        onClick = {
-                            isExpanded = false
-                            language = "Cebuano"
-                        })
-                    DropdownMenuItem(text = { Text(text = "Ilocano") },
-                        onClick = {
-                            isExpanded = false
-                            language = "Ilocano"
-                        })
-                    DropdownMenuItem(text = { Text(text = "Bicolano") },
-                        onClick = {
-                            isExpanded = false
-                            language = "Bicolano"
-                        })
-                }
+            {
+                DropdownMenuItem(text = { Text(text = "Cebuano") },
+                    onClick = {
+                        isExpanded = false
+                        language = "Cebuano"
+                    })
+                DropdownMenuItem(text = { Text(text = "Ilocano") },
+                    onClick = {
+                        isExpanded = false
+                        language = "Ilocano"
+                    })
+                DropdownMenuItem(text = { Text(text = "Bicolano") },
+                    onClick = {
+                        isExpanded = false
+                        language = "Bicolano"
+                    })
+            }
         }
 
         //3-Translation of Term in tagalog/english?

@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
@@ -125,16 +126,16 @@ fun WordOfTheDay(color: Color = appWhiteYellow) {
 
     Column(
         modifier = Modifier
-            .padding(10.dp)
+            .padding(start = 20.dp, top = 15.dp, end = 20.dp, bottom = 15.dp)
             .shadow(
-                shape = RoundedCornerShape(10.dp),
-                elevation = 5.dp,
+                //shape = RoundedCornerShape(10.dp),
+                elevation = 3.dp,
             )
-            .clip(RoundedCornerShape(10.dp))
+            //.clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
-            .height(200.dp)
+            .height(200.dp), horizontalAlignment = Alignment.Start
     ) {
         val lines = word.value.lines()
 
@@ -147,16 +148,19 @@ fun WordOfTheDay(color: Color = appWhiteYellow) {
             Text(
                 text = lines[1],
                 style = MaterialTheme.typography.titleMedium,
+                fontSize = 25.sp,
                 color = textTerm
             )
             Text(
                 text = lines[2],
                 style = MaterialTheme.typography.titleMedium,
+                fontSize = 22.sp,
                 color = appYellow
             )
             Text(
                 text = lines[3],
                 style = MaterialTheme.typography.titleMedium,
+                fontSize = 18.sp,
                 color = textOtherTerms
             )
             Text(
@@ -179,16 +183,17 @@ fun FAQ(
 ) {
     Column(
         modifier = Modifier
-            .padding(horizontal = 18.dp, vertical = 10.dp)
+            .padding(start = 20.dp, top = 15.dp, end = 20.dp, bottom = 15.dp)
             .shadow(
-                shape = RoundedCornerShape(10.dp),
-                elevation = 5.dp,
+                //shape = RoundedCornerShape(10.dp),
+                elevation = 4.dp,
             )
-            .clip(RoundedCornerShape(10.dp))
+            //.clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 15.dp)
             .fillMaxWidth()
             .height(200.dp),
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
 
@@ -235,12 +240,12 @@ fun FAQ(
 fun HomeForum ( color: Color = appWhiteYellow){
     Column(
         modifier = Modifier
-            .padding(start = 18.dp, top = 10.dp, end = 18.dp, bottom = 80.dp)
+            .padding(start = 20.dp, top = 15.dp, end = 20.dp, bottom = 15.dp)
             .shadow(
-                shape = RoundedCornerShape(10.dp),
+                //shape = RoundedCornerShape(10.dp),
                 elevation = 5.dp,
             )
-            .clip(RoundedCornerShape(10.dp))
+            //.clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 15.dp)
             .fillMaxWidth()
