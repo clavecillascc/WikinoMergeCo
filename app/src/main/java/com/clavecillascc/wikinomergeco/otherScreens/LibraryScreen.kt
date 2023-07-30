@@ -46,7 +46,7 @@ fun LibraryScreen(navController: NavHostController) {
 fun Languages (navController: NavHostController, color: Color = appWhiteYellow ) {
     Column(
         modifier = Modifier
-            .height(635.dp)
+            .height(640.dp)
             .padding(10.dp)
             .shadow(
                 shape = RoundedCornerShape(10.dp),
@@ -63,9 +63,9 @@ fun Languages (navController: NavHostController, color: Color = appWhiteYellow )
         Spacer(modifier = Modifier.size(20.dp))
 
         Column(
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.spacedBy(50.dp),
             modifier = Modifier
-                .height(220.dp)
+                .height(640.dp)
                 .padding(horizontal = 10.dp)
         ) {
             Row(
@@ -126,6 +126,136 @@ fun Languages (navController: NavHostController, color: Color = appWhiteYellow )
                     Image(
                         painter = painterResource(id = R.drawable.button_bicolano),
                         contentDescription = "Bicolano",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
+                }
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(modifier = Modifier
+                    .size(height = 110.dp, width = 92.dp)
+                    .defaultMinSize(),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.White
+                    ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {
+                        navController.navigate("")
+                    }
+
+                ) {
+                    //Text(text = "Cebuano")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_ibanag),
+                        contentDescription = "Ibanag",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
+                }
+                Button(modifier = Modifier
+                    .size(height = 110.dp, width = 92.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {
+                        navController.navigate("")
+                    }
+                ) {
+                    //Text(text = "Ilocano")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_itawis),
+                        contentDescription = "Itawis",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
+                }
+
+                Button(modifier = Modifier
+                    .size(height = 110.dp, width = 92.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White
+                ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {
+                        navController.navigate("")
+                    }
+                ) {
+                    //Text(text = "Bicolano")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_tausug),
+                        contentDescription = "Tausug",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
+                }
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(modifier = Modifier
+                    .size(height = 110.dp, width = 92.dp)
+                    .defaultMinSize(),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.White
+                    ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {
+                        navController.navigate("")
+                    }
+
+                ) {
+                    //Text(text = "Cebuano")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_waray),
+                        contentDescription = "Waray",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
+                }
+                Button(modifier = Modifier
+                    .size(height = 110.dp, width = 92.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {
+                        navController.navigate("")
+                    }
+                ) {
+                    //Text(text = "Ilocano")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_maranao),
+                        contentDescription = "Maranao",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize()
+                    )
+                }
+
+                Button(modifier = Modifier
+                    .size(height = 110.dp, width = 92.dp)
+                    .defaultMinSize(), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.White
+                ),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {
+                        navController.navigate("")
+                    }
+                ) {
+                    //Text(text = "Bicolano")
+                    Image(
+                        painter = painterResource(id = R.drawable.button_tagalog),
+                        contentDescription = "Tagalog",
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxSize()
