@@ -127,10 +127,10 @@ fun WordOfTheDay(color: Color = appWhiteYellow) {
 
     Column(
         modifier = Modifier
-            .padding(start = 20.dp, top = 15.dp, end = 20.dp, bottom = 15.dp)
+            .padding(start = 20.dp, top = 10.dp, end = 20.dp, bottom = 10.dp)
             .shadow(
                 //shape = RoundedCornerShape(10.dp),
-                elevation = 3.dp,
+                elevation = 4.dp,
             )
             //.clip(RoundedCornerShape(10.dp))
             .background(color)
@@ -184,7 +184,7 @@ fun FAQ(
 ) {
     Column(
         modifier = Modifier
-            .padding(start = 20.dp, top = 15.dp, end = 20.dp, bottom = 15.dp)
+            .padding(start = 20.dp, top = 10.dp, end = 20.dp, bottom = 10.dp)
             .shadow(
                 //shape = RoundedCornerShape(10.dp),
                 elevation = 4.dp,
@@ -241,7 +241,7 @@ fun FAQ(
 fun HomeForum ( color: Color = appWhiteYellow){
     Column(
         modifier = Modifier
-            .padding(start = 20.dp, top = 15.dp, end = 20.dp, bottom = 15.dp)
+            .padding(start = 20.dp, top = 10.dp, end = 20.dp, bottom = 80.dp)
             .shadow(
                 //shape = RoundedCornerShape(10.dp),
                 elevation = 5.dp,

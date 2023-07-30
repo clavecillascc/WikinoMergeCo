@@ -89,7 +89,16 @@ val Typography = Typography(
         fontFamily = Poppins,
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold,
-    )
+    ),
+    labelLarge = TextStyle(
+        fontFamily = Montserrat,
+    ),
+    titleLarge = TextStyle(
+        fontFamily = Poppins,
+        fontSize = 16.sp,
+    ),
+
+
 /* Other default text styles to override
 titleLarge = TextStyle(
     fontFamily = FontFamily.Default,
