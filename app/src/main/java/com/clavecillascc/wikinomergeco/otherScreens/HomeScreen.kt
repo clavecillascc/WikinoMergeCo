@@ -214,8 +214,8 @@ fun FAQ(
                 fontSize = 20.sp)
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 ExpandableBox1()
-                ExpandableBox2()
                 ExpandableBox3()
+                ExpandableBox2()
             }
         }
     }
@@ -308,7 +308,7 @@ fun ExpandableBox2(color: Color = appWhiteYellow) {
 @Composable
 fun ExpandableBox3(color: Color = appWhiteYellow) {
     var isExpanded by remember { mutableStateOf(false) }
-    val height by animateDpAsState(if (isExpanded) 185.dp else 20.dp)
+    val height by animateDpAsState(if (isExpanded) 310.dp else 45.dp)
     val width by animateDpAsState(if (isExpanded) 300.dp else 300.dp)
     Box(
         modifier = Modifier
@@ -332,12 +332,12 @@ fun ExpandableBox3(color: Color = appWhiteYellow) {
                 .fillMaxSize(),
                 verticalArrangement = Arrangement.Center) {
                 Text(
-                    text =  "• " + "How do I add a new word?",
+                    text =  "• " + "How do I search for a word or phrase to translate?",
                     style = MaterialTheme.typography.labelMedium
                 )
 
                 Text(
-                    text =  "- " + "To add a new collaborator, navigate to the 'Collaborator' screen using the drawer menu found in the top bar. Click on the floating action button (the plus icon) in the bottom right corner. Fill in the required information for the new word and click 'Upload' to add them.",
+                    text =  "- " + "To search for a word or phrase to translate, navigate to the 'Translate' screen using the bottom navigation bar at the bottom of the screen. Simply enter the text in the search bar at the top of the 'Translate' screen and tap the word suggested that you want to translate.After choosing the word you want to translate, the app will display available translation languages below the search bar. To select a language, tap on the respective language button (e.g., Bicolano, Cebuano, or Ilocano).",
                     style = MaterialTheme.typography.labelMedium,
                     fontSize = 14.sp,
                     color = normalBlack
