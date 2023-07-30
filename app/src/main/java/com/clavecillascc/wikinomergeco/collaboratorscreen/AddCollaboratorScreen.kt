@@ -79,7 +79,7 @@ import com.clavecillascc.wikinomergeco.ui.theme.textTerm
 fun AddCollaboratorScreen(navController: NavController, userData: com.clavecillascc.wikinomergeco.signin.UserData?) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         AddCollaboratorHeaderBox(navController)
-        AddNewTranslation(userData = userData)
+        AddNewTranslation(userData = userData, navController = navController)
     }
 }
 
@@ -116,7 +116,7 @@ fun AddCollaboratorHeaderBox(navController: NavController) {
 
 @Composable
 fun AddNewTranslation(
-    color: Color = appWhiteYellow, userData: com.clavecillascc.wikinomergeco.signin.UserData?
+    color: Color = appWhiteYellow, userData: com.clavecillascc.wikinomergeco.signin.UserData?, navController: NavController
 ) {
     var term by remember { mutableStateOf("") }
     var language by remember { mutableStateOf("") }
@@ -213,6 +213,7 @@ fun AddNewTranslation(
                             terminsentence,
                             translationsentence
                         )
+                        navController.navigate("collaborator")
                     }
                 ) {
                     Row {
