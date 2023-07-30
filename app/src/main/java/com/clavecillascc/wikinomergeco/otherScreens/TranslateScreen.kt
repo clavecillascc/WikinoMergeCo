@@ -75,6 +75,9 @@ import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import com.clavecillascc.wikinomergeco.ui.theme.colorIndicator
 import com.clavecillascc.wikinomergeco.ui.theme.colorinactiveIndicator
 import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
+import com.clavecillascc.wikinomergeco.ui.theme.textOtherTerms
+import com.clavecillascc.wikinomergeco.ui.theme.textSentence
+import com.clavecillascc.wikinomergeco.ui.theme.textTerm
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
@@ -117,8 +120,6 @@ fun TranslateScreen() {
 
     var showResult by remember { mutableStateOf(false) }
 
-    var isSearchClicked by remember { mutableStateOf(false) }
-
     var isLoading by remember { mutableStateOf(false) }
 
     val autocompleteViewModel: AutocompleteViewModel = viewModel()
@@ -151,8 +152,8 @@ fun TranslateScreen() {
     var selectedLanguage by remember { mutableStateOf("") }
     var isWordFound by remember { mutableStateOf(false) }
 
-    LaunchedEffect(search, selectedLanguage, isSearchClicked) {
-        if (isSearchClicked && search.isNotEmpty() && selectedLanguage.isNotEmpty()) {
+    LaunchedEffect(search, selectedLanguage) {
+        if (search.isNotEmpty() && selectedLanguage.isNotEmpty()) {
             val documentId = "$selectedLanguage:$search"
 
             Log.d("MyApp", "Constructed documentId: $documentId")
@@ -172,9 +173,6 @@ fun TranslateScreen() {
                     val storageReference = FirebaseStorage.getInstance().reference
                     val filePath = "${selectedLanguage}/${translatedWord}.txt"
 
-                    Log.d("MyApp", "Constructed filePath: $filePath")
-
-                    showResult = true
                     isLoading = true
 
                     storageReference.child(filePath).getBytes(Long.MAX_VALUE).addOnSuccessListener { bytes ->
@@ -188,11 +186,8 @@ fun TranslateScreen() {
                 }
             } else {
                 isWordFound = false
-                showResult = false
             }
         }
-
-        isSearchClicked = false
     }
 
     Box(
@@ -224,19 +219,24 @@ fun TranslateScreen() {
                     search = ""
                     commentList = emptyList()
                 },
-                onSearchClicked = { searchText ->
-                    isSearchClicked = true
+                onSearchClicked = {
+                    isShowCard = true
                 },
-                autocompleteSuggestions = autocompleteSuggestions,
-                selectedLanguage = selectedLanguage,
-                onLanguageSelected = { language ->
-                    selectedLanguage = language
-                },
+                autocompleteSuggestions = autocompleteSuggestions
+            )
+            AvailableTranslations(
+                text = search,
+                visibility = isShowCard,
+                buttonClick = { isShow, tl ->
+                    resultsShow = isShow
+                    translated = tl
+                    selectedLanguage = tl
+                }
             )
 
             TranslationResult(
                 text = search,
-                resultsShow = showResult,
+                showResult = resultsShow,
                 translated = translated,
                 resultData = resultData,
                 isLoading = isLoading
@@ -342,9 +342,17 @@ fun TranslateScreen() {
                     horizontalAlignment = Alignment.Start
                 ) {
                     Spacer(modifier = Modifier.size(15.dp))
+                    TranslationResultCard(
+                        textData = search,
+                        showResult = showResult,
+                        color = appWhiteYellow,
+                        translated = translated,
+                        result = resultData,
+                        isLoading = false
+                    )
                 }
             } else if (showResult) {
-                // This block is empty, it's not required.
+
             }
 
             CommentCard(
@@ -408,10 +416,27 @@ fun TranslateScreen() {
                 list = commentList,
                 showCommentList = if (showComment) false else resultsShow,
             )
+
+        }
+
+    }
+
+}
+
+
+@Composable
+fun SearchBar() {
+    Box(
+        modifier = Modifier
+            .background(appYellow)
+            .fillMaxWidth()
+            .height(70.dp)
+    ) {
+        Row {
+
         }
     }
 }
-
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -421,8 +446,6 @@ fun SearchAppBar(
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
     autocompleteSuggestions: List<String>,
-    selectedLanguage: String, // Add selectedLanguage parameter here
-    onLanguageSelected: (String) -> Unit, // Add the callback for language selection here
 ) {
     Surface(
         modifier = Modifier
@@ -462,11 +485,6 @@ fun SearchAppBar(
                             imageVector = Icons.Default.Search,
                             contentDescription = "Search Icon",
                             tint = Color.White
-                        )
-
-                        DropDown(
-                            selectedLanguage = selectedLanguage, // Pass the selected language
-                            onLanguageSelected = onLanguageSelected, // Pass the callback for language selection
                         )
                     }
                 },
@@ -548,84 +566,102 @@ private fun hideKeyboard(context: Context) {
         inputMethodManager.hideSoftInputFromWindow(currentFocus.windowToken, 0)
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDown(
-    selectedLanguage: String,
-    onLanguageSelected: (String) -> Unit
+fun AvailableTranslations(
+    text: String,
+    visibility: Boolean,
+    buttonClick: (Boolean, String) -> Unit,
 ) {
-    val languageMapping = mapOf(
-        "Cebuano" to "CEB",
-        "Ilocano" to "ILO",
-        "Bicolano" to "BIC"
-    )
-
-    var language by remember { mutableStateOf("") }
-    var isExpanded by remember { mutableStateOf(false) }
-
-    androidx.compose.material3.ExposedDropdownMenuBox(
-        expanded = isExpanded,
-        onExpandedChange = { isExpanded = it })
-    {
-        androidx.compose.material3.TextField(
-            value = languageMapping[selectedLanguage] ?: "",
-            onValueChange = {},
-            readOnly = true,
-            colors = androidx.compose.material3.TextFieldDefaults.colors(
-                unfocusedContainerColor = appYellow,
-                focusedContainerColor = appYellow,
-                unfocusedTextColor = TextWhite,
-                focusedTextColor = appWhite,
-                unfocusedLeadingIconColor = appWhite,
-                focusedLeadingIconColor = normalBlack,
-                unfocusedIndicatorColor = colorinactiveIndicator,
-                focusedIndicatorColor = colorIndicator
-            ),
-            textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp,),
-            leadingIcon = {
-                androidx.compose.material3.Icon(
-                    painter = painterResource(id = R.drawable.language_icon),
-                    contentDescription = "comment", Modifier.size(20.dp)
-                )
-            },
-            modifier = Modifier.menuAnchor()
-                .width(98.dp)
-        )
-
-        ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false })
-        {
-            androidx.compose.material3.DropdownMenuItem(text = { Text(text = "Cebuano") },
-                onClick = {
-                    isExpanded = false
-                    language = "Cebuano"
-                    onLanguageSelected(language)
-                })
-            androidx.compose.material3.DropdownMenuItem(text = { Text(text = "Ilocano") },
-                onClick = {
-                    isExpanded = false
-                    language = "Ilocano"
-                    onLanguageSelected(language)
-                })
-            androidx.compose.material3.DropdownMenuItem(text = { Text(text = "Bicolano") },
-                onClick = {
-                    isExpanded = false
-                    language = "Bicolano"
-                    onLanguageSelected(language)
-                })
-        }
+    var clickBicolano by remember {
+        mutableStateOf(false)
     }
+    var clickCebuano by remember {
+        mutableStateOf(false)
+    }
+    var clickIlocano by remember {
+        mutableStateOf(false)
+    }
+    if (visibility) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            color = appYellow
+        ) {
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = "Available Languages:",
+                    color = Color.White
+                )
+                Row(
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Button(
+                        colors = ButtonDefaults.buttonColors(backgroundColor = if (clickBicolano) Color.Blue else Color.White),
+                        onClick = {
+                            clickBicolano = !clickBicolano
+                            clickIlocano = false
+                            clickCebuano = false
+                            buttonClick(clickBicolano, "Bicolano")
+
+
+                        }) {
+                        Text(
+                            text = "Bicolano",
+                            color = if (clickBicolano) Color.White else Color.Black
+                        )
+                    }
+                    Spacer(modifier = Modifier.size(10.dp))
+                    Button(
+                        colors = ButtonDefaults.buttonColors(backgroundColor = if (clickCebuano) Color.Blue else Color.White),
+                        onClick = {
+                            clickCebuano = !clickCebuano
+                            clickBicolano = false
+                            clickIlocano = false
+                            buttonClick(clickCebuano, "Cebuano")
+                        }) {
+                        Text(
+                            text = "Cebuano",
+                            color = if (clickCebuano) Color.White else Color.Black
+                        )
+                    }
+                    Spacer(modifier = Modifier.size(10.dp))
+                    Button(
+                        colors = ButtonDefaults.buttonColors(backgroundColor = if (clickIlocano) Color.Blue else Color.White),
+                        onClick = {
+                            clickIlocano = !clickIlocano
+                            clickBicolano = false
+                            clickCebuano = false
+                            buttonClick(clickIlocano, "Ilocano")
+                        }) {
+                        Text(
+                            text = "Ilocano",
+                            color = if (clickIlocano) Color.White else Color.Black
+                        )
+                    }
+                }
+            }
+        }
+    } else {
+        clickBicolano = false
+        clickCebuano = false
+        clickIlocano = false
+    }
+
 }
 
 @Composable
 fun TranslationResult(
     text: String,
     resultData: String,
-    resultsShow: Boolean, // Use resultsShow instead of showResult
+    showResult: Boolean,
     translated: String,
     isLoading: Boolean
 ) {
-    if (resultsShow) { // Use resultsShow here
+    if (showResult) {
         Column(
             horizontalAlignment = Alignment.Start
         ) {
@@ -633,12 +669,17 @@ fun TranslationResult(
             Box {
                 TranslationResultCard(
                     textData = text,
-                    showResult = resultsShow, // Use resultsShow here
+                    showResult = showResult,
                     color = appWhiteYellow,
                     translated = translated,
                     result = resultData,
                     isLoading = isLoading
                 )
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
             }
         }
     }
@@ -653,38 +694,32 @@ fun TranslationResultCard(
     translated: String,
     isLoading: Boolean
 ) {
-    if (showResult) {
-        Column(
-            modifier = Modifier
-                .padding(10.dp)
-                .shadow(
-                    shape = RoundedCornerShape(10.dp),
-                    elevation = 5.dp,
-                )
-                .clip(RoundedCornerShape(10.dp))
-                .background(color)
-                .padding(horizontal = 15.dp, vertical = 20.dp)
-                .fillMaxWidth()
-        ) {
-            Column {
-                // Line 1 - Header
-                Text(
-                    text = textData,
-                    style = MaterialTheme.typography.headlineMedium,
-                )
-                Spacer(modifier = Modifier.size(5.dp))
+    Column(
+        modifier = Modifier
+            .padding(10.dp)
+            .shadow(
+                shape = RoundedCornerShape(10.dp),
+                elevation = 5.dp,
+            )
+            .clip(RoundedCornerShape(10.dp))
+            .background(color)
+            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .fillMaxWidth()
+        //.height(200.dp)
+    ) {
+        Column {
+            //Word of the Day
+            // Line 1 - Header
+            Text(
+                text = textData,
+                style = MaterialTheme.typography.headlineMedium,
+            )
+            Spacer(modifier = Modifier.size(5.dp))
 
-                if (isLoading) {
-                    // Show loading indicator while loading
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                } else if (result.isNotEmpty()) {
-                    // Show TranslationData when result is not empty
-                    TranslationData(
-                        resultTl = result
-                    )
-                }
+            if (result.isNotEmpty()) {
+                TranslationData(
+                    resultTl = result
+                )
             }
         }
     }
@@ -782,17 +817,42 @@ fun TranslateBottomMenu(
 
 
 @Composable
-private fun TranslationData(
-    resultTl: String
-) {
-    Column {
-        //Line 2 - Translated Word
-        Row {
-            Text(
-                text = "     $resultTl",
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
+private fun TranslationData(resultTl: String) {
+    // Split the resultTl into individual lines based on line breaks ('\n')
+    val lines = resultTl.split("\n")
+
+    // Render each line separately with its specific style
+    if (lines.size >= 6) {
+        Text(
+            text = lines[1],
+            style = MaterialTheme.typography.titleMedium,
+            color = textTerm,
+            modifier = Modifier.padding(5.dp)
+        )
+        Text(
+            text = lines[2],
+            style = MaterialTheme.typography.titleMedium,
+            color = appYellow,
+            modifier = Modifier.padding(5.dp)
+        )
+        Text(
+            text = lines[3],
+            style = MaterialTheme.typography.titleMedium,
+            color = textOtherTerms,
+            modifier = Modifier.padding(5.dp)
+        )
+        Text(
+            text = lines[4],
+            style = MaterialTheme.typography.headlineSmall,
+            color = textTerm,
+            modifier = Modifier.padding(5.dp)
+        )
+        Text(
+            text = lines[5],
+            style = MaterialTheme.typography.headlineSmall,
+            color = textSentence,
+            modifier = Modifier.padding(5.dp)
+        )
     }
 }
 
