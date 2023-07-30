@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -91,30 +93,35 @@ fun BicolanoScreen(navController: NavHostController) {
                     .padding(horizontal = 15.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(1.dp),
             ) {
-                Text(
-                    text = "Bicolano A - Z :",
-                    style = MaterialTheme.typography.displayLarge,
-                    color = colorBicolano
-                )
-                Divider(color = darkerdividerColor, thickness = 1.dp)
-
-                for ((letter, words) in wordsMap) {
+                Column(modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxWidth()
+                    .height(700.dp)) {
                     Text(
-                        text = "   " + letter,
+                        text = "Bicolano A - Z :",
                         style = MaterialTheme.typography.displayLarge,
                         color = colorBicolano
                     )
                     Divider(color = darkerdividerColor, thickness = 1.dp)
-                    Spacer(modifier = Modifier.size(3.dp))
 
-                    LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp)) {
-                        items(words.size) { index ->
-                            val word = words[index]
-                            WordItem2(word) {
-                                navController.navigate("wordDetails/${word.content}")
+                    for ((letter, words) in wordsMap) {
+                        Text(
+                            text = "   " + letter,
+                            style = MaterialTheme.typography.displayLarge,
+                            color = colorBicolano
+                        )
+                        Divider(color = darkerdividerColor, thickness = 1.dp)
+                        Spacer(modifier = Modifier.size(3.dp))
+
+                        LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                            items(words.size) { index ->
+                                val word = words[index]
+                                WordItem2(word) {
+                                    navController.navigate("wordDetails/${word.content}")
+                                }
+                                Spacer(modifier = Modifier.size(3.dp))
+                                Divider(color = darkerdividerColor, thickness = 1.dp)
                             }
-                            Spacer(modifier = Modifier.size(3.dp))
-                            Divider(color = darkerdividerColor, thickness = 1.dp)
                         }
                     }
                 }
@@ -173,27 +180,33 @@ fun TextFileItemUI2(textContent: String) {
 
     Column(
         modifier = Modifier
-            .padding(10.dp)
-            .background(Color.LightGray)
-            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 15.dp)
+            .shadow(
+                shape = RoundedCornerShape(10.dp),
+                elevation = 3.dp,
+            )
+            .clip(RoundedCornerShape(10.dp))
+            .background(appWhiteYellow)
+            .padding(horizontal = 15.dp, vertical = 30.dp)
             .fillMaxWidth()
-            .height(200.dp)
     ) {
-        Spacer(modifier = Modifier.size(5.dp))
         if (lines.size >= 6) {
             Text(
                 text = lines[1],
                 style = MaterialTheme.typography.titleMedium,
+                fontSize = 25.sp,
                 color = textTerm
             )
             Text(
                 text = lines[2],
                 style = MaterialTheme.typography.titleMedium,
+                fontSize = 22.sp,
                 color = appYellow
             )
             Text(
                 text = lines[3],
                 style = MaterialTheme.typography.titleMedium,
+                fontSize = 18.sp,
                 color = textOtherTerms
             )
             Text(

@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
@@ -98,32 +100,37 @@ fun IlocanoScreen(navController: NavHostController) {
                     .padding(horizontal = 15.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(1.dp),
             ) {
-                Text(
-                    text = "Ilocano A - Z :",
-                    style = MaterialTheme.typography.displayLarge,
-                    color = colorIlocano
-                )
-                Divider(color = darkerdividerColor, thickness = 1.dp)
-
-                // Iterate through the letters and their associated words
-                for ((letter, words) in wordsMap) {
+                Column(modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxWidth()
+                    .height(670.dp)) {
                     Text(
-                        text = "   " + letter,
+                        text = "Ilocano A - Z :",
                         style = MaterialTheme.typography.displayLarge,
                         color = colorIlocano
                     )
                     Divider(color = darkerdividerColor, thickness = 1.dp)
-                    Spacer(modifier = Modifier.size(3.dp))
 
-                    LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp)) {
-                        items(words.size) { index ->
-                            val word = words[index]
-                            WordItem1(word) {
-                                // Navigate to the new screen when a word is clicked
-                                navController.navigate("wordDetails/${word.content}")
+                    // Iterate through the letters and their associated words
+                    for ((letter, words) in wordsMap) {
+                        Text(
+                            text = "   " + letter,
+                            style = MaterialTheme.typography.displayLarge,
+                            color = colorIlocano
+                        )
+                        Divider(color = darkerdividerColor, thickness = 1.dp)
+                        Spacer(modifier = Modifier.size(3.dp))
+
+                        LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                            items(words.size) { index ->
+                                val word = words[index]
+                                WordItem1(word) {
+                                    // Navigate to the new screen when a word is clicked
+                                    navController.navigate("wordDetails/${word.content}")
+                                }
+                                Spacer(modifier = Modifier.size(3.dp))
+                                Divider(color = darkerdividerColor, thickness = 1.dp)
                             }
-                            Spacer(modifier = Modifier.size(3.dp))
-                            Divider(color = darkerdividerColor, thickness = 1.dp)
                         }
                     }
                 }
@@ -182,27 +189,34 @@ fun TextFileItemUI1(textContent: String) {
 
     Column(
         modifier = Modifier
-            .padding(10.dp)
-            .background(Color.LightGray)
-            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 15.dp)
+            .shadow(
+                shape = RoundedCornerShape(10.dp),
+                elevation = 3.dp,
+            )
+            .clip(RoundedCornerShape(10.dp))
+            .background(appWhiteYellow)
+            .padding(horizontal = 15.dp, vertical = 30.dp)
             .fillMaxWidth()
-            .height(200.dp)
     ) {
-        Spacer(modifier = Modifier.size(5.dp))
+
         if (lines.size >= 6) {
             Text(
                 text = lines[1],
-                style = MaterialTheme.typography.titleMedium, // Keep your custom typography
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 25.sp,// Keep your custom typography
                 color = textTerm // Keep your custom color
             )
             Text(
                 text = lines[2],
-                style = MaterialTheme.typography.titleMedium, // Keep your custom typography
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 22.sp,// Keep your custom typography
                 color = appYellow // Keep your custom color
             )
             Text(
                 text = lines[3],
-                style = MaterialTheme.typography.titleMedium, // Keep your custom typography
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 18.sp,// Keep your custom typography
                 color = textOtherTerms // Keep your custom color
             )
             Text(
