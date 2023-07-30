@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -92,6 +93,7 @@ fun CollaboratorScreen(navController: NavController, userData: UserData?) {
                     .verticalScroll(rememberScrollState())
                     .fillMaxSize()
             ) {
+                CollaboratorHeaderBox(navController = navController)
                 Spacer(modifier = Modifier.size(15.dp))
                 RecentlyAdded(userData = userData)
                 Spacer(modifier = Modifier.size(75.dp))
@@ -187,6 +189,36 @@ fun HeaderCollab(userData: UserData?) {
                 fontWeight = FontWeight.SemiBold
             )
             Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+fun CollaboratorHeaderBox(navController: NavController) {
+    Box(
+        modifier = Modifier
+            .background(appYellow)
+            .fillMaxWidth()
+            .height(50.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            androidx.compose.material.IconButton(onClick = { navController.navigate("home") }) {
+                androidx.compose.material.Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back Icon",
+                    tint = Color.White
+                )
+            }
+            androidx.compose.material.Text(
+                text = "Collaborator",
+                style = MaterialTheme.typography.labelMedium,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = appWhite
+            )
         }
     }
 }

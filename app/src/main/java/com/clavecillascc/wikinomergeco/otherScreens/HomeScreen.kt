@@ -49,6 +49,7 @@ fun HomeScreen(navController: NavHostController) {
         WordOfTheDay()
         FAQ()
         HomeForum()
+        Spacer(modifier = Modifier.size(70.dp))
     }
 }
 
