@@ -1,5 +1,6 @@
 package com.clavecillascc.wikinomergeco.collaboratorscreen
 
+import android.service.autofill.UserData
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -55,6 +56,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.material3.DropdownMenuItem
 import com.clavecillascc.wikinomergeco.R
+import com.clavecillascc.wikinomergeco.otherScreens.HeaderCollab
 import com.clavecillascc.wikinomergeco.ui.theme.appDarkBlue
 import com.clavecillascc.wikinomergeco.ui.theme.appNotSoWhite
 import com.clavecillascc.wikinomergeco.ui.theme.appWhite
@@ -74,10 +76,10 @@ import com.clavecillascc.wikinomergeco.ui.theme.textSentence
 import com.clavecillascc.wikinomergeco.ui.theme.textTerm
 
 @Composable
-fun AddCollaboratorScreen(navController: NavController) {
+fun AddCollaboratorScreen(navController: NavController, userData: com.clavecillascc.wikinomergeco.signin.UserData?) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         AddCollaboratorHeaderBox(navController)
-        AddNewTranslation()
+        AddNewTranslation(userData = userData)
     }
 }
 
@@ -114,7 +116,7 @@ fun AddCollaboratorHeaderBox(navController: NavController) {
 
 @Composable
 fun AddNewTranslation(
-    color: Color = appWhiteYellow
+    color: Color = appWhiteYellow, userData: com.clavecillascc.wikinomergeco.signin.UserData?
 ) {
     var term by remember { mutableStateOf("") }
     var language by remember { mutableStateOf("") }
@@ -135,27 +137,7 @@ fun AddNewTranslation(
             .fillMaxWidth(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Row() {
-            Image(
-                painter = painterResource(id = R.drawable.profilepic_sample),
-                contentDescription = "Logo",
-                modifier = Modifier
-                    .size(50.dp)
-                    .clip(CircleShape)
-                    .border(width = 1.dp, color = normalBlack, CircleShape)
-            )
-            Column() {
-                Text(
-                    text = "Username", Modifier.padding(horizontal = 20.dp),
-                    style = MaterialTheme.typography.labelMedium
-                )
-                Text(
-                    text = "user details", Modifier.padding(horizontal = 20.dp),
-                    style = MaterialTheme.typography.labelMedium,
-                    fontSize = 12.sp
-                )
-            }
-        }
+        HeaderCollab(userData = userData)
         //collaborator added word
         Column(
             modifier = Modifier

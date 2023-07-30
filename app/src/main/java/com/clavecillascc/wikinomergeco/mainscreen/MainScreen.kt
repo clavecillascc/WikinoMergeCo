@@ -94,7 +94,7 @@ fun MainScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TopBar(coroutineScope, scaffoldState) },
-        content = { ContentArea(navController) },
+        content = { ContentArea(navController, userData) },
         bottomBar = { BottomNavigationBar(navController) },
         drawerContent = { Drawer(coroutineScope, scaffoldState, userData, navController, onSignOut)}
     )
@@ -115,8 +115,8 @@ fun MainScreen(
 }
 
 @Composable
-fun ContentArea(navController: NavHostController) {
-    com.clavecillascc.wikinomergeco.navigation.Navigation(navController = navController)
+fun ContentArea(navController: NavHostController, userData: UserData?) {
+    com.clavecillascc.wikinomergeco.navigation.Navigation(navController = navController, userData = userData)
 }
 
 @Composable
@@ -125,8 +125,7 @@ fun BottomNavigationBar(navController: NavController) {
     val menuItem = listOf(
         NavigationItems.Home,
         NavigationItems.Translate,
-        NavigationItems.Library,
-        NavigationItems.Collaborator
+        NavigationItems.Library
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()

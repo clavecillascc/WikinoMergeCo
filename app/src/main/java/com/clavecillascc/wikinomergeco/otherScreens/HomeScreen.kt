@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import androidx.navigation.NavHostController
 import androidx.preference.PreferenceManager
 import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
@@ -39,7 +40,7 @@ import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavHostController) {
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
     ) {

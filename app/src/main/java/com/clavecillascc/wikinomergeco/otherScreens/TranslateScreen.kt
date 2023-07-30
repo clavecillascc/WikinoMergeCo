@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.clavecillascc.wikinomergeco.R
 import com.clavecillascc.wikinomergeco.components.AutocompleteViewModel
 import com.clavecillascc.wikinomergeco.interfaces.DBResponseListener
@@ -80,7 +81,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun TranslateScreen() {
+fun TranslateScreen(navController: NavHostController) {
     /*TODO*/
     //Text(text = "Translate")
     var search by remember {
