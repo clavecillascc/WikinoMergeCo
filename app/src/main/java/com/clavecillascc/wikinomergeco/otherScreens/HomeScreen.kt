@@ -207,7 +207,7 @@ fun FAQ(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(
                 text = "Frequenty Asked Questions",
                 style = MaterialTheme.typography.headlineMedium,
@@ -215,8 +215,8 @@ fun FAQ(
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 ExpandableBox1()
                 ExpandableBox2()
+                ExpandableBox3()
             }
-
         }
     }
 }
@@ -224,7 +224,7 @@ fun FAQ(
 @Composable
 fun ExpandableBox1(color: Color = appWhiteYellow) {
     var isExpanded by remember { mutableStateOf(false) }
-    val height by animateDpAsState(if (isExpanded) 180.dp else 50.dp)
+    val height by animateDpAsState(if (isExpanded) 190.dp else 45.dp)
     val width by animateDpAsState(if (isExpanded) 300.dp else 300.dp)
     Box(
         modifier = Modifier
@@ -253,7 +253,7 @@ fun ExpandableBox1(color: Color = appWhiteYellow) {
 
                 )
                 Text(
-                    text =  "- " + "You can navigate to different screens using the bottom navigation bar at the bottom of the screen. Each icon represents a different screen. Simply tap on the icon to go to the corresponding screen.",
+                    text =  "- " + "You can navigate to different screens using the bottom navigation bar at the bottom of the screen, and drawer at the top-left of the screen. Each icon represents a different screen. Simply tap on the icon to go to the corresponding screen.",
                     style = MaterialTheme.typography.labelMedium,
                     fontSize = 14.sp,
                     color = normalBlack
@@ -266,7 +266,49 @@ fun ExpandableBox1(color: Color = appWhiteYellow) {
 @Composable
 fun ExpandableBox2(color: Color = appWhiteYellow) {
     var isExpanded by remember { mutableStateOf(false) }
-    val height by animateDpAsState(if (isExpanded) 210.dp else 50.dp)
+    val height by animateDpAsState(if (isExpanded) 165.dp else 20.dp)
+    val width by animateDpAsState(if (isExpanded) 300.dp else 300.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .animateContentSize()
+            .background(notSelectedGray)
+            .clickable {
+                isExpanded = !isExpanded
+            }
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(start = 15.dp, top = 2.dp, end = 15.dp, bottom = 2.dp)
+                .background(notSelectedGray)
+                .padding(horizontal = 5.dp, vertical = 5.dp)
+                .height(height)
+                .width(width)
+                .background(notSelectedGray)
+        ) {
+            Column(modifier = Modifier
+                .fillMaxSize(),
+                verticalArrangement = Arrangement.Center) {
+                Text(
+                    text =  "• " + "How do I add a new word?",
+                    style = MaterialTheme.typography.labelMedium
+                )
+
+                Text(
+                    text =  "- " + "To add a new word, navigate to the 'Collaborator' screen using the drawer menu found in the top-left bar. Click on the floating action button (the plus icon) in the bottom-right corner. Fill in the required information for the new word and click 'Upload' to add them.",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontSize = 14.sp,
+                    color = normalBlack
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ExpandableBox3(color: Color = appWhiteYellow) {
+    var isExpanded by remember { mutableStateOf(false) }
+    val height by animateDpAsState(if (isExpanded) 185.dp else 20.dp)
     val width by animateDpAsState(if (isExpanded) 300.dp else 300.dp)
     Box(
         modifier = Modifier

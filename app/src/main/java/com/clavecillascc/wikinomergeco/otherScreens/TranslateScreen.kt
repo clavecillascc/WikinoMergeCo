@@ -91,8 +91,6 @@ import kotlinx.coroutines.tasks.await
 
 @Composable
 fun TranslateScreen(navController: NavHostController) {
-    /*TODO*/
-    //Text(text = "Translate")
     var search by remember {
         mutableStateOf("")
     }
@@ -868,7 +866,6 @@ fun CommentPart (){
 
     }
 }
-
 
 @Composable
 fun TranslateBottomMenu(
