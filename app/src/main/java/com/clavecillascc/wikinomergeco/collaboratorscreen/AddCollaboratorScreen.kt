@@ -237,12 +237,20 @@ fun TextFields() {
         var terminsentence by remember { mutableStateOf("")}
         var translationsentence by remember { mutableStateOf("")}
         var isExpanded by remember { mutableStateOf(false)}
+        val maxcharTerm = 15
+        val maxcharTranslation = 20
+        val maxcharSentence = 30
 
         //1-Term
         TextField(
             label = { Text("Term") },
             value = term,
-            onValueChange = {term = it},
+            maxLines = 1,
+            onValueChange = {
+                if(it.length < maxcharTerm){
+                    term = it
+                }
+                            },
             colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
                 unfocusedLabelColor = logoGray, focusedLabelColor = textTerm,
                 unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
@@ -255,6 +263,7 @@ fun TextFields() {
                 value = language,
                 onValueChange = {},
                 readOnly = true,
+                maxLines = 1,
                 colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
                     unfocusedLabelColor = logoGray, focusedLabelColor = appYellow,
                     unfocusedTextColor = normalBlack, focusedTextColor = normalBlack),
@@ -285,7 +294,12 @@ fun TextFields() {
         TextField(
             label = { Text("Translation of term") },
             value = translationterm,
-            onValueChange = {translationterm = it},
+            maxLines = 1,
+            onValueChange = {
+                if(it.length < maxcharTranslation){
+                    translationterm = it
+                }
+                            },
             colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
                 unfocusedLabelColor = logoGray, focusedLabelColor = textOtherTerms,
                 unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
@@ -294,7 +308,12 @@ fun TextFields() {
         TextField(
             label = { Text("Term used in a sentence") },
             value = terminsentence,
-            onValueChange = {terminsentence = it},
+            maxLines = 1,
+            onValueChange = {
+                if(it.length < maxcharSentence){
+                    terminsentence = it
+                }
+                            },
             colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
                 unfocusedLabelColor = logoGray, focusedLabelColor = textTerm,
                 unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
@@ -303,7 +322,12 @@ fun TextFields() {
         TextField(
             label = { Text("Translation of sentence") },
             value = translationsentence,
-            onValueChange = {translationsentence = it},
+            maxLines = 1,
+            onValueChange = {
+                if(it.length < maxcharSentence){
+                    translationsentence = it
+                }
+                            },
             colors = TextFieldDefaults.colors(unfocusedContainerColor = appWhite, focusedContainerColor = appNotSoWhite,
                 unfocusedLabelColor = logoGray, focusedLabelColor = textSentence,
                 unfocusedTextColor = normalBlack, focusedTextColor = normalBlack))
