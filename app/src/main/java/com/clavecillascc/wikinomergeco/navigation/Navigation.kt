@@ -9,6 +9,7 @@ import com.clavecillascc.wikinomergeco.libraryscreen.CebuanoScreen
 import com.clavecillascc.wikinomergeco.libraryscreen.IlocanoScreen
 import com.clavecillascc.wikinomergeco.libraryscreen.TextFileItemUI
 import com.clavecillascc.wikinomergeco.collaboratorscreen.AddCollaboratorScreen
+import com.clavecillascc.wikinomergeco.otherScreens.AboutScreen
 import com.clavecillascc.wikinomergeco.otherScreens.CollaboratorScreen
 import com.clavecillascc.wikinomergeco.otherScreens.Languages
 import com.clavecillascc.wikinomergeco.otherScreens.LibraryScreen
@@ -30,6 +31,9 @@ fun Navigation(navController: NavHostController) {
         }
         composable(route = "collaborator") {
             CollaboratorScreen(navController)
+        }
+        composable(route = "about") {
+            AboutScreen(navController)
         }
         composable("cebuanoScreen") {
             CebuanoScreen(navController = navController)
