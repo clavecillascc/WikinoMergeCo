@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -96,7 +97,7 @@ fun BicolanoScreen(navController: NavHostController) {
                 Column(modifier = Modifier
                     .verticalScroll(rememberScrollState())
                     .fillMaxWidth()
-                    .height(700.dp)) {
+                    .height(730.dp)) {
                     Text(
                         text = "Bicolano A - Z :",
                         style = MaterialTheme.typography.displayLarge,
@@ -113,7 +114,8 @@ fun BicolanoScreen(navController: NavHostController) {
                         Divider(color = darkerdividerColor, thickness = 1.dp)
                         Spacer(modifier = Modifier.size(3.dp))
 
-                        LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                        LazyColumn(verticalArrangement = Arrangement.spacedBy(7.dp),
+                            userScrollEnabled = false, modifier = Modifier.wrapContentHeight()) {
                             items(words.size) { index ->
                                 val word = words[index]
                                 WordItem2(word) {

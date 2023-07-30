@@ -75,6 +75,7 @@ import com.clavecillascc.wikinomergeco.ui.theme.appWhiteYellow
 import com.clavecillascc.wikinomergeco.ui.theme.appYellow
 import com.clavecillascc.wikinomergeco.ui.theme.colorIndicator
 import com.clavecillascc.wikinomergeco.ui.theme.colorinactiveIndicator
+import com.clavecillascc.wikinomergeco.ui.theme.darkerdividerColor
 import com.clavecillascc.wikinomergeco.ui.theme.normalBlack
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -667,13 +668,14 @@ fun TranslationResultCard(
                 .padding(horizontal = 15.dp, vertical = 20.dp)
                 .fillMaxWidth()
         ) {
-            Column {
+            Column(modifier = Modifier.padding(horizontal = 25.dp, vertical = 10.dp)) {
                 // Line 1 - Header
                 Text(
                     text = textData,
                     style = MaterialTheme.typography.headlineMedium,
+                    color = normalBlack
                 )
-                Spacer(modifier = Modifier.size(5.dp))
+                Divider(color = darkerdividerColor, thickness = 1.dp)
 
                 if (isLoading) {
                     // Show loading indicator while loading
